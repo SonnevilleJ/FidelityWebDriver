@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FidelityWebDriver")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A wrapper around Selenium WebDriver used to perform semantic driving of the Fidelity website.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("John Sonneville")]
 [assembly: AssemblyProduct("FidelityWebDriver")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright © 2015 John Sonneville")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

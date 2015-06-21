@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("TradingHistoryCsvDownloader")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("John Sonneville")]
 [assembly: AssemblyProduct("TradingHistoryCsvDownloader")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright © 2015 John Sonneville")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
