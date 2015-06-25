@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Pages;
 
 namespace Sonneville.FidelityWebDriver
 {
@@ -11,9 +12,11 @@ namespace Sonneville.FidelityWebDriver
             _webDriver = webDriver;
         }
 
-        public void GoToHomepage()
+        public HomePage GoToHomepage()
         {
             _webDriver.Navigate().GoToUrl("https://www.fidelity.com");
+
+            return new HomePage(null);
         }
 
         public void Dispose()

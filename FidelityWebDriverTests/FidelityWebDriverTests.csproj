@@ -64,6 +64,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FidelityDriverTests.cs" />
+    <Compile Include="Pages\HomepageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver;
+using Sonneville.FidelityWebDriver.Pages;
 
 namespace Sonneville.FidelityWebDriverTests
 {
@@ -26,8 +27,9 @@ namespace Sonneville.FidelityWebDriverTests
         [Test]
         public void ShouldOpenFidelitySite()
         {
-            _fidelityDriver.GoToHomepage();
+            var resultPage = _fidelityDriver.GoToHomepage();
 
+            Assert.IsNotNull(resultPage);
             _navigationMock.Verify(navigation => navigation.GoToUrl("https://www.fidelity.com"));
         }
 
