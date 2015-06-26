@@ -7,5 +7,6 @@ namespace Sonneville.FidelityWebDriver
     {
         IHomePage GoToHomepage();
         ILoginPage GoToLoginPage();
+        IActivityPage GoToActivityPage();
     }
 }

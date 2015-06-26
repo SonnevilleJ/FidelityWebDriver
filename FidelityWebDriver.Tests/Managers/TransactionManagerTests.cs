@@ -17,17 +17,18 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         }
 
         [Test]
-        public void ShouldOpenFidelityHomepage()
+        public void ShouldPerformLoginIfNotLoggedIn()
         {
             Manager.DownloadTransactions();
 
-            SiteNavigatorMock.Verify(navigator => navigator.GoToHomepage());
+            _loginManagerMock.Verify(manager => manager.EnsureLoggedIn());
+            SiteNavigatorMock.Verify(navigator => navigator.GoToActivityPage());
         }
 
         [Test]
         public void ShouldDisposeSiteNavigatorWhenRun()
         {
-            SiteNavigatorMock.Setup(navigator => navigator.GoToHomepage())
+            SiteNavigatorMock.Setup(navigator => navigator.GoToActivityPage())
                 .Callback(() => SiteNavigatorMock.Verify(fd => fd.Dispose(), Times.Never()));
 
             Manager.DownloadTransactions();

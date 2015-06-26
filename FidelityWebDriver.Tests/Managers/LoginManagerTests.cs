@@ -52,5 +52,24 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
             _loginPageMock.Verify(page => page.LogIn(_username, _password));
             Assert.IsTrue(Manager.IsLoggedIn);
         }
+
+        [Test]
+        public void ShouldNotLogInIfAlreadyLoggedIn()
+        {
+            Manager.LogIn();
+
+            Manager.EnsureLoggedIn();
+
+            SiteNavigatorMock.Verify(nav => nav.GoToLoginPage(), Times.Once());
+        }
+
+        [Test]
+        public void ShouldLogInIfNOtAlreadyLoggedIn()
+        {
+            Manager.EnsureLoggedIn();
+
+            SiteNavigatorMock.Verify(nav => nav.GoToLoginPage(), Times.Once());
+            Assert.IsTrue(Manager.IsLoggedIn);
+        }
     }
 }

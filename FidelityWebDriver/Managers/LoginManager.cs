@@ -23,6 +23,14 @@
             Dispose(true);
         }
 
+        public void EnsureLoggedIn()
+        {
+            if (!IsLoggedIn)
+            {
+                LogIn();
+            }
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)

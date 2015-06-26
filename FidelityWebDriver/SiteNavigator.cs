@@ -24,6 +24,11 @@ namespace Sonneville.FidelityWebDriver
             throw new System.NotImplementedException();
         }
 
+        public IActivityPage GoToActivityPage()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Dispose()
         {
             Dispose(true);
