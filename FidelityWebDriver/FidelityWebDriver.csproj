@@ -47,6 +47,9 @@
     <Compile Include="FidelityDriver.cs" />
     <Compile Include="IFidelityDriver.cs" />
     <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\IHomePage.cs" />
+    <Compile Include="Pages\ILoginPage.cs" />
+    <Compile Include="Pages\IPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.Designer.cs">

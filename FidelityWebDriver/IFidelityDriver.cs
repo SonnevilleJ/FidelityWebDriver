@@ -5,6 +5,6 @@ namespace Sonneville.FidelityWebDriver
 {
     public interface IFidelityDriver : IDisposable
     {
-        HomePage GoToHomepage();
+        IHomePage GoToHomepage();
     }
 }

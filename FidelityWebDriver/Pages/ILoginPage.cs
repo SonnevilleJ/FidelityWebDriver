@@ -1,6 +1,6 @@
 namespace Sonneville.FidelityWebDriver.Pages
 {
-    public class LoginPage : ILoginPage
+    public interface ILoginPage : IPage
     {
     }
 }

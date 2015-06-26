@@ -8,7 +8,7 @@ namespace Sonneville.FidelityWebDriverTests.Pages
     [TestFixture]
     public class HomepageTests
     {
-        private HomePage _homePage;
+        private IHomePage _homePage;
         private Mock<IWebDriver> _webDriverMock;
         private Mock<IWebElement> _divMock;
         private Mock<IWebElement> _ulMock;

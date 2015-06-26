@@ -12,7 +12,7 @@ namespace Sonneville.FidelityWebDriver
             _webDriver = webDriver;
         }
 
-        public HomePage GoToHomepage()
+        public IHomePage GoToHomepage()
         {
             _webDriver.Navigate().GoToUrl("https://www.fidelity.com");
 

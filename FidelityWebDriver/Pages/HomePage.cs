@@ -2,7 +2,7 @@ using OpenQA.Selenium;
 
 namespace Sonneville.FidelityWebDriver.Pages
 {
-    public class HomePage
+    public class HomePage : IHomePage
     {
         private readonly IWebDriver _webDriver;
 
@@ -11,7 +11,7 @@ namespace Sonneville.FidelityWebDriver.Pages
             _webDriver = webDriver;
         }
 
-        public LoginPage GoToLoginPage()
+        public ILoginPage GoToLoginPage()
         {
             _webDriver.FindElement(By.ClassName("pntlt"))
                 .FindElement(By.ClassName("pnlogout"))
