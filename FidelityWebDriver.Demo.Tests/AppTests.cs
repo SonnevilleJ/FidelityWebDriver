@@ -1,9 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Sonneville.FidelityWebDriver;
-using Sonneville.TradingHistoryCsvDownloader;
 
-namespace Sonneville.TradingHistoryCsvDownloaderTests
+namespace Sonneville.FidelityWebDriver.Demo.Tests
 {
     [TestFixture]
     public class AppTests

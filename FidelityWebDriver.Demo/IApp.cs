@@ -1,6 +1,6 @@
 using System;
 
-namespace Sonneville.TradingHistoryCsvDownloader
+namespace Sonneville.FidelityWebDriver.Demo
 {
     public interface IApp : IDisposable
     {

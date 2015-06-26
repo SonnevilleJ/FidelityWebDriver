@@ -7,8 +7,8 @@
     <ProjectGuid>{AF97F43C-4042-4399-AB37-B2C192860B79}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sonneville.TradingHistoryCsvDownloader</RootNamespace>
-    <AssemblyName>Sonneville.TradingHistoryCsvDownloader</AssemblyName>
+    <RootNamespace>Sonneville.FidelityWebDriver.Demo</RootNamespace>
+    <AssemblyName>Sonneville.FidelityWebDriver.Demo</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

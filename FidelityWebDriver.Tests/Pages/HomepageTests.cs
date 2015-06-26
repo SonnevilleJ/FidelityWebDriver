@@ -3,7 +3,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Pages;
 
-namespace Sonneville.FidelityWebDriverTests.Pages
+namespace Sonneville.FidelityWebDriver.Tests.Pages
 {
     [TestFixture]
     public class HomepageTests

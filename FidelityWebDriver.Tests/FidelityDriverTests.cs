@@ -1,10 +1,8 @@
 ﻿using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using Sonneville.FidelityWebDriver;
-using Sonneville.FidelityWebDriver.Pages;
 
-namespace Sonneville.FidelityWebDriverTests
+namespace Sonneville.FidelityWebDriver.Tests
 {
     [TestFixture]
     public class FidelityDriverTests

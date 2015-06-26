@@ -2,10 +2,9 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using Sonneville.TradingHistoryCsvDownloader;
-using Sonneville.TradingHistoryCsvDownloader.Ninject;
+using Sonneville.FidelityWebDriver.Demo.Ninject;
 
-namespace Sonneville.TradingHistoryCsvDownloaderTests.Ninject
+namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
 {
     [TestFixture]
     public class KernelBuilderTests

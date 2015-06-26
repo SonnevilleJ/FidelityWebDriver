@@ -5,11 +5,11 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FidelityWebDriver", "FidelityWebDriver\FidelityWebDriver.csproj", "{59134DBF-4B42-4A79-BD62-C56408B41D63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FidelityWebDriverTests", "FidelityWebDriverTests\FidelityWebDriverTests.csproj", "{4285A889-251F-4E12-8289-1538952D289F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FidelityWebDriver.Tests", "FidelityWebDriver.Tests\FidelityWebDriver.Tests.csproj", "{4285A889-251F-4E12-8289-1538952D289F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingHistoryCsvDownloader", "TradingHistoryCsvDownloader\TradingHistoryCsvDownloader.csproj", "{AF97F43C-4042-4399-AB37-B2C192860B79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FidelityWebDriver.Demo", "FidelityWebDriver.Demo\FidelityWebDriver.Demo.csproj", "{AF97F43C-4042-4399-AB37-B2C192860B79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingHistoryCsvDownloaderTests", "TradingHistoryCsvDownloaderTests\TradingHistoryCsvDownloaderTests.csproj", "{D8B9B52D-0FFB-4743-AEB4-0DC94272AE45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FidelityWebDriver.Demo.Tests", "FidelityWebDriver.Demo.Tests\FidelityWebDriver.Demo.Tests.csproj", "{D8B9B52D-0FFB-4743-AEB4-0DC94272AE45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

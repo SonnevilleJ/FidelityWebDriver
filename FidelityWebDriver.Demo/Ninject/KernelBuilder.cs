@@ -1,6 +1,6 @@
 ﻿using Ninject;
 
-namespace Sonneville.TradingHistoryCsvDownloader.Ninject
+namespace Sonneville.FidelityWebDriver.Demo.Ninject
 {
     public class KernelBuilder
     {

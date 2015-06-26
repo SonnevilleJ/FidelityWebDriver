@@ -1,7 +1,7 @@
 ﻿using Ninject;
-using Sonneville.TradingHistoryCsvDownloader.Ninject;
+using Sonneville.FidelityWebDriver.Demo.Ninject;
 
-namespace Sonneville.TradingHistoryCsvDownloader
+namespace Sonneville.FidelityWebDriver.Demo
 {
     public class Program
     {

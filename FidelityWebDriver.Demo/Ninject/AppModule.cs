@@ -1,7 +1,7 @@
 ﻿using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 
-namespace Sonneville.TradingHistoryCsvDownloader.Ninject
+namespace Sonneville.FidelityWebDriver.Demo.Ninject
 {
     public class AppModule : NinjectModule
     {

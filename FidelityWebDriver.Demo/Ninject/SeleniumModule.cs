@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace Sonneville.TradingHistoryCsvDownloader.Ninject
+namespace Sonneville.FidelityWebDriver.Demo.Ninject
 {
     public class SeleniumModule : NinjectModule
     {

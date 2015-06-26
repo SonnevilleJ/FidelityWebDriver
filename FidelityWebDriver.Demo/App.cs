@@ -1,6 +1,4 @@
-﻿using Sonneville.FidelityWebDriver;
-
-namespace Sonneville.TradingHistoryCsvDownloader
+﻿namespace Sonneville.FidelityWebDriver.Demo
 {
     public class App : IApp
     {
