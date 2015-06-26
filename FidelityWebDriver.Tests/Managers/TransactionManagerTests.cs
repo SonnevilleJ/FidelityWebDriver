@@ -22,15 +22,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
             Manager.DownloadTransactions();
 
             _loginManagerMock.Verify(manager => manager.EnsureLoggedIn());
-            SiteNavigatorMock.Verify(navigator => navigator.GoToActivityPage());
         }
 
         [Test]
         public void ShouldDisposeSiteNavigatorWhenRun()
         {
-            SiteNavigatorMock.Setup(navigator => navigator.GoToActivityPage())
-                .Callback(() => SiteNavigatorMock.Verify(fd => fd.Dispose(), Times.Never()));
-
             Manager.DownloadTransactions();
 
             SiteNavigatorMock.Verify(navigator => navigator.Dispose());

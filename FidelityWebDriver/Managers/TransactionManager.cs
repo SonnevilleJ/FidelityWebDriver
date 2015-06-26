@@ -15,8 +15,6 @@ namespace Sonneville.FidelityWebDriver.Managers
         {
             _loginManager.EnsureLoggedIn();
 
-            _siteNavigator.GoToActivityPage();
-
             if (Settings.Default.AutoCloseSelenium)
             {
                 _siteNavigator.Dispose();
