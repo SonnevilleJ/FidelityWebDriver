@@ -1,6 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Pages;
 
 namespace Sonneville.FidelityWebDriver.Tests
 {
@@ -10,24 +11,31 @@ namespace Sonneville.FidelityWebDriver.Tests
         private SiteNavigator _siteNavigator;
         private Mock<IWebDriver> _webDriverMock;
         private Mock<INavigation> _navigationMock;
+        private Mock<IHomePage> _homePageMock;
+        private Mock<IPageFactory> _pageFactoryMock;
 
         [SetUp]
         public void Setup()
         {
+            _homePageMock = new Mock<IHomePage>();
+
             _navigationMock = new Mock<INavigation>();
 
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(webDriver => webDriver.Navigate()).Returns(_navigationMock.Object);
 
-            _siteNavigator = new SiteNavigator(_webDriverMock.Object);
+            _pageFactoryMock = new Mock<IPageFactory>();
+            _pageFactoryMock.Setup(factory => factory.GetPage<IHomePage>(_webDriverMock.Object)).Returns(_homePageMock.Object);
+
+            _siteNavigator = new SiteNavigator(_webDriverMock.Object, _pageFactoryMock.Object);
         }
 
         [Test]
-        public void ShouldOpenFidelitySite()
+        public void ShouldOpenHomePage()
         {
-            var resultPage = _siteNavigator.GoToHomepage();
+            var resultPage = _siteNavigator.GoToHomePage();
 
-            Assert.IsNotNull(resultPage);
+            Assert.AreEqual(_homePageMock.Object, resultPage);
             _navigationMock.Verify(navigation => navigation.GoToUrl("https://www.fidelity.com"));
         }
 
@@ -37,6 +45,15 @@ namespace Sonneville.FidelityWebDriver.Tests
             _siteNavigator.Dispose();
 
             _webDriverMock.Verify(driver => driver.Dispose());
+        }
+
+        [Test]
+        public void ShouldOpenLoginPage()
+        {
+            var loginPage = _siteNavigator.GoToLoginPage();
+
+            _homePageMock.Verify(page => page.GoToLoginPage());
+            Assert.IsNotNull(loginPage);
         }
     }
 }

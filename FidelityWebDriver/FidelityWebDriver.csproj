@@ -50,6 +50,8 @@
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\TransactionManager.cs" />
     <Compile Include="Pages\IActivityPage.cs" />
+    <Compile Include="Pages\IPageFactory.cs" />
+    <Compile Include="Pages\PageFactory.cs" />
     <Compile Include="SiteNavigator.cs" />
     <Compile Include="ISiteNavigator.cs" />
     <Compile Include="Pages\HomePage.cs" />

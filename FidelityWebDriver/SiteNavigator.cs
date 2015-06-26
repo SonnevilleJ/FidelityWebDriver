@@ -6,22 +6,25 @@ namespace Sonneville.FidelityWebDriver
     public class SiteNavigator : ISiteNavigator
     {
         private readonly IWebDriver _webDriver;
+        private readonly IPageFactory _pageFactory;
 
-        public SiteNavigator(IWebDriver webDriver)
+        public SiteNavigator(IWebDriver webDriver, IPageFactory pageFactory)
         {
             _webDriver = webDriver;
+            _pageFactory = pageFactory;
         }
 
-        public IHomePage GoToHomepage()
+        public IHomePage GoToHomePage()
         {
             _webDriver.Navigate().GoToUrl("https://www.fidelity.com");
 
-            return new HomePage(null);
+            return _pageFactory.GetPage<IHomePage>(_webDriver);
         }
 
         public ILoginPage GoToLoginPage()
         {
-            throw new System.NotImplementedException();
+            GoToHomePage().GoToLoginPage();
+            return new LoginPage();
         }
 
         public IActivityPage GoToActivityPage()
