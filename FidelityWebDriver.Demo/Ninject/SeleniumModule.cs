@@ -8,7 +8,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
     {
         public override void Load()
         {
-            Kernel.Bind<IWebDriver>().To<ChromeDriver>();
+            Kernel.Bind<IWebDriver>().To<ChromeDriver>().InSingletonScope();
         }
     }
 }

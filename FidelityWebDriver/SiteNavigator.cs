@@ -18,13 +18,13 @@ namespace Sonneville.FidelityWebDriver
         {
             _webDriver.Navigate().GoToUrl("https://www.fidelity.com");
 
-            return _pageFactory.GetPage<IHomePage>(_webDriver);
+            return _pageFactory.GetPage<IHomePage>();
         }
 
         public ILoginPage GoToLoginPage()
         {
             GoToHomePage().GoToLoginPage();
-            return new LoginPage();
+            return _pageFactory.GetPage<ILoginPage>();
         }
 
         public IActivityPage GoToActivityPage()

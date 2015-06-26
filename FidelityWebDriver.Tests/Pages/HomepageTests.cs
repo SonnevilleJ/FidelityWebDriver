@@ -6,14 +6,15 @@ using Sonneville.FidelityWebDriver.Pages;
 namespace Sonneville.FidelityWebDriver.Tests.Pages
 {
     [TestFixture]
-    public class HomepageTests
+    public class HomePageTests : PageFactoryTests<IHomePage>
     {
         private IHomePage _homePage;
-        private Mock<IWebDriver> _webDriverMock;
         private Mock<IWebElement> _divMock;
         private Mock<IWebElement> _ulMock;
         private Mock<IWebElement> _liMock;
         private Mock<IWebElement> _aMock;
+        private Mock<IPageFactory> _pageFactoryMock;
+        private Mock<ILoginPage> _loginPageMock;
 
         [SetUp]
         public void Setup()
@@ -29,11 +30,14 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             _divMock = new Mock<IWebElement>();
             _divMock.Setup(div => div.FindElement(By.ClassName("pnlogout"))).Returns(_ulMock.Object);
 
-            _webDriverMock = new Mock<IWebDriver>();
-            _webDriverMock.Setup(driver =>driver.FindElement(By.ClassName("pntlt"))).Returns(_divMock.Object);
+            WebDriverMock.Setup(driver =>driver.FindElement(By.ClassName("pntlt"))).Returns(_divMock.Object);
 
+            _loginPageMock = new Mock<ILoginPage>();
 
-            _homePage = new HomePage(_webDriverMock.Object);
+            _pageFactoryMock = new Mock<IPageFactory>();
+            _pageFactoryMock.Setup(factory => factory.GetPage<ILoginPage>()).Returns(_loginPageMock.Object);
+
+            _homePage = new HomePage(WebDriverMock.Object, _pageFactoryMock.Object);
         }
 
         [Test]
@@ -42,7 +46,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             var loginPage = _homePage.GoToLoginPage();
 
             _aMock.Verify(a => a.Click());
-            Assert.IsNotNull(loginPage);
+            Assert.AreSame(_loginPageMock.Object, loginPage);
         }
     }
 }

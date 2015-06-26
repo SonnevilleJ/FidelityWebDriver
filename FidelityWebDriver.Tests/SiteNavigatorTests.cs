@@ -13,29 +13,40 @@ namespace Sonneville.FidelityWebDriver.Tests
         private Mock<INavigation> _navigationMock;
         private Mock<IHomePage> _homePageMock;
         private Mock<IPageFactory> _pageFactoryMock;
+        private Mock<ILoginPage> _loginPageMock;
 
         [SetUp]
         public void Setup()
         {
-            _homePageMock = new Mock<IHomePage>();
+            SetupWebDriver();
+            SetupPageFactory();
+            _siteNavigator = new SiteNavigator(_webDriverMock.Object, _pageFactoryMock.Object);
+        }
 
+        private void SetupWebDriver()
+        {
             _navigationMock = new Mock<INavigation>();
 
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(webDriver => webDriver.Navigate()).Returns(_navigationMock.Object);
+        }
+
+        private void SetupPageFactory()
+        {
+            _homePageMock = new Mock<IHomePage>();
+            _loginPageMock = new Mock<ILoginPage>();
 
             _pageFactoryMock = new Mock<IPageFactory>();
-            _pageFactoryMock.Setup(factory => factory.GetPage<IHomePage>(_webDriverMock.Object)).Returns(_homePageMock.Object);
-
-            _siteNavigator = new SiteNavigator(_webDriverMock.Object, _pageFactoryMock.Object);
+            _pageFactoryMock.Setup(factory => factory.GetPage<IHomePage>()).Returns(_homePageMock.Object);
+            _pageFactoryMock.Setup(factory => factory.GetPage<ILoginPage>()).Returns(_loginPageMock.Object);
         }
 
         [Test]
         public void ShouldOpenHomePage()
         {
-            var resultPage = _siteNavigator.GoToHomePage();
+            var homePage = _siteNavigator.GoToHomePage();
 
-            Assert.AreEqual(_homePageMock.Object, resultPage);
+            Assert.AreEqual(_homePageMock.Object, homePage);
             _navigationMock.Verify(navigation => navigation.GoToUrl("https://www.fidelity.com"));
         }
 
@@ -53,7 +64,7 @@ namespace Sonneville.FidelityWebDriver.Tests
             var loginPage = _siteNavigator.GoToLoginPage();
 
             _homePageMock.Verify(page => page.GoToLoginPage());
-            Assert.IsNotNull(loginPage);
+            Assert.AreEqual(_loginPageMock.Object, loginPage);
         }
     }
 }

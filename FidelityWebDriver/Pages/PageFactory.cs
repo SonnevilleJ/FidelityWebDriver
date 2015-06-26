@@ -1,12 +1,25 @@
+using System;
+using System.Collections.Generic;
 using OpenQA.Selenium;
 
 namespace Sonneville.FidelityWebDriver.Pages
 {
     public class PageFactory : IPageFactory
     {
-        public T GetPage<T>(IWebDriver webDriver) where T : IPage
+        private readonly Dictionary<Type, IPage> _pages;
+
+        public PageFactory(IWebDriver webDriver)
         {
-            throw new System.NotImplementedException();
+            _pages = new Dictionary<Type, IPage>
+            {
+                {typeof (IHomePage), new HomePage(webDriver, this)},
+                {typeof(ILoginPage), new LoginPage(webDriver)}
+            };
+        }
+
+        public T GetPage<T>() where T : IPage
+        {
+            return (T) _pages[typeof (T)];
         }
     }
 }
