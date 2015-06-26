@@ -21,18 +21,18 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         {
             Manager.DownloadTransactions();
 
-            SiteNavigatorMock.Verify(driver => driver.GoToHomepage());
+            SiteNavigatorMock.Verify(navigator => navigator.GoToHomepage());
         }
 
         [Test]
         public void ShouldDisposeSiteNavigatorWhenRun()
         {
-            SiteNavigatorMock.Setup(driver => driver.GoToHomepage())
+            SiteNavigatorMock.Setup(navigator => navigator.GoToHomepage())
                 .Callback(() => SiteNavigatorMock.Verify(fd => fd.Dispose(), Times.Never()));
 
             Manager.DownloadTransactions();
 
-            SiteNavigatorMock.Verify(driver => driver.Dispose());
+            SiteNavigatorMock.Verify(navigator => navigator.Dispose());
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
 
                 Manager.DownloadTransactions();
 
-                SiteNavigatorMock.Verify(driver => driver.Dispose(), Times.Never());
+                SiteNavigatorMock.Verify(navigator => navigator.Dispose(), Times.Never());
             }
             finally
             {

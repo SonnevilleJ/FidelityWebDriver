@@ -25,7 +25,8 @@ namespace Sonneville.FidelityWebDriver.Demo
         {
             if (disposing)
             {
-                _transactionManager.Dispose();
+                var transactionManager = _transactionManager;
+                if (transactionManager != null) transactionManager.Dispose();
             }
         }
     }
