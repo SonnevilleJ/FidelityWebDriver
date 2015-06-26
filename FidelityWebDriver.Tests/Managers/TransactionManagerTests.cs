@@ -5,36 +5,34 @@ using Sonneville.FidelityWebDriver.Managers;
 namespace Sonneville.FidelityWebDriver.Tests.Managers
 {
     [TestFixture]
-    public class TransactionManagerTests
+    public class TransactionManagerTests : ManagerTestsBase<TransactionManager>
     {
-        private TransactionManager _manager;
-        private Mock<ISiteNavigator> _siteNavigatorMock;
+        private Mock<ILoginManager> _loginManagerMock;
 
-        [SetUp]
-        public void Setup()
+        protected override TransactionManager InstantiateManager()
         {
-            _siteNavigatorMock = new Mock<ISiteNavigator>();
+            _loginManagerMock = new Mock<ILoginManager>();
 
-            _manager = new TransactionManager(_siteNavigatorMock.Object);
+            return new TransactionManager(SiteNavigatorMock.Object, _loginManagerMock.Object);
         }
 
         [Test]
         public void ShouldOpenFidelityHomepage()
         {
-            _manager.DownloadTransactions();
+            Manager.DownloadTransactions();
 
-            _siteNavigatorMock.Verify(driver => driver.GoToHomepage());
+            SiteNavigatorMock.Verify(driver => driver.GoToHomepage());
         }
 
         [Test]
-        public void ShouldDisposeFidelityDriverWhenRun()
+        public void ShouldDisposeSiteNavigatorWhenRun()
         {
-            _siteNavigatorMock.Setup(driver => driver.GoToHomepage())
-                .Callback(() => _siteNavigatorMock.Verify(fd => fd.Dispose(), Times.Never()));
+            SiteNavigatorMock.Setup(driver => driver.GoToHomepage())
+                .Callback(() => SiteNavigatorMock.Verify(fd => fd.Dispose(), Times.Never()));
 
-            _manager.DownloadTransactions();
+            Manager.DownloadTransactions();
 
-            _siteNavigatorMock.Verify(driver => driver.Dispose());
+            SiteNavigatorMock.Verify(driver => driver.Dispose());
         }
 
         [Test]
@@ -44,29 +42,14 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
             {
                 Settings.Default.AutoCloseSelenium = false;
 
-                _manager.DownloadTransactions();
+                Manager.DownloadTransactions();
 
-                _siteNavigatorMock.Verify(driver => driver.Dispose(), Times.Never());
+                SiteNavigatorMock.Verify(driver => driver.Dispose(), Times.Never());
             }
             finally
             {
                 Settings.Default.Reset();
             }
-        }
-
-        [Test]
-        public void ShouldDisposeFidelityDriver()
-        {
-            _manager.Dispose();
-
-            _siteNavigatorMock.Verify(driver => driver.Dispose());
-        }
-
-        [Test]
-        public void ShouldHandleMultipleDisposals()
-        {
-            _manager.Dispose();
-            _manager.Dispose();
         }
     }
 }

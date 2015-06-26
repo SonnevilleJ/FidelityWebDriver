@@ -19,6 +19,11 @@ namespace Sonneville.FidelityWebDriver
             return new HomePage(null);
         }
 
+        public ILoginPage GoToLoginPage()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Dispose()
         {
             Dispose(true);

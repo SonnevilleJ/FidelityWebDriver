@@ -3,10 +3,12 @@ namespace Sonneville.FidelityWebDriver.Managers
     public class TransactionManager : ITransactionManager
     {
         private readonly ISiteNavigator _siteNavigator;
+        private readonly ILoginManager _loginManager;
 
-        public TransactionManager(ISiteNavigator siteNavigator)
+        public TransactionManager(ISiteNavigator siteNavigator, ILoginManager loginManager)
         {
             _siteNavigator = siteNavigator;
+            _loginManager = loginManager;
         }
 
         public void DownloadTransactions()

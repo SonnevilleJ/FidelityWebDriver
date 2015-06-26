@@ -44,7 +44,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Managers\ILoginManager.cs" />
+    <Compile Include="Managers\IManager.cs" />
     <Compile Include="Managers\ITransactionManager.cs" />
+    <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\TransactionManager.cs" />
     <Compile Include="SiteNavigator.cs" />
     <Compile Include="ISiteNavigator.cs" />

@@ -63,6 +63,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Managers\LoginManagerTests.cs" />
+    <Compile Include="Managers\ManagerTestsBase.cs" />
     <Compile Include="Managers\TransactionManagerTests.cs" />
     <Compile Include="SiteNavigatorTests.cs" />
     <Compile Include="Pages\HomepageTests.cs" />
