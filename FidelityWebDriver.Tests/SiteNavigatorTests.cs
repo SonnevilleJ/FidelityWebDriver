@@ -5,9 +5,9 @@ using OpenQA.Selenium;
 namespace Sonneville.FidelityWebDriver.Tests
 {
     [TestFixture]
-    public class FidelityDriverTests
+    public class SiteNavigatorTests
     {
-        private FidelityDriver _fidelityDriver;
+        private SiteNavigator _siteNavigator;
         private Mock<IWebDriver> _webDriverMock;
         private Mock<INavigation> _navigationMock;
 
@@ -19,13 +19,13 @@ namespace Sonneville.FidelityWebDriver.Tests
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(webDriver => webDriver.Navigate()).Returns(_navigationMock.Object);
 
-            _fidelityDriver = new FidelityDriver(_webDriverMock.Object);
+            _siteNavigator = new SiteNavigator(_webDriverMock.Object);
         }
 
         [Test]
         public void ShouldOpenFidelitySite()
         {
-            var resultPage = _fidelityDriver.GoToHomepage();
+            var resultPage = _siteNavigator.GoToHomepage();
 
             Assert.IsNotNull(resultPage);
             _navigationMock.Verify(navigation => navigation.GoToUrl("https://www.fidelity.com"));
@@ -34,7 +34,7 @@ namespace Sonneville.FidelityWebDriver.Tests
         [Test]
         public void ShouldDisposeWebDriver()
         {
-            _fidelityDriver.Dispose();
+            _siteNavigator.Dispose();
 
             _webDriverMock.Verify(driver => driver.Dispose());
         }

@@ -3,11 +3,11 @@ using Sonneville.FidelityWebDriver.Pages;
 
 namespace Sonneville.FidelityWebDriver
 {
-    public class FidelityDriver : IFidelityDriver
+    public class SiteNavigator : ISiteNavigator
     {
         private readonly IWebDriver _webDriver;
 
-        public FidelityDriver(IWebDriver webDriver)
+        public SiteNavigator(IWebDriver webDriver)
         {
             _webDriver = webDriver;
         }

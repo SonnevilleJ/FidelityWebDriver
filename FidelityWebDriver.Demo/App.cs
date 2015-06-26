@@ -1,22 +1,19 @@
-﻿namespace Sonneville.FidelityWebDriver.Demo
+using Sonneville.FidelityWebDriver.Managers;
+
+namespace Sonneville.FidelityWebDriver.Demo
 {
     public class App : IApp
     {
-        private readonly IFidelityDriver _fidelityDriver;
+        private readonly ITransactionManager _transactionManager;
 
-        public App(IFidelityDriver fidelityDriver)
+        public App(ITransactionManager transactionManager)
         {
-            _fidelityDriver = fidelityDriver;
+            _transactionManager = transactionManager;
         }
 
         public void Run(string[] args)
         {
-            _fidelityDriver.GoToHomepage();
-
-            if (Settings.Default.AutoCloseSelenium)
-            {
-                _fidelityDriver.Dispose();
-            }
+            _transactionManager.DownloadTransactions();
         }
 
         public void Dispose()
@@ -28,8 +25,7 @@
         {
             if (disposing)
             {
-                var fidelityDriver = _fidelityDriver;
-                if (fidelityDriver != null) fidelityDriver.Dispose();
+                _transactionManager.Dispose();
             }
         }
     }

@@ -1,67 +1,40 @@
 ﻿using Moq;
 using NUnit.Framework;
+using Sonneville.FidelityWebDriver.Managers;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests
 {
     [TestFixture]
     public class AppTests
     {
-        private string[] _cliParams;
+        private string[] _args;
         private App _app;
-        private Mock<IFidelityDriver> _fidelityDriverMock;
+        private Mock<ITransactionManager> _transactionManagerMock;
 
         [SetUp]
         public void Setup()
         {
-            _cliParams = new string[0];
+            _args = new string[0];
 
-            _fidelityDriverMock = new Mock<IFidelityDriver>();
+            _transactionManagerMock = new Mock<ITransactionManager>();
 
-            _app = new App(_fidelityDriverMock.Object);
+            _app = new App(_transactionManagerMock.Object);
         }
 
         [Test]
-        public void ShouldOpenFidelityHomepage()
+        public void ShouldDelegateToTransactionManager()
         {
-            _app.Run(_cliParams);
+            _app.Run(_args);
 
-            _fidelityDriverMock.Verify(driver => driver.GoToHomepage());
+            _transactionManagerMock.Verify(manager => manager.DownloadTransactions());
         }
 
         [Test]
-        public void ShouldDisposeFidelityDriverWhenRun()
-        {
-            _fidelityDriverMock.Setup(driver => driver.GoToHomepage())
-                .Callback(() => _fidelityDriverMock.Verify(fd => fd.Dispose(), Times.Never()));
-
-            _app.Run(_cliParams);
-
-            _fidelityDriverMock.Verify(driver => driver.Dispose());
-        }
-
-        [Test]
-        public void ShouldObserveAutoCloseSettingWhenRun()
-        {
-            try
-            {
-                Settings.Default.AutoCloseSelenium = false;
-
-                _app.Run(_cliParams);
-
-                _fidelityDriverMock.Verify(driver => driver.Dispose(), Times.Never());
-            }
-            finally
-            {
-                Settings.Default.Reset();
-            }
-        }
-
-        [Test]
-        public void ShouldDisposeFidelityDriver()
+        public void ShouldCascadeDisposeToManagers()
         {
             _app.Dispose();
 
-            _fidelityDriverMock.Verify(driver => driver.Dispose());
+            _transactionManagerMock.Verify(manager => manager.Dispose());
         }
 
         [Test]

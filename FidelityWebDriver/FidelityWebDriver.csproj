@@ -44,8 +44,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FidelityDriver.cs" />
-    <Compile Include="IFidelityDriver.cs" />
+    <Compile Include="Managers\ITransactionManager.cs" />
+    <Compile Include="Managers\TransactionManager.cs" />
+    <Compile Include="SiteNavigator.cs" />
+    <Compile Include="ISiteNavigator.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\IHomePage.cs" />
     <Compile Include="Pages\ILoginPage.cs" />
