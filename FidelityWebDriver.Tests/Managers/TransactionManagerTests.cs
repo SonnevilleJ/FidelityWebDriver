@@ -23,30 +23,5 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
 
             _loginManagerMock.Verify(manager => manager.EnsureLoggedIn());
         }
-
-        [Test]
-        public void ShouldDisposeSiteNavigatorWhenRun()
-        {
-            Manager.DownloadTransactions();
-
-            SiteNavigatorMock.Verify(navigator => navigator.Dispose());
-        }
-
-        [Test]
-        public void ShouldObserveAutoCloseSettingWhenRun()
-        {
-            try
-            {
-                Settings.Default.AutoCloseSelenium = false;
-
-                Manager.DownloadTransactions();
-
-                SiteNavigatorMock.Verify(navigator => navigator.Dispose(), Times.Never());
-            }
-            finally
-            {
-                Settings.Default.Reset();
-            }
-        }
     }
 }

@@ -14,11 +14,6 @@ namespace Sonneville.FidelityWebDriver.Managers
         public void DownloadTransactions()
         {
             _loginManager.EnsureLoggedIn();
-
-            if (Settings.Default.AutoCloseSelenium)
-            {
-                _siteNavigator.Dispose();
-            }
         }
 
         public void Dispose()

@@ -8,10 +8,12 @@ namespace Sonneville.FidelityWebDriver.Demo
     {
         public static void Main(string[] args)
         {
-            new KernelBuilder().Build().Get<IApp>().Run(args);
-
-            Console.WriteLine("Press any key to continue...");
-            Console.Read();
+            using (var app = new KernelBuilder().Build().Get<IApp>())
+            {
+                app.Run(args);
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
         }
     }
 }
