@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Sonneville.FidelityWebDriver.Managers
+﻿namespace Sonneville.FidelityWebDriver.Managers
 {
     public interface ILoginManager : IManager
     {

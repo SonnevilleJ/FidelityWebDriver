@@ -1,4 +1,3 @@
-using System.Threading;
 using OpenQA.Selenium;
 
 namespace Sonneville.FidelityWebDriver.Pages
