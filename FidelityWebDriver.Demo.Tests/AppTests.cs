@@ -76,7 +76,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             
             if (string.IsNullOrEmpty(Settings.Default.Username) || string.IsNullOrEmpty(Settings.Default.Password))
             {
-                Assert.Inconclusive("Username or password not set; not going to persist empty credentials!");
+                Settings.Default.Reload();
+                Assert.Inconclusive("Username or password not modified; not going to persist empty credentials!");
             }
             else
             {
