@@ -1,5 +1,6 @@
 ﻿using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+using Sonneville.FidelityWebDriver.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Demo.Ninject
 {
@@ -13,6 +14,10 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
                         .SelectAllClasses()
                         .BindDefaultInterface()
                         .Configure(configurationAction => configurationAction.InSingletonScope()));
+
+            var fidelityConfiguration = new FidelityConfiguration();
+            fidelityConfiguration.Initialize();
+            Kernel.Bind<FidelityConfiguration>().ToConstant(fidelityConfiguration);
         }
     }
 }

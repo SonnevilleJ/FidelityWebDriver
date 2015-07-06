@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
+using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Managers;
 using Sonneville.FidelityWebDriver.Pages;
 
@@ -9,31 +10,25 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
     public class LoginManagerTests : ManagerTestsBase<LoginManager>
     {
         private Mock<ILoginPage> _loginPageMock;
-        private string _username;
-        private string _password;
+        private FidelityConfiguration _fidelityConfiguration;
 
         protected override LoginManager InstantiateManager()
         {
-            return new LoginManager(SiteNavigatorMock.Object);
+            _fidelityConfiguration = new FidelityConfiguration
+            {
+                Username = "username",
+                Password = "password"
+            };
+
+            return new LoginManager(SiteNavigatorMock.Object, _fidelityConfiguration);
         }
 
         [SetUp]
         public void Setup()
         {
-            _username = "username";
-            _password = "password";
-            Settings.Default.Username = _username;
-            Settings.Default.Password = _password;
-
             _loginPageMock = new Mock<ILoginPage>();
 
             SiteNavigatorMock.Setup(navigator => navigator.GoToLoginPage()).Returns(_loginPageMock.Object);
-        }
-
-        [TearDown]
-        public void Teardown()
-        {
-            Settings.Default.Reload();
         }
 
         [Test]
@@ -49,7 +44,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         {
             Manager.LogIn();
 
-            _loginPageMock.Verify(page => page.LogIn(_username, _password));
+            _loginPageMock.Verify(page => page.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password));
             Assert.IsTrue(Manager.IsLoggedIn);
         }
 

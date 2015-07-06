@@ -1,12 +1,16 @@
-﻿namespace Sonneville.FidelityWebDriver.Managers
+﻿using Sonneville.FidelityWebDriver.Configuration;
+
+namespace Sonneville.FidelityWebDriver.Managers
 {
     public class LoginManager : ILoginManager
     {
         private readonly ISiteNavigator _siteNavigator;
+        private readonly FidelityConfiguration _fidelityConfiguration;
 
-        public LoginManager(ISiteNavigator siteNavigator)
+        public LoginManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration)
         {
             _siteNavigator = siteNavigator;
+            _fidelityConfiguration = fidelityConfiguration;
         }
 
         public bool IsLoggedIn { get; private set; }
@@ -14,7 +18,8 @@
         public void LogIn()
         {
             var loginPage = _siteNavigator.GoToLoginPage();
-            loginPage.LogIn(Settings.Default.Username, Settings.Default.Password);
+
+            loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password);
             IsLoggedIn = true;
         }
 
