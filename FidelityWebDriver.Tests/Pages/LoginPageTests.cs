@@ -9,7 +9,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
     public class LoginPageTests : PageFactoryTests<ILoginPage>
     {
         private LoginPage _loginPage;
-        private Mock<IWebDriver> _webDriverMock;
         private string _username;
         private string _password;
         private Mock<IWebElement> _usernameInputMock;
@@ -30,10 +29,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
 
             _submitButtonMock = new Mock<IWebElement>();
 
-            _webDriverMock = new Mock<IWebDriver>();
-            _webDriverMock.Setup(driver => driver.FindElement(By.Id("userId-input"))).Returns(_usernameInputMock.Object);
-            _webDriverMock.Setup(driver => driver.FindElement(By.Id("password"))).Returns(_passwordInputMock.Object);
-            _webDriverMock.Setup(driver => driver.FindElement(By.Id("fs-login-button"))).Returns(_submitButtonMock.Object);
+            WebDriverMock.Setup(driver => driver.FindElement(By.Id("userId-input"))).Returns(_usernameInputMock.Object);
+            WebDriverMock.Setup(driver => driver.FindElement(By.Id("password"))).Returns(_passwordInputMock.Object);
+            WebDriverMock.Setup(driver => driver.FindElement(By.Id("fs-login-button"))).Returns(_submitButtonMock.Object);
 
             _summaryPageMock = new Mock<ISummaryPage>();
 
@@ -41,7 +39,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             _pageFactoryMock.Setup(pageFactory => pageFactory.GetPage<ISummaryPage>())
                 .Returns(_summaryPageMock.Object);
 
-            _loginPage = new LoginPage(_webDriverMock.Object, _pageFactoryMock.Object);
+            _loginPage = new LoginPage(WebDriverMock.Object, _pageFactoryMock.Object);
         }
 
         [Test]
