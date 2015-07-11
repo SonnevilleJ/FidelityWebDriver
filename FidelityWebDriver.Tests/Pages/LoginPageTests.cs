@@ -14,9 +14,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         private Mock<IWebElement> _usernameInputMock;
         private Mock<IWebElement> _passwordInputMock;
         private Mock<IWebElement> _submitButtonMock;
+        private Mock<IWebDriver> _webDriverMock;
         private Mock<IPageFactory> _pageFactoryMock;
         private Mock<ISummaryPage> _summaryPageMock;
-        private Mock<IWebDriver> _webDriverMock;
 
         [SetUp]
         public void Setup()
