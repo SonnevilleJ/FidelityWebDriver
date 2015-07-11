@@ -1,9 +1,11 @@
-﻿namespace Sonneville.FidelityWebDriver.Managers
+﻿using Sonneville.FidelityWebDriver.Pages;
+
+namespace Sonneville.FidelityWebDriver.Managers
 {
     public interface ILoginManager : IManager
     {
         bool IsLoggedIn { get; }
-        void LogIn();
+        ISummaryPage LogIn();
         void EnsureLoggedIn();
     }
 }

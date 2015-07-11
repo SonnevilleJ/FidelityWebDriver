@@ -4,24 +4,28 @@ namespace Sonneville.FidelityWebDriver.Pages
 {
     public class LoginPage : ILoginPage
     {
-        public LoginPage(IWebDriver webDriver)
+        private readonly IWebDriver _webDriver;
+        private readonly IPageFactory _pageFactory;
+
+        public LoginPage(IWebDriver webDriver, IPageFactory pageFactory)
         {
-            WebDriver = webDriver;
+            _webDriver = webDriver;
+            _pageFactory = pageFactory;
         }
 
-        public void LogIn(string username, string password)
+        public ISummaryPage LogIn(string username, string password)
         {
             InsertTextIntoInput(By.Id("userId-input"), username);
             InsertTextIntoInput(By.Id("password"), password);
-            WebDriver.FindElement(By.Id("fs-login-button")).Click();
+            _webDriver.FindElement(By.Id("fs-login-button")).Click();
+
+            return _pageFactory.GetPage<ISummaryPage>();
         }
 
         private void InsertTextIntoInput(By @by, string username)
         {
-            var element = WebDriver.FindElement(@by);
+            var element = _webDriver.FindElement(@by);
             element.SendKeys(username);
         }
-
-        public IWebDriver WebDriver { get; private set; }
     }
 }

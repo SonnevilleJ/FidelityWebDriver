@@ -11,6 +11,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
     {
         private Mock<ILoginPage> _loginPageMock;
         private FidelityConfiguration _fidelityConfiguration;
+        private Mock<ISummaryPage> _summaryPageMock;
 
         protected override LoginManager InstantiateManager()
         {
@@ -26,8 +27,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         [SetUp]
         public void Setup()
         {
-            _loginPageMock = new Mock<ILoginPage>();
+            _summaryPageMock = new Mock<ISummaryPage>();
 
+            _loginPageMock = new Mock<ILoginPage>();
+            _loginPageMock.Setup(
+                loginPage => loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password))
+                .Returns(_summaryPageMock.Object);
             SiteNavigatorMock.Setup(navigator => navigator.GoToLoginPage()).Returns(_loginPageMock.Object);
         }
 
@@ -40,12 +45,13 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         }
 
         [Test]
-        public void ShouldNavigateToLoginPageWhenLoggingIn()
+        public void ShouldNavigateToSummaryPageAfterSuccessfulLogIn()
         {
-            Manager.LogIn();
+            var summaryPage = Manager.LogIn();
 
             _loginPageMock.Verify(page => page.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password));
             Assert.IsTrue(Manager.IsLoggedIn);
+            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
 
         [Test]

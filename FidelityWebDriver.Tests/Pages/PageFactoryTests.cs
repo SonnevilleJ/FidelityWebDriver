@@ -20,14 +20,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         }
 
         [Test]
-        public void GetPagePassesInWebDriver()
-        {
-            var homePage = _factory.GetPage<T>();
-            
-            Assert.AreEqual(WebDriverMock.Object, homePage.WebDriver);
-        }
-
-        [Test]
         public void ShouldReturnSamePageForEachRequest()
         {
             var homePage1 = _factory.GetPage<T>();

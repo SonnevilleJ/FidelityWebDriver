@@ -13,7 +13,8 @@ namespace Sonneville.FidelityWebDriver.Pages
             _pages = new Dictionary<Type, IPage>
             {
                 {typeof (IHomePage), new HomePage(webDriver, this)},
-                {typeof(ILoginPage), new LoginPage(webDriver)}
+                {typeof (ILoginPage), new LoginPage(webDriver, this)},
+                {typeof (ISummaryPage), new SummaryPage(webDriver, this)}
             };
         }
 

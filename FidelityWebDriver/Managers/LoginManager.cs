@@ -1,4 +1,5 @@
 ﻿using Sonneville.FidelityWebDriver.Configuration;
+using Sonneville.FidelityWebDriver.Pages;
 
 namespace Sonneville.FidelityWebDriver.Managers
 {
@@ -15,12 +16,13 @@ namespace Sonneville.FidelityWebDriver.Managers
 
         public bool IsLoggedIn { get; private set; }
 
-        public void LogIn()
+        public ISummaryPage LogIn()
         {
             var loginPage = _siteNavigator.GoToLoginPage();
 
-            loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password);
+            var summaryPage = loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password);
             IsLoggedIn = true;
+            return summaryPage;
         }
 
         public void EnsureLoggedIn()

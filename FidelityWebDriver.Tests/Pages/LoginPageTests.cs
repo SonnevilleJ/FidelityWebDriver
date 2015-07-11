@@ -15,6 +15,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         private Mock<IWebElement> _usernameInputMock;
         private Mock<IWebElement> _passwordInputMock;
         private Mock<IWebElement> _submitButtonMock;
+        private Mock<IPageFactory> _pageFactoryMock;
+        private Mock<ISummaryPage> _summaryPageMock;
 
         [SetUp]
         public void Setup()
@@ -33,7 +35,13 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             _webDriverMock.Setup(driver => driver.FindElement(By.Id("password"))).Returns(_passwordInputMock.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.Id("fs-login-button"))).Returns(_submitButtonMock.Object);
 
-            _loginPage = new LoginPage(_webDriverMock.Object);
+            _summaryPageMock = new Mock<ISummaryPage>();
+
+            _pageFactoryMock = new Mock<IPageFactory>();
+            _pageFactoryMock.Setup(pageFactory => pageFactory.GetPage<ISummaryPage>())
+                .Returns(_summaryPageMock.Object);
+
+            _loginPage = new LoginPage(_webDriverMock.Object, _pageFactoryMock.Object);
         }
 
         [Test]
@@ -44,10 +52,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
                 _usernameInputMock.Verify(input => input.SendKeys(_username), "Must enter username before clicking submit!");
                 _passwordInputMock.Verify(input => input.SendKeys(_password), "Must enter password before clicking submit!");
             });
-            
-            _loginPage.LogIn(_username, _password);
+
+            var summaryPage = _loginPage.LogIn(_username, _password);
 
             _submitButtonMock.Verify(button => button.Click());
+
+            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
     }
 }

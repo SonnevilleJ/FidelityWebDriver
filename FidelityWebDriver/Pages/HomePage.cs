@@ -4,24 +4,23 @@ namespace Sonneville.FidelityWebDriver.Pages
 {
     public class HomePage : IHomePage
     {
+        private readonly IWebDriver _webDriver;
         private readonly IPageFactory _pageFactory;
 
         public HomePage(IWebDriver webDriver, IPageFactory pageFactory)
         {
+            _webDriver = webDriver;
             _pageFactory = pageFactory;
-            WebDriver = webDriver;
         }
 
         public ILoginPage GoToLoginPage()
         {
-            WebDriver.FindElement(By.ClassName("pntlt"))
+            _webDriver.FindElement(By.ClassName("pntlt"))
                 .FindElement(By.ClassName("pnlogout"))
                 .FindElement(By.ClassName("last-child"))
                 .FindElement(By.TagName("a"))
                 .Click();
             return _pageFactory.GetPage<ILoginPage>();
         }
-
-        public IWebDriver WebDriver { get; private set; }
     }
 }

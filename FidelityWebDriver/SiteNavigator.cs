@@ -27,11 +27,6 @@ namespace Sonneville.FidelityWebDriver
             return _pageFactory.GetPage<ILoginPage>();
         }
 
-        public IActivityPage GoToActivityPage()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void Dispose()
         {
             Dispose(true);
