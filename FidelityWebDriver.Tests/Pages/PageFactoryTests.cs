@@ -9,23 +9,23 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
     public abstract class PageFactoryTests<T> where T : IPage
     {
         private PageFactory _factory;
-        protected Mock<IWebDriver> WebDriverMock;
+        private Mock<IWebDriver> _driverMock;
 
         [SetUp]
         public void SetupPageFactory()
         {
-            WebDriverMock = new Mock<IWebDriver>();
+            _driverMock = new Mock<IWebDriver>(MockBehavior.Strict);
 
-            _factory = new PageFactory(WebDriverMock.Object);
+            _factory = new PageFactory(_driverMock.Object);
         }
 
         [Test]
         public void ShouldReturnSamePageForEachRequest()
         {
-            var homePage1 = _factory.GetPage<T>();
-            var homePage2 = _factory.GetPage<T>();
+            var page1 = _factory.GetPage<T>();
+            var page2 = _factory.GetPage<T>();
 
-            Assert.AreSame(homePage1, homePage2);
+            Assert.AreSame(page1, page2);
         }
     }
 }
