@@ -28,12 +28,13 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         public void Setup()
         {
             _summaryPageMock = new Mock<ISummaryPage>();
+            SiteNavigatorMock.Setup(navigator => navigator.GoTo<ISummaryPage>()).Returns(_summaryPageMock.Object);
 
             _loginPageMock = new Mock<ILoginPage>();
             _loginPageMock.Setup(
                 loginPage => loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password))
                 .Returns(_summaryPageMock.Object);
-            SiteNavigatorMock.Setup(navigator => navigator.GoToLoginPage()).Returns(_loginPageMock.Object);
+            SiteNavigatorMock.Setup(navigator => navigator.GoTo<ILoginPage>()).Returns(_loginPageMock.Object);
         }
 
         [Test]
@@ -41,7 +42,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         {
             Assert.IsFalse(Manager.IsLoggedIn);
 
-            SiteNavigatorMock.Verify(navigator => navigator.GoToLoginPage(), Times.Never());
+            SiteNavigatorMock.Verify(navigator => navigator.GoTo<ILoginPage>(), Times.Never());
         }
 
         [Test]
@@ -59,18 +60,20 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         {
             Manager.LogIn();
 
-            Manager.EnsureLoggedIn();
+            var summaryPage = Manager.EnsureLoggedIn();
 
-            SiteNavigatorMock.Verify(nav => nav.GoToLoginPage(), Times.Once());
+            SiteNavigatorMock.Verify(nav => nav.GoTo<ILoginPage>(), Times.Once());
+            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
 
         [Test]
         public void ShouldLogInIfNOtAlreadyLoggedIn()
         {
-            Manager.EnsureLoggedIn();
+            var summaryPage = Manager.EnsureLoggedIn();
 
-            SiteNavigatorMock.Verify(nav => nav.GoToLoginPage(), Times.Once());
+            SiteNavigatorMock.Verify(nav => nav.GoTo<ILoginPage>(), Times.Once());
             Assert.IsTrue(Manager.IsLoggedIn);
+            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
     }
 }

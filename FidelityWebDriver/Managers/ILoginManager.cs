@@ -6,6 +6,6 @@ namespace Sonneville.FidelityWebDriver.Managers
     {
         bool IsLoggedIn { get; }
         ISummaryPage LogIn();
-        void EnsureLoggedIn();
+        ISummaryPage EnsureLoggedIn();
     }
 }

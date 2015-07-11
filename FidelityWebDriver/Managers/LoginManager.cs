@@ -18,19 +18,20 @@ namespace Sonneville.FidelityWebDriver.Managers
 
         public ISummaryPage LogIn()
         {
-            var loginPage = _siteNavigator.GoToLoginPage();
+            var loginPage = _siteNavigator.GoTo<ILoginPage>();
 
             var summaryPage = loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password);
             IsLoggedIn = true;
             return summaryPage;
         }
 
-        public void EnsureLoggedIn()
+        public ISummaryPage EnsureLoggedIn()
         {
             if (!IsLoggedIn)
             {
-                LogIn();
+                return LogIn();
             }
+            return _siteNavigator.GoTo<ISummaryPage>();
         }
 
         public void Dispose()
