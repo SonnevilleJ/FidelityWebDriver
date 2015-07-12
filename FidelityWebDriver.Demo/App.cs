@@ -12,6 +12,7 @@ namespace Sonneville.FidelityWebDriver.Demo
         private readonly FidelityConfiguration _fidelityConfiguration;
         private readonly OptionSet _optionSet;
         private bool _shouldPersistOptions;
+        private bool _shouldShowHelp;
 
         public App(ITransactionManager transactionManager, FidelityConfiguration fidelityConfiguration)
         {
@@ -23,12 +24,16 @@ namespace Sonneville.FidelityWebDriver.Demo
                 },
                 {
                     "p|password=", "the password to use when logging into Fidelity",
-                    password=> { _fidelityConfiguration.Password = password; }
+                    password => { _fidelityConfiguration.Password = password; }
                 },
                 {
                     "s|save", "indicates options should be persisted.",
-                    save=> { _shouldPersistOptions = true; }
-                }
+                    save => { _shouldPersistOptions = true; }
+                },
+                {
+                    "h|help", "shows this message and exits.",
+                    help => { _shouldShowHelp = true; }
+                },
             };
             _fidelityConfiguration = fidelityConfiguration;
             _transactionManager = transactionManager;
@@ -37,11 +42,15 @@ namespace Sonneville.FidelityWebDriver.Demo
         public void Run(IEnumerable<string> args)
         {
             _optionSet.Parse(args);
+            if (_shouldShowHelp)
+            {
+                _optionSet.WriteOptionDescriptions(Console.Out);
+                return;
+            }
             if (_shouldPersistOptions)
             {
                 _fidelityConfiguration.Write();
             }
-            _optionSet.WriteOptionDescriptions(Console.Out);
 
             _transactionManager.DownloadTransactions();
         }
