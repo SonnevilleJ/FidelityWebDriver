@@ -20,14 +20,9 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
         [Test]
         public void ShouldGetApp()
         {
-            var app = _kernelBuilder.Build().Get<IApp>();
-            try
+            using (var app = _kernelBuilder.Build().Get<IApp>())
             {
                 Assert.IsNotNull(app);
-            }
-            finally
-            {
-                app.Dispose();
             }
         }
 
