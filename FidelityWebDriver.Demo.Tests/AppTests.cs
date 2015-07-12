@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Managers;
@@ -6,7 +7,7 @@ using Sonneville.FidelityWebDriver.Managers;
 namespace Sonneville.FidelityWebDriver.Demo.Tests
 {
     [TestFixture]
-    public class AppTests
+    public class AppTests : IDisposable
     {
         private string[] _args;
         private App _app;
@@ -86,6 +87,24 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         {
             _app.Dispose();
             _app.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                var app = _app;
+                if (app != null)
+                {
+                    app.Dispose();
+                    _app = null;
+                }
+            }
         }
     }
 }

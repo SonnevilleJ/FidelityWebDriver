@@ -48,7 +48,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         [Test]
         public void ShouldNavigateToSummaryPageAfterSuccessfulLogIn()
         {
-            var summaryPage = Manager.LogIn();
+            var summaryPage = Manager.EnsureLoggedIn();
 
             _loginPageMock.Verify(page => page.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password));
             Assert.IsTrue(Manager.IsLoggedIn);
@@ -58,7 +58,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         [Test]
         public void ShouldNotLogInIfAlreadyLoggedIn()
         {
-            Manager.LogIn();
+            Manager.EnsureLoggedIn();
 
             var summaryPage = Manager.EnsureLoggedIn();
 

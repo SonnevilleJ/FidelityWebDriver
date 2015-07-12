@@ -16,7 +16,7 @@ namespace Sonneville.FidelityWebDriver.Managers
 
         public bool IsLoggedIn { get; private set; }
 
-        public ISummaryPage LogIn()
+        private ISummaryPage LogIn()
         {
             var loginPage = _siteNavigator.GoTo<ILoginPage>();
 

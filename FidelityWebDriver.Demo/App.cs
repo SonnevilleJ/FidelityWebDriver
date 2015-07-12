@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NDesk.Options;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Managers;
@@ -33,7 +34,7 @@ namespace Sonneville.FidelityWebDriver.Demo
             _transactionManager = transactionManager;
         }
 
-        public void Run(string[] args)
+        public void Run(IEnumerable<string> args)
         {
             _optionSet.Parse(args);
             if (_shouldPersistOptions)

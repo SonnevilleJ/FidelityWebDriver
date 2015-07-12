@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.IsolatedStorage;
 using System.Text;
 using Westwind.Utilities.Configuration;
@@ -28,11 +27,6 @@ namespace Sonneville.FidelityWebDriver.Configuration
 
                 return true;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
             finally
             {
                 DecryptFields(config);
@@ -52,11 +46,6 @@ namespace Sonneville.FidelityWebDriver.Configuration
                     fileStream.Write(bytes, 0, bytes.Length);
                 }
                 return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
             }
             finally
             {

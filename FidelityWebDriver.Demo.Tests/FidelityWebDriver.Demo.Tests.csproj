@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="AppTests.cs" />
     <Compile Include="Ninject\KernelBuilderTests.cs" />
+    <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

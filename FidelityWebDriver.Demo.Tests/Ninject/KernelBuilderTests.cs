@@ -31,14 +31,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
         {
             using (var webDriver = _kernelBuilder.Build().Get<IWebDriver>())
             {
-                try
-                {
-                    Assert.IsInstanceOf<ChromeDriver>(webDriver);
-                }
-                finally
-                {
-                    webDriver.Close();
-                }
+                Assert.IsInstanceOf<ChromeDriver>(webDriver);
             }
         }
     }

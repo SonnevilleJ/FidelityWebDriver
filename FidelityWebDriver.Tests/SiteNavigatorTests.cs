@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Pages;
@@ -6,7 +7,7 @@ using Sonneville.FidelityWebDriver.Pages;
 namespace Sonneville.FidelityWebDriver.Tests
 {
     [TestFixture]
-    public class SiteNavigatorTests
+    public class SiteNavigatorTests : IDisposable
     {
         private SiteNavigator _siteNavigator;
         private Mock<IWebDriver> _webDriverMock;
@@ -77,6 +78,24 @@ namespace Sonneville.FidelityWebDriver.Tests
 
             _navigationMock.Verify(navigation => navigation.GoToUrl("https://oltx.fidelity.com/ftgw/fbc/oftop/portfolio"));
             Assert.AreEqual(_summaryPageMock.Object, summaryPage);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                var siteNavigator = _siteNavigator;
+                if (siteNavigator != null)
+                {
+                    siteNavigator.Dispose();
+                    _siteNavigator = null;
+                }
+            }
         }
     }
 }
