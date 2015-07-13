@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using System.Security.Authentication;
+using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Pages;
@@ -58,6 +60,17 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             _submitButtonMock.Verify(button => button.Click());
 
             Assert.AreSame(_summaryPageMock.Object, summaryPage);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidCredentialException))]
+        public void ShouldThrowIfCredentialsFail()
+        {
+            _submitButtonMock.Setup(button => button.Click())
+                .Callback(() => _webDriverMock.Setup(webDriver => webDriver.FindElements(By.ClassName("error-page")))
+                    .Returns(new List<IWebElement> {new Mock<IWebElement>().Object}.AsReadOnly()));
+
+            _loginPage.LogIn("Superman", "Who needs tools?");
         }
     }
 }

@@ -1,3 +1,6 @@
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Security.Authentication;
 using OpenQA.Selenium;
 
 namespace Sonneville.FidelityWebDriver.Pages
@@ -19,6 +22,10 @@ namespace Sonneville.FidelityWebDriver.Pages
             InsertTextIntoInput(By.Id("password"), password);
             _webDriver.FindElement(By.Id("fs-login-button")).Click();
 
+            if (_webDriver.FindElements(By.ClassName("error-page")).Any())
+            {
+                throw new InvalidCredentialException("Failed to log into Fidelity.com with given credentials!");
+            }
             return _pageFactory.GetPage<ISummaryPage>();
         }
 
