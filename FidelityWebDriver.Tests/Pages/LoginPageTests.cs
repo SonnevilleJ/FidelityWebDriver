@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Authentication;
 using Moq;
+using Moq.Language.Flow;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Pages;
@@ -19,6 +20,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         private Mock<IWebDriver> _webDriverMock;
         private Mock<IPageFactory> _pageFactoryMock;
         private Mock<ISummaryPage> _summaryPageMock;
+        private List<IWebElement> _errorDivs;
 
         [SetUp]
         public void Setup()
@@ -30,12 +32,16 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
 
             _passwordInputMock = new Mock<IWebElement>();
 
+            _errorDivs = new List<IWebElement>();
+
             _submitButtonMock = new Mock<IWebElement>();
 
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(driver => driver.FindElement(By.Id("userId-input"))).Returns(_usernameInputMock.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.Id("password"))).Returns(_passwordInputMock.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.Id("fs-login-button"))).Returns(_submitButtonMock.Object);
+            _webDriverMock.Setup(webDriver => webDriver.FindElements(By.ClassName("error-page")))
+                .Returns(_errorDivs.AsReadOnly());
 
             _summaryPageMock = new Mock<ISummaryPage>();
 
@@ -67,8 +73,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         public void ShouldThrowIfCredentialsFail()
         {
             _submitButtonMock.Setup(button => button.Click())
-                .Callback(() => _webDriverMock.Setup(webDriver => webDriver.FindElements(By.ClassName("error-page")))
-                    .Returns(new List<IWebElement> {new Mock<IWebElement>().Object}.AsReadOnly()));
+                .Callback(() => _errorDivs.Add(new Mock<IWebElement>().Object));
 
             _loginPage.LogIn("Superman", "Who needs tools?");
         }
