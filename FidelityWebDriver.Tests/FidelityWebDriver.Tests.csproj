@@ -70,6 +70,7 @@
     <Compile Include="Managers\TransactionManagerTests.cs" />
     <Compile Include="Pages\LoginPageTests.cs" />
     <Compile Include="Pages\PageFactoryTests.cs" />
+    <Compile Include="Pages\PositionsPageTests.cs" />
     <Compile Include="Pages\SummaryPageTests.cs" />
     <Compile Include="SiteNavigatorTests.cs" />
     <Compile Include="Pages\HomePageTests.cs" />

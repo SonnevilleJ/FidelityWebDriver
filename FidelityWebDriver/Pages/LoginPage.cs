@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Authentication;
 using OpenQA.Selenium;

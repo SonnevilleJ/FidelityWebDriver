@@ -14,7 +14,8 @@ namespace Sonneville.FidelityWebDriver.Pages
             {
                 {typeof (IHomePage), new HomePage(webDriver, this)},
                 {typeof (ILoginPage), new LoginPage(webDriver, this)},
-                {typeof (ISummaryPage), new SummaryPage(webDriver, this)}
+                {typeof (ISummaryPage), new SummaryPage(webDriver, this)},
+                {typeof(IPositionsPage), new PositionsPage(webDriver, this)},
             };
         }
 

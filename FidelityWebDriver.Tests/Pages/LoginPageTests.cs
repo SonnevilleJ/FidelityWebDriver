@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Authentication;
 using Moq;
-using Moq.Language.Flow;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Pages;
