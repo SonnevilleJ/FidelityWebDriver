@@ -27,16 +27,22 @@ namespace Sonneville.FidelityWebDriver.Pages
 
         public IEnumerable<IAccount> BuildAccounts()
         {
-            var accountDivs = _webDriver.FindElements(By.ClassName("account-selector--group-container"));
+            var accountGroupDivs = _webDriver.FindElements(By.ClassName("account-selector--group-container"));
 
-            foreach (var accountDiv in accountDivs)
+            foreach (var accountGroupDiv in accountGroupDivs)
             {
-                var accountNumber = accountDiv.GetAttribute("data-acct-number");
-                var accountType = _groupIds[accountDiv.GetAttribute("data-group-id")];
-                var accountName = accountDiv.GetAttribute("data-account-name");
-                var value = double.Parse(accountDiv.GetAttribute("data-most-recent-value"));
+                var accountType = _groupIds[accountGroupDiv.GetAttribute("data-group-id")];
+                var accountDivs = accountGroupDiv.FindElements(By.ClassName("js-account"));
 
-                yield return new Account(accountNumber, accountType, accountName, value);
+                foreach (var accountDiv in accountDivs)
+                {
+                    var accountNumber = accountDiv.GetAttribute("data-acct-number");
+                    var accountName = accountDiv.GetAttribute("data-acct-name");
+                    var value = accountType == AccountType.CreditCard
+                        ? double.Parse(accountDiv.GetAttribute("data-acct-balance"))
+                        : double.Parse(accountDiv.GetAttribute("data-most-recent-value"));
+                    yield return new Account(accountNumber, accountType, accountName, value);
+                }
             }
         }
     }
