@@ -26,7 +26,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             {"CC", AccountType.CreditCard},
         };
 
-        private static Dictionary<string, Mock<IWebElement>> _groupDivMocks;
+        private IDictionary<string, Mock<IWebElement>> _groupDivMocks;
 
         [SetUp]
         public void Setup()
@@ -73,7 +73,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             }
         }
 
-        private static Dictionary<string, string> CreateAccountValues(string accountNumber, string accountType, string accountName, string accountValue)
+        private Dictionary<string, string> CreateAccountValues(string accountNumber, string accountType, string accountName, string accountValue)
         {
             return new Dictionary<string, string>
             {
@@ -96,48 +96,44 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             return accountGroupDiv.Object;
         }
 
-        private static IEnumerable<IWebElement> CreateAccountDivs(IEnumerable<IReadOnlyDictionary<string, string>> accountValues, string accountTypeString)
+        private IEnumerable<IWebElement> CreateAccountDivs(IEnumerable<IReadOnlyDictionary<string, string>> accountValues, string accountTypeString)
         {
-            foreach (var values in accountValues)
+            return accountValues.Select(values =>
             {
-                var accountNumberString = values["accountNumber"];
-                var accountNameString = values["accountName"];
-                var accountValueString = values["accountValue"];
-
-                var accountDivMock = CreateAccountDivMock(accountNumberString, accountNameString, accountTypeString,
-                    accountValueString);
-                yield return accountDivMock;
-            }
+                var accountDivMock = new Mock<IWebElement>();
+                accountDivMock.Setup(div => div.GetAttribute("data-acct-number"))
+                    .Returns(values["accountNumber"]);
+                accountDivMock.Setup(div => div.GetAttribute("data-acct-name"))
+                    .Returns(values["accountName"]);
+                accountDivMock.Setup(div => div.GetAttribute(GetValueAttributeName(accountTypeString)))
+                    .Returns(values["accountValue"]);
+                return accountDivMock.Object;
+            });
         }
 
-        private static Mock<IWebElement> GetOrCreateAccountGroupDiv(string accountTypeString)
+        private string GetValueAttributeName(string accountTypeString)
         {
-            return _groupDivMocks.ContainsKey(accountTypeString) ? _groupDivMocks[accountTypeString] : new Mock<IWebElement>();
-        }
-
-        private static IWebElement CreateAccountDivMock(string accountNumberString, string accountNameString, string accountTypeString,
-            string accountValueString)
-        {
-            var accountDivMock = new Mock<IWebElement>();
-            accountDivMock.Setup(div => div.GetAttribute("data-acct-number")).Returns(accountNumberString);
-            accountDivMock.Setup(div => div.GetAttribute("data-acct-name")).Returns(accountNameString);
+            string valueAttributeName;
             switch (accountTypeString)
             {
                 case "IA":
                 case "RA":
                 case "HS":
                 case "OA":
-                    accountDivMock.Setup(div => div.GetAttribute("data-most-recent-value"))
-                        .Returns(accountValueString);
+                    valueAttributeName = "data-most-recent-value";
                     break;
                 case "CC":
-                    accountDivMock.Setup(div => div.GetAttribute("data-acct-balance"))
-                        .Returns(accountValueString);
+                    valueAttributeName = "data-acct-balance";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return accountDivMock.Object;
+            return valueAttributeName;
+        }
+
+        private Mock<IWebElement> GetOrCreateAccountGroupDiv(string accountTypeString)
+        {
+            return _groupDivMocks.ContainsKey(accountTypeString) ? _groupDivMocks[accountTypeString] : new Mock<IWebElement>();
         }
     }
 }
