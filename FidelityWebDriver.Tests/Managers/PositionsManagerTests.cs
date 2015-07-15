@@ -8,7 +8,7 @@ using Sonneville.FidelityWebDriver.Pages;
 namespace Sonneville.FidelityWebDriver.Tests.Managers
 {
     [TestFixture]
-    public class SummaryManagerTests : ManagerTestsBase<IPositionsManager>
+    public class PositionsManagerTests : ManagerTestsBase<IPositionsManager>
     {
         private Mock<ILoginManager> _loginManagerMock;
         private Mock<ISummaryPage> _summaryPageMock;

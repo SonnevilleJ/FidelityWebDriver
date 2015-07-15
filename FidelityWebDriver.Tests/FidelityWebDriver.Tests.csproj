@@ -67,7 +67,7 @@
     <Compile Include="Configuration\IsolatedStorageConfigurationProviderTests.cs" />
     <Compile Include="Managers\LoginManagerTests.cs" />
     <Compile Include="Managers\ManagerTestsBase.cs" />
-    <Compile Include="Managers\SummaryManagerTests.cs" />
+    <Compile Include="Managers\PositionsManagerTests.cs" />
     <Compile Include="Managers\TransactionManagerTests.cs" />
     <Compile Include="Pages\LoginPageTests.cs" />
     <Compile Include="Pages\PageFactoryTests.cs" />
