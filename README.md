@@ -11,6 +11,7 @@ _This project depends on ChromeDriver, so be sure you have Chrome installed!_
 The demo app will use the specified credentials to log into the www.Fidelity.com website and print some basic account info to the console.
 
 ## Command line arguments
+Complie and run Sonneville.FidelityWebDriver.Demo.exe with any of the below parameters:
 ```
   -u, --username=VALUE       the username to use when logging into Fidelity.
   -p, --password=VALUE       the password to use when logging into Fidelity.
