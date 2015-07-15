@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
+using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Managers;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests
@@ -11,23 +13,33 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
     public class AppTests : IDisposable
     {
         private App _app;
-        private Mock<ITransactionManager> _transactionManagerMock;
+        private Mock<IPositionsManager> _positionsManagerMock;
         private FidelityConfiguration _fidelityConfiguration;
         private string _cliUserName;
         private string _cliPassword;
+        private List<Account> _accounts;
 
         [SetUp]
         public void Setup()
         {
             _cliUserName = "Batman";
             _cliPassword = "I am vengeance. I am the night. I am Batman.";
-            
-            _transactionManagerMock = new Mock<ITransactionManager>();
 
+            _accounts = new List<Account>
+            {
+                new Account("acct 1", AccountType.InvestmentAccount, "play money", 5000),
+                new Account("acct 2", AccountType.RetirementAccount, "play money", 88176),
+                new Account("acct 3", AccountType.HealthSavingsAccount, "don't get sick", 1800),
+                new Account("acct 4", AccountType.CreditCard, "debt", 1200),
+            };
+
+            _positionsManagerMock = new Mock<IPositionsManager>();
+            _positionsManagerMock.Setup(manager => manager.GetAccounts()).Returns(_accounts);
+            
             _fidelityConfiguration = new FidelityConfiguration();
             _fidelityConfiguration.Initialize();
 
-            _app = new App(_transactionManagerMock.Object, _fidelityConfiguration);
+            _app = new App(_positionsManagerMock.Object, _fidelityConfiguration);
         }
 
         [TearDown]
@@ -43,9 +55,20 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         [Test]
         public void ShouldDelegateToTransactionManager()
         {
-            _app.Run(new string[0]);
+            using (var memoryStream = new MemoryStream())
+            {
+                RedirectConsoleOutput(memoryStream);
+                
+                _app.Run(new string[0]);
 
-            _transactionManagerMock.Verify(manager => manager.DownloadTransactions());
+                var consoleOutput = ReadConsoleOutput(memoryStream);
+                _accounts.ForEach(account =>
+                {
+                    Assert.IsTrue(consoleOutput.Contains(account.AccountNumber));
+                    Assert.IsTrue(consoleOutput.Contains(account.Name));
+                    Assert.IsTrue(consoleOutput.Contains(account.MostRecentValue.ToString("C")));
+                });
+            }
         }
 
         [Test]
@@ -94,7 +117,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         {
             _app.Dispose();
 
-            _transactionManagerMock.Verify(manager => manager.Dispose());
+            _positionsManagerMock.Verify(manager => manager.Dispose());
         }
 
         [Test]

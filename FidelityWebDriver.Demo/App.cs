@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NDesk.Options;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Managers;
@@ -8,13 +9,13 @@ namespace Sonneville.FidelityWebDriver.Demo
 {
     public class App : IApp
     {
-        private readonly ITransactionManager _transactionManager;
+        private readonly IPositionsManager _positionsManager;
         private readonly FidelityConfiguration _fidelityConfiguration;
         private readonly OptionSet _optionSet;
         private bool _shouldPersistOptions;
         private bool _shouldShowHelp;
 
-        public App(ITransactionManager transactionManager, FidelityConfiguration fidelityConfiguration)
+        public App(IPositionsManager positionsManager, FidelityConfiguration fidelityConfiguration)
         {
             _optionSet = new OptionSet
             {
@@ -36,7 +37,7 @@ namespace Sonneville.FidelityWebDriver.Demo
                 },
             };
             _fidelityConfiguration = fidelityConfiguration;
-            _transactionManager = transactionManager;
+            _positionsManager = positionsManager;
         }
 
         public void Run(IEnumerable<string> args)
@@ -52,7 +53,17 @@ namespace Sonneville.FidelityWebDriver.Demo
                 _fidelityConfiguration.Write();
             }
 
-            _transactionManager.DownloadTransactions();
+            var accounts = _positionsManager.GetAccounts().ToList();
+
+            Console.WriteLine("Found {0} accounts!", accounts.Count());
+            foreach (var account in accounts)
+            {
+                Console.WriteLine("Account Name: {0}", account.Name);
+                Console.WriteLine("Account Number: {0}", account.AccountNumber);
+                Console.WriteLine("Account Type: {0}", account.AccountType);
+                Console.WriteLine("Account Value: {0}", account.MostRecentValue.ToString("C"));
+                Console.WriteLine();
+            }
         }
 
         public void Dispose()
@@ -64,7 +75,7 @@ namespace Sonneville.FidelityWebDriver.Demo
         {
             if (disposing)
             {
-                var transactionManager = _transactionManager;
+                var transactionManager = _positionsManager;
                 if (transactionManager != null) transactionManager.Dispose();
             }
         }
