@@ -24,7 +24,7 @@ namespace Sonneville.FidelityWebDriver.Demo
                     username => { _fidelityConfiguration.Username = username; }
                 },
                 {
-                    "p|password=", "the password to use when logging into Fidelity",
+                    "p|password=", "the password to use when logging into Fidelity.",
                     password => { _fidelityConfiguration.Password = password; }
                 },
                 {
