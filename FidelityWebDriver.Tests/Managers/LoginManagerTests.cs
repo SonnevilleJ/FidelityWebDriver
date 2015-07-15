@@ -13,7 +13,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         private FidelityConfiguration _fidelityConfiguration;
         private Mock<ISummaryPage> _summaryPageMock;
 
-        protected override LoginManager InstantiateManager()
+        protected override LoginManager InstantiateManager(ISiteNavigator siteNavigator)
         {
             _fidelityConfiguration = new FidelityConfiguration
             {
@@ -21,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
                 Password = "password"
             };
 
-            return new LoginManager(SiteNavigatorMock.Object, _fidelityConfiguration);
+            return new LoginManager(siteNavigator, _fidelityConfiguration);
         }
 
         [SetUp]

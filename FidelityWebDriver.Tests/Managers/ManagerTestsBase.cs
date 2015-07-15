@@ -14,10 +14,10 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
         public void SetupTestsBase()
         {
             SiteNavigatorMock = new Mock<ISiteNavigator>();
-            Manager = InstantiateManager();
+            Manager = InstantiateManager(SiteNavigatorMock.Object);
         }
 
-        protected abstract T InstantiateManager();
+        protected abstract T InstantiateManager(ISiteNavigator siteNavigator);
 
         [Test]
         public void ShouldDisposeSiteNavigator()

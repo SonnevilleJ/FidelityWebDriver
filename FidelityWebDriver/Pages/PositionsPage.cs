@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using System.Collections.Generic;
+using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Pages
 {
@@ -11,6 +13,11 @@ namespace Sonneville.FidelityWebDriver.Pages
         {
             _webDriver = webDriver;
             _pageFactory = pageFactory;
+        }
+
+        public IEnumerable<IAccount> BuildAccounts()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

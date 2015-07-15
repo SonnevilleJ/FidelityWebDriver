@@ -9,11 +9,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
     {
         private Mock<ILoginManager> _loginManagerMock;
 
-        protected override TransactionManager InstantiateManager()
+        protected override TransactionManager InstantiateManager(ISiteNavigator siteNavigator)
         {
             _loginManagerMock = new Mock<ILoginManager>();
 
-            return new TransactionManager(SiteNavigatorMock.Object, _loginManagerMock.Object);
+            return new TransactionManager(siteNavigator, _loginManagerMock.Object);
         }
 
         [Test]
