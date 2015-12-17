@@ -68,13 +68,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidCredentialException))]
         public void ShouldThrowIfCredentialsFail()
         {
             _submitButtonMock.Setup(button => button.Click())
                 .Callback(() => _errorDivs.Add(new Mock<IWebElement>().Object));
 
-            _loginPage.LogIn("Superman", "Who needs tools?");
+            Assert.Throws<InvalidCredentialException>(() => _loginPage.LogIn("Superman", "Who needs tools?"));
         }
     }
 }

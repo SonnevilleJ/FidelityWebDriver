@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -17,6 +16,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         private Mock<IPageFactory> _pageFactoryMock;
         private List<IWebElement> _accountDivs;
         private List<Dictionary<string, string>> _startingValues;
+
         private readonly IDictionary<string, AccountType> _accountTypeStrings = new Dictionary<string, AccountType>
         {
             {"IA", AccountType.InvestmentAccount},
@@ -24,6 +24,15 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             {"HS", AccountType.HealthSavingsAccount},
             {"OA", AccountType.Other},
             {"CC", AccountType.CreditCard},
+        };
+
+        private readonly Dictionary<string, string> _valueAttributeNames = new Dictionary<string, string>
+        {
+            {"IA", "data-most-recent-value"},
+            {"RA", "data-most-recent-value"},
+            {"HS", "data-most-recent-value"},
+            {"OA", "data-most-recent-value"},
+            {"CC", "data-acct-balance"}
         };
 
         private IDictionary<string, Mock<IWebElement>> _groupDivMocks;
@@ -44,7 +53,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             _groupDivMocks = new Dictionary<string, Mock<IWebElement>>();
 
             _accountDivs = _startingValues
-                .GroupBy(d=>d["accountType"])
+                .GroupBy(d => d["accountType"])
                 .Select(CreateAccountGroupDivMock)
                 .ToList();
 
@@ -73,7 +82,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             }
         }
 
-        private Dictionary<string, string> CreateAccountValues(string accountNumber, string accountType, string accountName, string accountValue)
+        private Dictionary<string, string> CreateAccountValues(string accountNumber, string accountType,
+            string accountName, string accountValue)
         {
             return new Dictionary<string, string>
             {
@@ -84,7 +94,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             };
         }
 
-        private IWebElement CreateAccountGroupDivMock(IGrouping<string, IReadOnlyDictionary<string, string>> accountValuesByAccountType)
+        private IWebElement CreateAccountGroupDivMock(
+            IGrouping<string, IReadOnlyDictionary<string, string>> accountValuesByAccountType)
         {
             var accountTypeString = accountValuesByAccountType.Key;
 
@@ -96,7 +107,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
             return accountGroupDiv.Object;
         }
 
-        private IEnumerable<IWebElement> CreateAccountDivs(IEnumerable<IReadOnlyDictionary<string, string>> accountValues, string accountTypeString)
+        private IEnumerable<IWebElement> CreateAccountDivs(
+            IEnumerable<IReadOnlyDictionary<string, string>> accountValues, string accountTypeString)
         {
             return accountValues.Select(values =>
             {
@@ -105,35 +117,17 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
                     .Returns(values["accountNumber"]);
                 accountDivMock.Setup(div => div.GetAttribute("data-acct-name"))
                     .Returns(values["accountName"]);
-                accountDivMock.Setup(div => div.GetAttribute(GetValueAttributeName(accountTypeString)))
+                accountDivMock.Setup(div => div.GetAttribute(_valueAttributeNames[accountTypeString]))
                     .Returns(values["accountValue"]);
                 return accountDivMock.Object;
             });
         }
 
-        private string GetValueAttributeName(string accountTypeString)
-        {
-            string valueAttributeName;
-            switch (accountTypeString)
-            {
-                case "IA":
-                case "RA":
-                case "HS":
-                case "OA":
-                    valueAttributeName = "data-most-recent-value";
-                    break;
-                case "CC":
-                    valueAttributeName = "data-acct-balance";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            return valueAttributeName;
-        }
-
         private Mock<IWebElement> GetOrCreateAccountGroupDiv(string accountTypeString)
         {
-            return _groupDivMocks.ContainsKey(accountTypeString) ? _groupDivMocks[accountTypeString] : new Mock<IWebElement>();
+            return _groupDivMocks.ContainsKey(accountTypeString)
+                ? _groupDivMocks[accountTypeString]
+                : new Mock<IWebElement>();
         }
     }
 }
