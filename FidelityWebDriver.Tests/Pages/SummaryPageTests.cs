@@ -37,7 +37,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
 
             _gainLossPercentSpan = new Mock<IWebElement>();
             _gainLossPercentSpan.Setup(span => span.Text)
-                .Returns(string.Format("(+{0})", _gainLossPercent.ToString("P")));
+                .Returns($"(+{_gainLossPercent.ToString("P")})");
 
             _positionsLi = new Mock<IWebElement>();
 

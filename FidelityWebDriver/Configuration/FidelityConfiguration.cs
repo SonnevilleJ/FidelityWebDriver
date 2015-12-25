@@ -8,7 +8,8 @@ namespace Sonneville.FidelityWebDriver.Configuration
     {
         protected override IConfigurationProvider OnCreateDefaultProvider(string sectionName, object configData)
         {
-            var encryptionKey = string.Format("{0}-{1}-{2}", Environment.MachineName, Environment.UserName, Assembly.GetExecutingAssembly().ManifestModule);
+            var encryptionKey =
+                $"{Environment.MachineName}-{Environment.UserName}-{Assembly.GetExecutingAssembly().ManifestModule}";
             return new IsolatedStorageConfigurationProvider<FidelityConfiguration>
             {
                 PropertiesToEncrypt = "Password",

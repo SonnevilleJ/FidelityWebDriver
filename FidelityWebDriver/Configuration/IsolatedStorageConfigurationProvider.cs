@@ -12,7 +12,7 @@ namespace Sonneville.FidelityWebDriver.Configuration
             try
             {
                 var userStore = GetUserStore();
-                var path = string.Format("{0}.config", typeof (T).FullName);
+                var path = $"{typeof (T).FullName}.config";
 
                 if (userStore.FileExists(path))
                 {
@@ -39,7 +39,7 @@ namespace Sonneville.FidelityWebDriver.Configuration
             {
                 EncryptFields(config);
                 var userStore = GetUserStore();
-                var path = string.Format("{0}.config", typeof (T).FullName);
+                var path = $"{typeof (T).FullName}.config";
                 using (var fileStream = userStore.OpenFile(path, FileMode.Create))
                 {
                     var bytes = GetDefaultEncoding().GetBytes(config.WriteAsString());

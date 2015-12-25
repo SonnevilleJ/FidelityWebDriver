@@ -107,7 +107,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
                 var consoleOutput = ReadConsoleOutput(memoryStream);
                 Assert.IsTrue(consoleOutput.Contains("-h"),
-                    string.Format("Actual console output follows:{0}{1}", Environment.NewLine, consoleOutput));
+                    $"Actual console output follows:{Environment.NewLine}{consoleOutput}");
                 AssertUnchangedConfig();
             }
         }
