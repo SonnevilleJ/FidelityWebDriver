@@ -50,10 +50,13 @@
   <ItemGroup>
     <Compile Include="Configuration\FidelityConfiguration.cs" />
     <Compile Include="Configuration\IsolatedStorageConfigurationProvider.cs" />
+    <Compile Include="CSV\FidelityCsvParser.cs" />
+    <Compile Include="CSV\IFidelityCsvParser.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\AccountType.cs" />
     <Compile Include="Data\IAccount.cs" />
-    <Compile Include="Data\Transaction.cs" />
+    <Compile Include="Data\FidelityTransaction.cs" />
+    <Compile Include="Data\TransactionType.cs" />
     <Compile Include="Managers\ILoginManager.cs" />
     <Compile Include="Managers\IManager.cs" />
     <Compile Include="Managers\IPositionsManager.cs" />

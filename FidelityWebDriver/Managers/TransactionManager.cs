@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using Sonneville.FidelityWebDriver.CSV;
+using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Pages;
 
 namespace Sonneville.FidelityWebDriver.Managers
@@ -7,18 +10,23 @@ namespace Sonneville.FidelityWebDriver.Managers
     {
         private readonly ISiteNavigator _siteNavigator;
         private readonly ILoginManager _loginManager;
+        private readonly IFidelityCsvParser _fidelityCsvParser;
 
-        public TransactionManager(ISiteNavigator siteNavigator, ILoginManager loginManager)
+        public TransactionManager(ISiteNavigator siteNavigator, ILoginManager loginManager,
+            IFidelityCsvParser fidelityCsvParser)
         {
             _siteNavigator = siteNavigator;
             _loginManager = loginManager;
+            _fidelityCsvParser = fidelityCsvParser;
         }
 
-        public void DownloadTransactionHistory()
+        public IList<FidelityTransaction> DownloadTransactionHistory()
         {
             _loginManager.EnsureLoggedIn();
             var activityPage = _siteNavigator.GoTo<IActivityPage>();
-            var transactions = activityPage.DownloadHistory(DateTime.MinValue, DateTime.Today);
+            var downloadPath = activityPage.DownloadHistory(DateTime.MinValue, DateTime.Today);
+
+            return _fidelityCsvParser.ParseCsv(downloadPath);
         }
 
         public void Dispose()

@@ -1,7 +1,10 @@
+using System.Collections.Generic;
+using Sonneville.FidelityWebDriver.Data;
+
 namespace Sonneville.FidelityWebDriver.Managers
 {
     public interface ITransactionManager : IManager
     {
-        void DownloadTransactionHistory();
+        IList<FidelityTransaction> DownloadTransactionHistory();
     }
 }
