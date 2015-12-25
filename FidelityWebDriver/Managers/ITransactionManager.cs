@@ -5,6 +5,6 @@ namespace Sonneville.FidelityWebDriver.Managers
 {
     public interface ITransactionManager : IManager
     {
-        IList<FidelityTransaction> DownloadTransactionHistory();
+        IList<IFidelityTransaction> DownloadTransactionHistory();
     }
 }

@@ -14,13 +14,13 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
     {
         private Mock<ILoginManager> _loginManagerMock;
         private Mock<IActivityPage> _activityPageMock;
-        private Mock<IFidelityCsvParser> _csvParserMock;
-        private List<FidelityTransaction> _transactions;
+        private Mock<ITransactionsMapper> _csvParserMock;
+        private List<IFidelityTransaction> _transactions;
 
         protected override TransactionManager InstantiateManager(ISiteNavigator siteNavigator)
         {
             var downloadPath = "file path";
-            _transactions = new List<FidelityTransaction>();
+            _transactions = new List<IFidelityTransaction>();
 
             _activityPageMock = new Mock<IActivityPage>();
             _activityPageMock.Setup(
@@ -32,7 +32,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Managers
 
             _loginManagerMock = new Mock<ILoginManager>();
 
-            _csvParserMock = new Mock<IFidelityCsvParser>();
+            _csvParserMock = new Mock<ITransactionsMapper>();
             _csvParserMock.Setup(parser => parser.ParseCsv(downloadPath)).Returns(_transactions);
 
             return new TransactionManager(siteNavigator, _loginManagerMock.Object, _csvParserMock.Object);

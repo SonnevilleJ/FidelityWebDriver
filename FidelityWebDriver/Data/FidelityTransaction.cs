@@ -2,11 +2,11 @@ using System;
 
 namespace Sonneville.FidelityWebDriver.Data
 {
-    public class FidelityTransaction
+    public class FidelityTransaction : IFidelityTransaction
     {
-        public FidelityTransaction(DateTime runDate, string account, string action, TransactionType type,
-            string symbol, string securityDescription, string securityType, decimal quantity, decimal price,
-            decimal commission, decimal fees, decimal accruedInterest, decimal amount, DateTime settlementDate)
+        public FidelityTransaction(DateTime? runDate, string account, string action, TransactionType type,
+            string symbol, string securityDescription, string securityType, decimal? quantity, decimal? price,
+            decimal? commission, decimal? fees, decimal? accruedInterest, decimal? amount, DateTime? settlementDate)
         {
             RunDate = runDate;
             Account = account;
@@ -24,7 +24,7 @@ namespace Sonneville.FidelityWebDriver.Data
             SettlementDate = settlementDate;
         }
 
-        public DateTime RunDate { get; }
+        public DateTime? RunDate { get; }
 
         public string Account { get; }
 
@@ -38,18 +38,18 @@ namespace Sonneville.FidelityWebDriver.Data
 
         public string SecurityType { get; }
 
-        public decimal Quantity { get; }
+        public decimal? Quantity { get; }
 
-        public decimal Price { get; }
+        public decimal? Price { get; }
 
-        public decimal Commission { get; }
+        public decimal? Commission { get; }
 
-        public decimal Fees { get; }
+        public decimal? Fees { get; }
 
-        public decimal AccruedInterest { get; }
+        public decimal? AccruedInterest { get; }
 
-        public decimal Amount { get; }
+        public decimal? Amount { get; }
 
-        public DateTime SettlementDate { get; }
+        public DateTime? SettlementDate { get; }
     }
 }

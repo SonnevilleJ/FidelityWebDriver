@@ -3,8 +3,8 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.CSV
 {
-    public interface IFidelityCsvParser
+    public interface ITransactionsMapper
     {
-        IList<FidelityTransaction> ParseCsv(string downloadPath);
+        IList<IFidelityTransaction> ParseCsv(string downloadPath);
     }
 }

@@ -10,23 +10,23 @@ namespace Sonneville.FidelityWebDriver.Managers
     {
         private readonly ISiteNavigator _siteNavigator;
         private readonly ILoginManager _loginManager;
-        private readonly IFidelityCsvParser _fidelityCsvParser;
+        private readonly ITransactionsMapper _transactionsMapper;
 
         public TransactionManager(ISiteNavigator siteNavigator, ILoginManager loginManager,
-            IFidelityCsvParser fidelityCsvParser)
+            ITransactionsMapper transactionsMapper)
         {
             _siteNavigator = siteNavigator;
             _loginManager = loginManager;
-            _fidelityCsvParser = fidelityCsvParser;
+            _transactionsMapper = transactionsMapper;
         }
 
-        public IList<FidelityTransaction> DownloadTransactionHistory()
+        public IList<IFidelityTransaction> DownloadTransactionHistory()
         {
             _loginManager.EnsureLoggedIn();
             var activityPage = _siteNavigator.GoTo<IActivityPage>();
             var downloadPath = activityPage.DownloadHistory(DateTime.MinValue, DateTime.Today);
 
-            return _fidelityCsvParser.ParseCsv(downloadPath);
+            return _transactionsMapper.ParseCsv(downloadPath);
         }
 
         public void Dispose()
