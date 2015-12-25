@@ -20,6 +20,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         private double _gainLossAmount;
         private double _gainLossPercent;
 
+        private Mock<IWebElement> _activityLi;
+        private Mock<IActivityPage> _activityPageMock;
+
         [SetUp]
         public void Setup()
         {
@@ -41,20 +44,27 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
 
             _positionsLi = new Mock<IWebElement>();
 
+            _activityLi = new Mock<IWebElement>();
+
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("js-total-balance-value")))
                 .Returns(_fullBalanceSpan.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.CssSelector("[data-tab-name='Positions']")))
                 .Returns(_positionsLi.Object);
+            _webDriverMock.Setup(driver => driver.FindElement(By.CssSelector("[data-tab-name='Activity']")))
+                .Returns(_activityLi.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("js-today-change-value-dollar")))
                 .Returns(_gainLossAmountSpan.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("js-today-change-value-percent")))
                 .Returns(_gainLossPercentSpan.Object);
 
             _positionsPageMock = new Mock<IPositionsPage>();
+
+            _activityPageMock = new Mock<IActivityPage>();
             
             _pageFactoryMock = new Mock<IPageFactory>();
             _pageFactoryMock.Setup(factory => factory.GetPage<IPositionsPage>()).Returns(_positionsPageMock.Object);
+            _pageFactoryMock.Setup(factory => factory.GetPage<IActivityPage>()).Returns(_activityPageMock.Object);
 
             _summaryPage = new SummaryPage(_webDriverMock.Object, _pageFactoryMock.Object);
         }
@@ -90,6 +100,15 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
 
             _positionsLi.Verify(li => li.Click());
             Assert.AreSame(_positionsPageMock.Object, positionsPage);
+        }
+
+        [Test]
+        public void ShouldNavigateToActivityPage()
+        {
+            var activityPage = _summaryPage.GoToActivityPage();
+
+            _activityLi.Verify(li => li.Click());
+            Assert.AreSame(_activityPageMock.Object, activityPage);
         }
     }
 }

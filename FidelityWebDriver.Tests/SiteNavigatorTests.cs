@@ -17,6 +17,8 @@ namespace Sonneville.FidelityWebDriver.Tests
         private Mock<ILoginPage> _loginPageMock;
         private Mock<ISummaryPage> _summaryPageMock;
 
+        private Mock<IActivityPage> _activityPageMock;
+
         [SetUp]
         public void Setup()
         {
@@ -38,11 +40,13 @@ namespace Sonneville.FidelityWebDriver.Tests
             _homePageMock = new Mock<IHomePage>();
             _loginPageMock = new Mock<ILoginPage>();
             _summaryPageMock = new Mock<ISummaryPage>();
+            _activityPageMock = new Mock<IActivityPage>();
 
             _pageFactoryMock = new Mock<IPageFactory>();
             _pageFactoryMock.Setup(factory => factory.GetPage<IHomePage>()).Returns(_homePageMock.Object);
             _pageFactoryMock.Setup(factory => factory.GetPage<ILoginPage>()).Returns(_loginPageMock.Object);
             _pageFactoryMock.Setup(factory => factory.GetPage<ISummaryPage>()).Returns(_summaryPageMock.Object);
+            _pageFactoryMock.Setup(factory => factory.GetPage<IActivityPage>()).Returns(_activityPageMock.Object);
         }
 
         [Test]
@@ -78,6 +82,15 @@ namespace Sonneville.FidelityWebDriver.Tests
 
             _navigationMock.Verify(navigation => navigation.GoToUrl("https://oltx.fidelity.com/ftgw/fbc/oftop/portfolio"));
             Assert.AreEqual(_summaryPageMock.Object, summaryPage);
+        }
+
+        [Test]
+        public void ShouldGoToActivityPage()
+        {
+            var activityPage = _siteNavigator.GoTo<IActivityPage>();
+
+            Assert.AreEqual(_activityPageMock.Object, activityPage);
+            _summaryPageMock.Verify(summaryPage=>summaryPage.GoToActivityPage());
         }
 
         public void Dispose()

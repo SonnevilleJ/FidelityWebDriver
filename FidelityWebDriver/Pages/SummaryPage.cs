@@ -44,5 +44,12 @@ namespace Sonneville.FidelityWebDriver.Pages
 
             return _pageFactory.GetPage<IPositionsPage>();
         }
+
+        public IActivityPage GoToActivityPage()
+        {
+            _webDriver.FindElement(By.CssSelector("[data-tab-name='Activity']")).Click();
+
+            return _pageFactory.GetPage<IActivityPage>();
+        }
     }
 }

@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sonneville.Investing, Version=1.0.27.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sonneville.Investing.1.0.27.0\lib\net461\Sonneville.Investing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -49,6 +53,7 @@
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\AccountType.cs" />
     <Compile Include="Data\IAccount.cs" />
+    <Compile Include="Data\Transaction.cs" />
     <Compile Include="Managers\ILoginManager.cs" />
     <Compile Include="Managers\IManager.cs" />
     <Compile Include="Managers\IPositionsManager.cs" />
@@ -56,6 +61,8 @@
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\PositionsManager.cs" />
     <Compile Include="Managers\TransactionManager.cs" />
+    <Compile Include="Pages\ActivityPage.cs" />
+    <Compile Include="Pages\IActivityPage.cs" />
     <Compile Include="Pages\IPageFactory.cs" />
     <Compile Include="Pages\IPositionsPage.cs" />
     <Compile Include="Pages\ISummaryPage.cs" />

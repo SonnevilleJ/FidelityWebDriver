@@ -10,12 +10,15 @@ namespace Sonneville.FidelityWebDriver.Demo
     public class App : IApp
     {
         private readonly IPositionsManager _positionsManager;
+
+        private readonly ITransactionManager _transactionManager;
+
         private readonly FidelityConfiguration _fidelityConfiguration;
         private readonly OptionSet _optionSet;
         private bool _shouldPersistOptions;
         private bool _shouldShowHelp;
 
-        public App(IPositionsManager positionsManager, FidelityConfiguration fidelityConfiguration)
+        public App(IPositionsManager positionsManager, ITransactionManager transactionManager, FidelityConfiguration fidelityConfiguration)
         {
             _optionSet = new OptionSet
             {
@@ -38,6 +41,7 @@ namespace Sonneville.FidelityWebDriver.Demo
             };
             _fidelityConfiguration = fidelityConfiguration;
             _positionsManager = positionsManager;
+            _transactionManager = transactionManager;
         }
 
         public void Run(IEnumerable<string> args)
@@ -64,6 +68,8 @@ namespace Sonneville.FidelityWebDriver.Demo
                 Console.WriteLine("Account Value: {0}", account.MostRecentValue.ToString("C"));
                 Console.WriteLine();
             }
+
+            _transactionManager.DownloadTransactionHistory();
         }
 
         public void Dispose()
@@ -75,8 +81,10 @@ namespace Sonneville.FidelityWebDriver.Demo
         {
             if (disposing)
             {
-                var transactionManager = _positionsManager;
-                if (transactionManager != null) transactionManager.Dispose();
+                var positionsManager = _positionsManager;
+                positionsManager?.Dispose();
+                var transactionManager = _transactionManager;
+                transactionManager?.Dispose();
             }
         }
     }

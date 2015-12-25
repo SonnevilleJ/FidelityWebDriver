@@ -19,6 +19,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         private string _cliPassword;
         private List<Account> _accounts;
 
+        private Mock<ITransactionManager> _transactionManagerMock;
+
         [SetUp]
         public void Setup()
         {
@@ -35,11 +37,13 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
             _positionsManagerMock = new Mock<IPositionsManager>();
             _positionsManagerMock.Setup(manager => manager.GetAccounts()).Returns(_accounts);
-            
+
+            _transactionManagerMock = new Mock<ITransactionManager>();
+
             _fidelityConfiguration = new FidelityConfiguration();
             _fidelityConfiguration.Initialize();
 
-            _app = new App(_positionsManagerMock.Object, _fidelityConfiguration);
+            _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration);
         }
 
         [TearDown]
@@ -53,7 +57,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         }
 
         [Test]
-        public void ShouldDelegateToTransactionManager()
+        public void ShouldFetchAccountInfoFromPositionsManager()
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -69,6 +73,14 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                     Assert.IsTrue(consoleOutput.Contains(account.MostRecentValue.ToString("C")));
                 });
             }
+        }
+
+        [Test]
+        public void ShouldDownloadTransactionHistoryFromTransactionsManager()
+        {
+            _app.Run(new string[0]);
+
+            _transactionManagerMock.Verify(manager => manager.DownloadTransactionHistory());
         }
 
         [Test]
@@ -118,6 +130,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _app.Dispose();
 
             _positionsManagerMock.Verify(manager => manager.Dispose());
+            _transactionManagerMock.Verify(manager => manager.Dispose());
         }
 
         [Test]

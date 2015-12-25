@@ -44,6 +44,9 @@
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Sonneville.Investing">
+      <HintPath>..\packages\Sonneville.Investing.1.0.27.0\lib\net461\Sonneville.Investing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="WebDriver, Version=2.46.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -70,6 +73,7 @@
     <Compile Include="Managers\ManagerTestsBase.cs" />
     <Compile Include="Managers\PositionsManagerTests.cs" />
     <Compile Include="Managers\TransactionManagerTests.cs" />
+    <Compile Include="Pages\ActivityPageTests.cs" />
     <Compile Include="Pages\LoginPageTests.cs" />
     <Compile Include="Pages\PageFactoryTests.cs" />
     <Compile Include="Pages\PositionsPageTests.cs" />

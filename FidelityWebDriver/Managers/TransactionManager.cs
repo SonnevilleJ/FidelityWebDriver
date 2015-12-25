@@ -1,3 +1,6 @@
+using System;
+using Sonneville.FidelityWebDriver.Pages;
+
 namespace Sonneville.FidelityWebDriver.Managers
 {
     public class TransactionManager : ITransactionManager
@@ -11,9 +14,11 @@ namespace Sonneville.FidelityWebDriver.Managers
             _loginManager = loginManager;
         }
 
-        public void DownloadTransactions()
+        public void DownloadTransactionHistory()
         {
             _loginManager.EnsureLoggedIn();
+            var activityPage = _siteNavigator.GoTo<IActivityPage>();
+            var transactions = activityPage.DownloadHistory(DateTime.MinValue, DateTime.Today);
         }
 
         public void Dispose()
