@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.CSV;
 using Sonneville.FidelityWebDriver.Pages;
 
 namespace Sonneville.FidelityWebDriver.Tests.Pages
@@ -17,11 +17,19 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
         private Mock<IPageFactory> _pageFactoryMock;
 
         private Mock<IWebElement> _downloadLinkMock;
+        private Mock<ICsvDownloadService> _downloadServiceMock;
+        private string _fileContents;
 
         [SetUp]
         public void Setup()
         {
+            _fileContents = "file contents";
+            _downloadServiceMock = new Mock<ICsvDownloadService>();
+            _downloadServiceMock.Setup(service => service.GetDownloadedContent()).Returns(_fileContents);
+
             _downloadLinkMock = new Mock<IWebElement>();
+            _downloadLinkMock.Setup(link => link.Click())
+                .Callback(() => _downloadServiceMock.Verify(service => service.Cleanup(), Times.Once()));
 
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("activity--history-download-link")))
@@ -29,17 +37,16 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
 
             _pageFactoryMock = new Mock<IPageFactory>();
 
-            _activityPage = new ActivityPage(_webDriverMock.Object, _pageFactoryMock.Object);
+            _activityPage = new ActivityPage(_webDriverMock.Object, _pageFactoryMock.Object, _downloadServiceMock.Object);
         }
 
         [Test]
         public void DownloadHistoryShouldClickHistoryExpander()
         {
-            var filePath = _activityPage.DownloadHistory(DateTime.MinValue, DateTime.MaxValue);
+            var actualContents = _activityPage.DownloadHistory(DateTime.MinValue, DateTime.MaxValue);
 
-            _downloadLinkMock.Verify(link => link.Click());
-            var expectedFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Downloads");
-            Assert.AreEqual(expectedFilePath, filePath);
+            Assert.AreEqual(_fileContents, actualContents);
+            _downloadServiceMock.Verify(service => service.Cleanup(), Times.Exactly(2));
         }
     }
 }

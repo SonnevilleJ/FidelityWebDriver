@@ -5,6 +5,6 @@ namespace Sonneville.FidelityWebDriver.CSV
 {
     public interface ITransactionsMapper
     {
-        IList<IFidelityTransaction> ParseCsv(string downloadPath);
+        IList<IFidelityTransaction> ParseCsv(string csvContent);
     }
 }

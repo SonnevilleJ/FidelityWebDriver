@@ -50,8 +50,10 @@
   <ItemGroup>
     <Compile Include="Configuration\FidelityConfiguration.cs" />
     <Compile Include="Configuration\IsolatedStorageConfigurationProvider.cs" />
+    <Compile Include="CSV\CsvDownloadService.cs" />
     <Compile Include="CSV\FidelityCsvColumn.cs" />
     <Compile Include="CSV\FidelityCsvColumnMapper.cs" />
+    <Compile Include="CSV\ICsvDownloadService.cs" />
     <Compile Include="CSV\ITransactionMapper.cs" />
     <Compile Include="CSV\ITransactionTypeMapper.cs" />
     <Compile Include="CSV\TransactionMapper.cs" />

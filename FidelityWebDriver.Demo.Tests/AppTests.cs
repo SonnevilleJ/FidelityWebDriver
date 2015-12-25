@@ -20,6 +20,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         private List<Account> _accounts;
 
         private Mock<ITransactionManager> _transactionManagerMock;
+        private List<IFidelityTransaction> _transactions;
 
         [SetUp]
         public void Setup()
@@ -35,10 +36,16 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                 new Account("acct 4", AccountType.CreditCard, "debt", 1200),
             };
 
+            _transactions = new List<IFidelityTransaction>
+            {
+                new FidelityTransaction(new DateTime(2015, 12, 25), null, null, TransactionType.Buy, "DE", null, null, 12.3m, 45.67m, 8.9m, 0.0m, 0.0m, 0.0m, new DateTime(2015, 12, 31))
+            };
+
             _positionsManagerMock = new Mock<IPositionsManager>();
             _positionsManagerMock.Setup(manager => manager.GetAccounts()).Returns(_accounts);
 
             _transactionManagerMock = new Mock<ITransactionManager>();
+            _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory()).Returns(_transactions);
 
             _fidelityConfiguration = new FidelityConfiguration();
             _fidelityConfiguration.Initialize();
@@ -78,7 +85,21 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         [Test]
         public void ShouldDownloadTransactionHistoryFromTransactionsManager()
         {
-            _app.Run(new string[0]);
+            using (var memoryStream = new MemoryStream())
+            {
+                RedirectConsoleOutput(memoryStream);
+
+                _app.Run(new string[0]);
+
+                var consoleOutput = ReadConsoleOutput(memoryStream);
+                _transactions.ForEach(transaction =>
+                {
+                    Assert.IsTrue(consoleOutput.Contains(transaction.RunDate.Value.ToString("d")));
+                    Assert.IsTrue(consoleOutput.Contains(transaction.Quantity.Value.ToString("F")));
+                    Assert.IsTrue(consoleOutput.Contains(transaction.Symbol));
+                    Assert.IsTrue(consoleOutput.Contains(transaction.Price.Value.ToString("C")));
+                });
+            }
 
             _transactionManagerMock.Verify(manager => manager.DownloadTransactionHistory());
         }

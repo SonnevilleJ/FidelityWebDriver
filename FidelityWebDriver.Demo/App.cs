@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NDesk.Options;
 using Sonneville.FidelityWebDriver.Configuration;
+using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Managers;
 
 namespace Sonneville.FidelityWebDriver.Demo
@@ -18,7 +19,9 @@ namespace Sonneville.FidelityWebDriver.Demo
         private bool _shouldPersistOptions;
         private bool _shouldShowHelp;
 
-        public App(IPositionsManager positionsManager, ITransactionManager transactionManager, FidelityConfiguration fidelityConfiguration)
+        public App(IPositionsManager positionsManager,
+            ITransactionManager transactionManager,
+            FidelityConfiguration fidelityConfiguration)
         {
             _optionSet = new OptionSet
             {
@@ -69,7 +72,39 @@ namespace Sonneville.FidelityWebDriver.Demo
                 Console.WriteLine();
             }
 
-            _transactionManager.DownloadTransactionHistory();
+            var transactions = _transactionManager.DownloadTransactionHistory();
+            Console.WriteLine("Found {0} recent transactions!", transactions.Count());
+            foreach (var transaction in transactions)
+            {
+                Console.WriteLine("On {0:d} {1:F} shares of {2} were {3} at {4:C} per share",
+                    transaction.RunDate, transaction.Quantity, transaction.Symbol, Translate(transaction),
+                    transaction.Price);
+            }
+        }
+
+        private static string Translate(IFidelityTransaction transaction)
+        {
+            switch (transaction.Type)
+            {
+                case TransactionType.Deposit:
+                    return "deposited";
+                case TransactionType.Withdrawal:
+                    return "withdrew";
+                case TransactionType.Buy:
+                    return "bought";
+                case TransactionType.Sell:
+                    return "sold";
+                case TransactionType.BuyToCover:
+                    return "bought to cover short position";
+                case TransactionType.SellShort:
+                    return "sold short";
+                case TransactionType.DividendReceipt:
+                    return "received";
+                case TransactionType.DividendReinvestment:
+                    return "reinvested";
+                default:
+                    return $"Unknown transaction type: {transaction.Type}";
+            }
         }
 
         public void Dispose()

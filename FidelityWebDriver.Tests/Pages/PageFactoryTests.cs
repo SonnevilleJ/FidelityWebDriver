@@ -1,6 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.CSV;
 using Sonneville.FidelityWebDriver.Pages;
 
 namespace Sonneville.FidelityWebDriver.Tests.Pages
@@ -10,13 +11,16 @@ namespace Sonneville.FidelityWebDriver.Tests.Pages
     {
         private PageFactory _factory;
         private Mock<IWebDriver> _driverMock;
+        private Mock<ICsvDownloadService> _csvDownloadServiceMock;
 
         [SetUp]
         public void SetupPageFactory()
         {
             _driverMock = new Mock<IWebDriver>(MockBehavior.Strict);
 
-            _factory = new PageFactory(_driverMock.Object);
+            _csvDownloadServiceMock = new Mock<ICsvDownloadService>();
+
+            _factory = new PageFactory(_driverMock.Object, _csvDownloadServiceMock.Object);
         }
 
         [Test]

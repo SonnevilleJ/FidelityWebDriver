@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Configuration\FidelityConfigurationTests.cs" />
     <Compile Include="Configuration\IsolatedStorageConfigurationProviderTests.cs" />
+    <Compile Include="CSV\CsvDownloadServiceTests.cs" />
     <Compile Include="CSV\FidelityCsvColumnMapperTests.cs" />
     <Compile Include="CSV\TransactionMapperTests.cs" />
     <Compile Include="CSV\TransactionsMapperTests.cs" />
