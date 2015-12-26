@@ -50,12 +50,15 @@
   <ItemGroup>
     <Compile Include="Configuration\FidelityConfiguration.cs" />
     <Compile Include="Configuration\IsolatedStorageConfigurationProvider.cs" />
+    <Compile Include="Data\AccountDetails.cs" />
     <Compile Include="Data\AccountSummary.cs" />
     <Compile Include="Data\AccountType.cs" />
     <Compile Include="Data\IAccountSummary.cs" />
     <Compile Include="Data\FidelityTransaction.cs" />
     <Compile Include="Data\IAccountDetails.cs" />
     <Compile Include="Data\IFidelityTransaction.cs" />
+    <Compile Include="Data\IPosition.cs" />
+    <Compile Include="Data\Position.cs" />
     <Compile Include="Data\TransactionType.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Login\ILoginManager.cs" />
@@ -71,7 +74,9 @@
     <Compile Include="Navigation\PageFactory.cs" />
     <Compile Include="Navigation\SiteNavigator.cs" />
     <Compile Include="Navigation\SummaryPage.cs" />
+    <Compile Include="Positions\AccountDetailsExtractor.cs" />
     <Compile Include="Positions\IAccountDetailsExtractor.cs" />
+    <Compile Include="Positions\IPositionDetailsExtractor.cs" />
     <Compile Include="Positions\IPositionsManager.cs" />
     <Compile Include="Positions\IPositionsPage.cs" />
     <Compile Include="Positions\IAccountSummariesExtractor.cs" />

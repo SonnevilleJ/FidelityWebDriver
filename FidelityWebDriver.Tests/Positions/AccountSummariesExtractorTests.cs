@@ -52,12 +52,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             Assert.AreEqual(_expectedAccountDetails.Count(), accounts.Count());
             foreach (var account in accounts)
             {
-                var matchingValues =
+                var matchingExpected =
                     _expectedAccountDetails.Single(values => values["accountNumber"] == account.AccountNumber);
 
-                Assert.AreEqual(matchingValues["accountName"], account.Name);
-                Assert.AreEqual(accountTypeStrings[matchingValues["accountType"]], account.AccountType);
-                Assert.AreEqual(double.Parse(matchingValues["accountValue"]), account.MostRecentValue);
+                Assert.AreEqual(matchingExpected["accountName"], account.Name);
+                Assert.AreEqual(accountTypeStrings[matchingExpected["accountType"]], account.AccountType);
+                Assert.AreEqual(double.Parse(matchingExpected["accountValue"]), account.MostRecentValue);
             }
         }
 
