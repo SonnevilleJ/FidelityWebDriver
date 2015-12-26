@@ -46,9 +46,11 @@ namespace Sonneville.FidelityWebDriver.CSV
             return rawString.Trim();
         }
 
-        private DateTime ParseDateField(string dateString)
+        private DateTime? ParseDateField(string dateString)
         {
-            return DateTime.Parse(dateString);
+            return string.IsNullOrWhiteSpace(dateString)
+                ? new DateTime?()
+                : DateTime.Parse(dateString);
         }
     }
 }

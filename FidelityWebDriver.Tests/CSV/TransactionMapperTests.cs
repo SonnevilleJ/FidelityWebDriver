@@ -45,7 +45,7 @@ namespace Sonneville.FidelityWebDriver.Tests.CSV
         public void ShouldMapBasedOnColumnMappings()
         {
             var record =
-                " 12/18/2015,Account 1234, awesome profit, ticker, ticker description,Cash,1.2,3.4,,-7.8,9.01,234.56, 12/20/2015";
+                " 12/18/2015,Account 1234, awesome profit, ticker, ticker description,Cash,1.2,3.4,,-7.8,9.01,234.56, ";
 
             var actualTransaction = _transactionMapper.CreateTransaction(record, _columnMappings);
 
@@ -62,7 +62,7 @@ namespace Sonneville.FidelityWebDriver.Tests.CSV
             Assert.AreEqual(-7.8m, first.Fees);
             Assert.AreEqual(9.01m, first.AccruedInterest);
             Assert.AreEqual(234.56m, first.Amount);
-            Assert.AreEqual(new DateTime(2015, 12, 20), first.SettlementDate);
+            Assert.IsNull(first.SettlementDate);
             Assert.AreEqual(TransactionType.Sell, first.Type);
         }
     }

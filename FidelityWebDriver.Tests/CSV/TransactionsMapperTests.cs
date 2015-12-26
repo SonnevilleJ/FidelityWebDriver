@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -20,11 +20,11 @@ namespace Sonneville.FidelityWebDriver.Tests.CSV
         [SetUp]
         public void Setup()
         {
-            _headerRow = "csv headers";
+            _headerRow = "\n\n\ncsv headers";
             _columnMappings = new Dictionary<FidelityCsvColumn, int>();
 
             _columnMapperMock = new Mock<IFidelityCsvColumnMapper>();
-            _columnMapperMock.Setup(mapper => mapper.GetColumnMappings(_headerRow)).Returns(_columnMappings);
+            _columnMapperMock.Setup(mapper => mapper.GetColumnMappings(_headerRow.Trim())).Returns(_columnMappings);
 
             _transactionMapperMock = new Mock<ITransactionMapper>();
 
@@ -36,11 +36,13 @@ namespace Sonneville.FidelityWebDriver.Tests.CSV
         {
             var records = new[]
             {
-                "record 1",
-                "second record"
+                "record 1 col a, col b, col c",
+                "record 2 col a, col b, col c",
+                "",
+                "garbage - this, should be, filtered, out"
             };
             var expectedTransactions = SetupExpectedTransactions(records).ToList();
-            var csvContent = SetupCsv(_headerRow, records);
+            var csvContent = SetupCsv(_headerRow, "\n", records);
 
             var actualTransactions = _transactionsMapper.ParseCsv(csvContent);
 
@@ -51,6 +53,8 @@ namespace Sonneville.FidelityWebDriver.Tests.CSV
         {
             foreach (var record in records)
             {
+                if (string.IsNullOrWhiteSpace(record)) yield break;
+
                 var transactionMock = new Mock<IFidelityTransaction>();
                 _transactionMapperMock.Setup(mapper => mapper.CreateTransaction(record, _columnMappings))
                     .Returns(transactionMock.Object);
@@ -58,9 +62,9 @@ namespace Sonneville.FidelityWebDriver.Tests.CSV
             }
         }
 
-        private static string SetupCsv(string headerRow, params string[] records)
+        private static string SetupCsv(string headerRow, string newLine, params string[] records)
         {
-            return $"{headerRow}{Environment.NewLine}{string.Join(Environment.NewLine, records)}";
+            return $"{headerRow}{newLine}{string.Join(newLine, records)}";
         }
     }
 }

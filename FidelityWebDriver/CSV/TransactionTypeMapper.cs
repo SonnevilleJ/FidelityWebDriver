@@ -16,7 +16,8 @@ namespace Sonneville.FidelityWebDriver.CSV
                 trimmedText.Contains("CAP GAIN"))
                 return TransactionType.DividendReceipt;
             if (trimmedText.Contains("Electronic Funds Transfer Received") ||
-                (trimmedText.Contains("TRANSFERRED FROM") && trimmedText.Contains("TO BROKERAGE OPTION")))
+                (trimmedText.Contains("TRANSFERRED FROM") && trimmedText.Contains("TO BROKERAGE OPTION")) ||
+                trimmedText.Contains("PARTIC CONTR"))
                 return TransactionType.Deposit;
             return TransactionType.Unknown;
         }

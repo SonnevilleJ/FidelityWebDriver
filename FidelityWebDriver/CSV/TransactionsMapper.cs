@@ -18,9 +18,12 @@ namespace Sonneville.FidelityWebDriver.CSV
 
         public IList<IFidelityTransaction> ParseCsv(string csvContent)
         {
-            var rows = csvContent.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+            var rows = csvContent.Trim().Split(new[] {"\n"}, StringSplitOptions.None);
             var headers = _fidelityCsvColumnMapper.GetColumnMappings(rows.Take(1).Single());
-            return rows.Skip(1).Select(row => _transactionMapper.CreateTransaction(row, headers)).ToList();
+            return rows.Skip(1)
+                .TakeWhile(line => !string.IsNullOrWhiteSpace(line))
+                .Select(row => _transactionMapper.CreateTransaction(row, headers))
+                .ToList();
         }
     }
 }

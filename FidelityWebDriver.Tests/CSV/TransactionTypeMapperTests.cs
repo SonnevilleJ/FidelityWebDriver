@@ -78,5 +78,13 @@ namespace Sonneville.FidelityWebDriver.Tests.CSV
 
             Assert.AreEqual(TransactionType.Deposit, transactionType);
         }
+
+        [Test]
+        public void ShouldMapHsaDeposit()
+        {
+            var transactionType = _mapper.Map("PARTIC CONTR CURRENT PARTICIPANT CUR YR");
+
+            Assert.AreEqual(TransactionType.Deposit, transactionType);
+        }
     }
 }
