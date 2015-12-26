@@ -14,7 +14,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private PositionsPage _positionsPage;
         private Mock<IWebDriver> _webDriverMock;
         private Mock<IPageFactory> _pageFactoryMock;
-        private Mock<IAccountSummariesExtractor> _positionsPageAccountsExtractorMock;
+        private Mock<IPositionsPageAccountsExtractor> _positionsPageAccountsExtractorMock;
 
         [SetUp]
         public void Setup()
@@ -23,7 +23,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
             _pageFactoryMock = new Mock<IPageFactory>();
 
-            _positionsPageAccountsExtractorMock = new Mock<IAccountSummariesExtractor>();
+            _positionsPageAccountsExtractorMock = new Mock<IPositionsPageAccountsExtractor>();
 
             _positionsPage = new PositionsPage(_webDriverMock.Object, _pageFactoryMock.Object,
                 _positionsPageAccountsExtractorMock.Object);

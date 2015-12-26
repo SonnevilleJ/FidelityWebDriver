@@ -9,19 +9,19 @@ namespace Sonneville.FidelityWebDriver.Positions
     {
         private readonly IWebDriver _webDriver;
         private readonly IPageFactory _pageFactory;
-        private readonly IAccountSummariesExtractor _accountSummariesExtractor;
+        private readonly IPositionsPageAccountsExtractor _positionsPageAccountsExtractor;
 
         public PositionsPage(IWebDriver webDriver, IPageFactory pageFactory,
-            IAccountSummariesExtractor accountSummariesExtractor)
+            IPositionsPageAccountsExtractor positionsPageAccountsExtractor)
         {
             _webDriver = webDriver;
             _pageFactory = pageFactory;
-            _accountSummariesExtractor = accountSummariesExtractor;
+            _positionsPageAccountsExtractor = positionsPageAccountsExtractor;
         }
 
         public IEnumerable<IAccount> GetAccountSummaries()
         {
-            return _accountSummariesExtractor.ExtractAccountSummaries(_webDriver);
+            return _positionsPageAccountsExtractor.ExtractAccountSummaries(_webDriver);
         }
     }
 }

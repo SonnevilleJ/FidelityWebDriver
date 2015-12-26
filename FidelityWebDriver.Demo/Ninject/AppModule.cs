@@ -11,12 +11,10 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
     {
         public override void Load()
         {
-            Kernel.Bind(
-                syntax =>
-                    syntax.FromAssembliesMatching("Sonneville.*")
-                        .SelectAllClasses()
-                        .BindDefaultInterface()
-                        .Configure(configurationAction => configurationAction.InSingletonScope()));
+            Kernel.Bind(syntax => syntax.FromAssembliesMatching("Sonneville.*")
+                .SelectAllClasses()
+                .BindDefaultInterface()
+                .Configure(configurationAction => configurationAction.InSingletonScope()));
 
             var fidelityConfiguration = new FidelityConfiguration();
             fidelityConfiguration.Initialize();

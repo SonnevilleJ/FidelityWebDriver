@@ -4,7 +4,7 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
-    public class PositionsPageAccountsExtractor : IAccountSummariesExtractor
+    public class PositionsPageAccountsExtractor : IPositionsPageAccountsExtractor
     {
         private readonly Dictionary<string, AccountType> _groupIds;
 

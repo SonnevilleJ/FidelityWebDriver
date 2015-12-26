@@ -72,7 +72,7 @@
     <Compile Include="Navigation\SummaryPage.cs" />
     <Compile Include="Positions\IPositionsManager.cs" />
     <Compile Include="Positions\IPositionsPage.cs" />
-    <Compile Include="Positions\IAccountSummariesExtractor.cs" />
+    <Compile Include="Positions\IPositionsPageAccountsExtractor.cs" />
     <Compile Include="Positions\PositionsManager.cs" />
     <Compile Include="Positions\PositionsPage.cs" />
     <Compile Include="Positions\PositionsPageAccountsExtractor.cs" />
