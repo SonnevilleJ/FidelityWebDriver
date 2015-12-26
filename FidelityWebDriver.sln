@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FidelityWebDriver", "FidelityWebDriver\FidelityWebDriver.csproj", "{59134DBF-4B42-4A79-BD62-C56408B41D63}"
 EndProject
@@ -10,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FidelityWebDriver.Demo", "FidelityWebDriver.Demo\FidelityWebDriver.Demo.csproj", "{AF97F43C-4042-4399-AB37-B2C192860B79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FidelityWebDriver.Demo.Tests", "FidelityWebDriver.Demo.Tests\FidelityWebDriver.Demo.Tests.csproj", "{D8B9B52D-0FFB-4743-AEB4-0DC94272AE45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0E7E90F1-70A1-4913-8415-36F5DD7C86FA}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

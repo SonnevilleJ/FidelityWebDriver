@@ -3,12 +3,10 @@ FidelityWebDriver is a wrapper around the Selenium WebDriver, used to perform se
 
 Current build status: ![Build Status](http://sonnevillej.ddns.net:9000/app/rest/builds/buildType:(id:FidelityWebDriver_Build)/statusIcon)
 
-Much of the demo app and library is still not functional, but login capability has been implemented. While I'm still building out the structure of the library, I am planning on accept pull requests in the future.
-
 ## Demo app
 _This project depends on ChromeDriver, so be sure you have Chrome installed!_
 
-The demo app will use the specified credentials to log into the www.Fidelity.com website and print some basic account info to the console.
+The demo app will use the specified credentials to log into the www.Fidelity.com website. Once logged in, it will print to the console some basic account info as well as the most recent transactions.
 
 ## Command line arguments
 Complie and run Sonneville.FidelityWebDriver.Demo.exe with any of the below parameters:
