@@ -50,9 +50,9 @@
   <ItemGroup>
     <Compile Include="Configuration\FidelityConfiguration.cs" />
     <Compile Include="Configuration\IsolatedStorageConfigurationProvider.cs" />
-    <Compile Include="Data\Account.cs" />
+    <Compile Include="Data\AccountSummary.cs" />
     <Compile Include="Data\AccountType.cs" />
-    <Compile Include="Data\IAccount.cs" />
+    <Compile Include="Data\IAccountSummary.cs" />
     <Compile Include="Data\FidelityTransaction.cs" />
     <Compile Include="Data\IAccountDetails.cs" />
     <Compile Include="Data\IFidelityTransaction.cs" />

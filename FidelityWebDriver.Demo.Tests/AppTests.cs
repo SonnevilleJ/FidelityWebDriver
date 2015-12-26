@@ -18,7 +18,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         private FidelityConfiguration _fidelityConfiguration;
         private string _cliUserName;
         private string _cliPassword;
-        private List<Account> _accounts;
+        private List<AccountSummary> _accounts;
 
         private Mock<ITransactionManager> _transactionManagerMock;
         private List<IFidelityTransaction> _transactions;
@@ -29,12 +29,12 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _cliUserName = "Batman";
             _cliPassword = "I am vengeance. I am the night. I am Batman.";
 
-            _accounts = new List<Account>
+            _accounts = new List<AccountSummary>
             {
-                new Account("acct 1", AccountType.InvestmentAccount, "play money", 5000),
-                new Account("acct 2", AccountType.RetirementAccount, "play money", 88176),
-                new Account("acct 3", AccountType.HealthSavingsAccount, "don't get sick", 1800),
-                new Account("acct 4", AccountType.CreditCard, "debt", 1200),
+                new AccountSummary("acct 1", AccountType.InvestmentAccount, "play money", 5000),
+                new AccountSummary("acct 2", AccountType.RetirementAccount, "play money", 88176),
+                new AccountSummary("acct 3", AccountType.HealthSavingsAccount, "don't get sick", 1800),
+                new AccountSummary("acct 4", AccountType.CreditCard, "debt", 1200),
             };
 
             _transactions = new List<IFidelityTransaction>

@@ -6,6 +6,6 @@ namespace Sonneville.FidelityWebDriver.Positions
 {
     public interface IPositionsPage : IPage
     {
-        IEnumerable<IAccount> GetAccountSummaries();
+        IEnumerable<IAccountSummary> GetAccountSummaries();
     }
 }

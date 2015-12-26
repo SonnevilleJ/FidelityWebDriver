@@ -1,8 +1,8 @@
 namespace Sonneville.FidelityWebDriver.Data
 {
-    public class Account : IAccount
+    public class AccountSummary : IAccountSummary
     {
-        public Account(string accountNumber, AccountType accountType, string accountName, double value)
+        public AccountSummary(string accountNumber, AccountType accountType, string accountName, double value)
         {
             AccountNumber = accountNumber;
             AccountType = accountType;

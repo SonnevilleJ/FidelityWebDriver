@@ -21,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Positions
             _accountDetailsExtractor = accountDetailsExtractor;
         }
 
-        public IEnumerable<IAccount> GetAccountSummaries()
+        public IEnumerable<IAccountSummary> GetAccountSummaries()
         {
             return _accountSummariesExtractor.ExtractAccountSummaries(_webDriver);
         }

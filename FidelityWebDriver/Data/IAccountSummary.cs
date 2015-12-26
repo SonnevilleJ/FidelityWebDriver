@@ -1,6 +1,6 @@
 namespace Sonneville.FidelityWebDriver.Data
 {
-    public interface IAccount
+    public interface IAccountSummary
     {
         AccountType AccountType { get; }
         double MostRecentValue { get; }

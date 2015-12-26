@@ -35,7 +35,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         [Test]
         public void ShouldReturnExtractedSummaries()
         {
-            var expectedSummaries = new List<IAccount>();
+            var expectedSummaries = new List<IAccountSummary>();
             _accountSummariesExtractorMock
                 .Setup(extractor => extractor.ExtractAccountSummaries(_webDriverMock.Object))
                 .Returns(expectedSummaries);

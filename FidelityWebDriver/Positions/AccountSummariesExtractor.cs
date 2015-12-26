@@ -20,7 +20,7 @@ namespace Sonneville.FidelityWebDriver.Positions
             };
         }
 
-        public IEnumerable<IAccount> ExtractAccountSummaries(IWebDriver webDriver)
+        public IEnumerable<IAccountSummary> ExtractAccountSummaries(IWebDriver webDriver)
         {
             var accountGroupDivs = webDriver.FindElements(By.ClassName("account-selector--group-container"));
 
@@ -36,7 +36,7 @@ namespace Sonneville.FidelityWebDriver.Positions
                     var value = accountType == AccountType.CreditCard
                         ? double.Parse(accountDiv.GetAttribute("data-acct-balance"))
                         : double.Parse(accountDiv.GetAttribute("data-most-recent-value"));
-                    yield return new Account(accountNumber, accountType, accountName, value);
+                    yield return new AccountSummary(accountNumber, accountType, accountName, value);
                 }
             }
         }

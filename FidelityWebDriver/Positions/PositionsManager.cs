@@ -16,7 +16,7 @@ namespace Sonneville.FidelityWebDriver.Positions
             _loginManager = loginManager;
         }
 
-        public IEnumerable<IAccount> GetAccounts()
+        public IEnumerable<IAccountSummary> GetAccounts()
         {
             return _loginManager.EnsureLoggedIn().GoToPositionsPage().GetAccountSummaries();
         }

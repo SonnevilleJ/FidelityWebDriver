@@ -14,11 +14,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private Mock<ILoginManager> _loginManagerMock;
         private Mock<ISummaryPage> _summaryPageMock;
         private Mock<IPositionsPage> _positionsPage;
-        private List<IAccount> _accountsList;
+        private List<IAccountSummary> _accountsList;
 
         protected override IPositionsManager InstantiateManager(ISiteNavigator siteNavigator)
         {
-            _accountsList = new List<IAccount>();
+            _accountsList = new List<IAccountSummary>();
 
             _positionsPage = new Mock<IPositionsPage>();
             _positionsPage.Setup(positionsPage => positionsPage.GetAccountSummaries()).Returns(_accountsList);
