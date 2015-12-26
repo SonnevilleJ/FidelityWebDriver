@@ -14,7 +14,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private PositionsPage _positionsPage;
         private Mock<IWebDriver> _webDriverMock;
         private Mock<IPageFactory> _pageFactoryMock;
-        private Mock<IPositionsPageAccountsExtractor> _positionsPageAccountsExtractorMock;
+        private Mock<IAccountSummariesExtractor> _accountSummariesExtractorMock;
+        private Mock<IAccountDetailsExtractor> _accountDetailsExtractorMock;
 
         [SetUp]
         public void Setup()
@@ -23,23 +24,38 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
             _pageFactoryMock = new Mock<IPageFactory>();
 
-            _positionsPageAccountsExtractorMock = new Mock<IPositionsPageAccountsExtractor>();
+            _accountSummariesExtractorMock = new Mock<IAccountSummariesExtractor>();
+
+            _accountDetailsExtractorMock = new Mock<IAccountDetailsExtractor>();
 
             _positionsPage = new PositionsPage(_webDriverMock.Object, _pageFactoryMock.Object,
-                _positionsPageAccountsExtractorMock.Object);
+                _accountSummariesExtractorMock.Object, _accountDetailsExtractorMock.Object);
         }
 
         [Test]
         public void ShouldReturnExtractedSummaries()
         {
             var expectedSummaries = new List<IAccount>();
-            _positionsPageAccountsExtractorMock
+            _accountSummariesExtractorMock
                 .Setup(extractor => extractor.ExtractAccountSummaries(_webDriverMock.Object))
                 .Returns(expectedSummaries);
 
             var actualSummaries = _positionsPage.GetAccountSummaries();
 
             Assert.AreSame(expectedSummaries, actualSummaries);
+        }
+
+        [Test]
+        public void ShouldReturnExtractedDetails()
+        {
+            var expectedDetails = new List<IAccountDetails>();
+            _accountDetailsExtractorMock
+                .Setup(extractor => extractor.ExtractAccountDetails(_webDriverMock.Object))
+                .Returns(expectedDetails);
+
+            var actualDetails = _positionsPage.GetAccountDetails();
+
+            Assert.AreSame(expectedDetails, actualDetails);
         }
     }
 }

@@ -10,7 +10,7 @@ using Sonneville.FidelityWebDriver.Positions;
 namespace Sonneville.FidelityWebDriver.Tests.Positions
 {
     [TestFixture]
-    public class PositionsPageAccountsExtractorTests
+    public class AccountSummariesExtractorTests
     {
         private Mock<IWebDriver> _webDriverMock;
         private List<Dictionary<string, string>> _expectedAccountDetails;
@@ -47,7 +47,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                 {"CC", AccountType.CreditCard},
             };
 
-            var accounts = new PositionsPageAccountsExtractor().ExtractAccountSummaries(_webDriverMock.Object).ToList();
+            var accounts = new AccountSummariesExtractor().ExtractAccountSummaries(_webDriverMock.Object).ToList();
 
             Assert.AreEqual(_expectedAccountDetails.Count(), accounts.Count());
             foreach (var account in accounts)

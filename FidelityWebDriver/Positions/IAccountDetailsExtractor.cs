@@ -4,8 +4,8 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
-    public interface IPositionsPageAccountsExtractor
+    public interface IAccountDetailsExtractor
     {
-        IEnumerable<IAccount> ExtractAccountSummaries(IWebDriver webDriver);
+        IEnumerable<IAccountDetails> ExtractAccountDetails(IWebDriver webDriver);
     }
 }

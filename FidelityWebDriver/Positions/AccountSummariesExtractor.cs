@@ -4,11 +4,11 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
-    public class PositionsPageAccountsExtractor : IPositionsPageAccountsExtractor
+    public class AccountSummariesExtractor : IAccountSummariesExtractor
     {
         private readonly Dictionary<string, AccountType> _groupIds;
 
-        public PositionsPageAccountsExtractor()
+        public AccountSummariesExtractor()
         {
             _groupIds = new Dictionary<string, AccountType>
             {

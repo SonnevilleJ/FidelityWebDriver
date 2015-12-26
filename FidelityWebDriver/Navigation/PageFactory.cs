@@ -12,15 +12,17 @@ namespace Sonneville.FidelityWebDriver.Navigation
     {
         private readonly Dictionary<Type, IPage> _pages;
 
-        public PageFactory(IWebDriver webDriver, ICsvDownloadService csvDownloadService,
-            IPositionsPageAccountsExtractor positionsPageAccountsExtractor)
+        public PageFactory(IWebDriver webDriver,
+            ICsvDownloadService csvDownloadService,
+            IAccountSummariesExtractor accountSummariesExtractor,
+            IAccountDetailsExtractor accountDetailsExtractor)
         {
             _pages = new Dictionary<Type, IPage>
             {
                 {typeof (IHomePage), new HomePage(webDriver, this)},
                 {typeof (ILoginPage), new LoginPage(webDriver, this)},
                 {typeof (ISummaryPage), new SummaryPage(webDriver, this)},
-                {typeof (IPositionsPage), new PositionsPage(webDriver, this, positionsPageAccountsExtractor)},
+                {typeof (IPositionsPage), new PositionsPage(webDriver, this, accountSummariesExtractor, accountDetailsExtractor)},
                 {typeof (IActivityPage), new ActivityPage(webDriver, this, csvDownloadService)},
             };
         }

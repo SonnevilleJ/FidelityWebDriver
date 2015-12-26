@@ -13,7 +13,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         private PageFactory _factory;
         private Mock<IWebDriver> _driverMock;
         private Mock<ICsvDownloadService> _csvDownloadServiceMock;
-        private Mock<IPositionsPageAccountsExtractor> _positionsPageAccountsExtractorMock;
+        private Mock<IAccountSummariesExtractor> _accountSummariesExtractorMock;
+        private Mock<IAccountDetailsExtractor> _accountDetailsExtractorMock;
 
         [SetUp]
         public void SetupPageFactory()
@@ -22,10 +23,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
 
             _csvDownloadServiceMock = new Mock<ICsvDownloadService>();
 
-            _positionsPageAccountsExtractorMock = new Mock<IPositionsPageAccountsExtractor>();
+            _accountSummariesExtractorMock = new Mock<IAccountSummariesExtractor>();
+
+            _accountDetailsExtractorMock = new Mock<IAccountDetailsExtractor>();
 
             _factory = new PageFactory(_driverMock.Object, _csvDownloadServiceMock.Object,
-                _positionsPageAccountsExtractorMock.Object);
+                _accountSummariesExtractorMock.Object, _accountDetailsExtractorMock.Object);
         }
 
         [Test]
