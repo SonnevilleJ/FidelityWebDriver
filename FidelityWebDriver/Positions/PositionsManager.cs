@@ -18,7 +18,7 @@ namespace Sonneville.FidelityWebDriver.Positions
 
         public IEnumerable<IAccount> GetAccounts()
         {
-            return _loginManager.EnsureLoggedIn().GoToPositionsPage().BuildAccounts();
+            return _loginManager.EnsureLoggedIn().GoToPositionsPage().GetAccountSummaries();
         }
 
         public void Dispose()

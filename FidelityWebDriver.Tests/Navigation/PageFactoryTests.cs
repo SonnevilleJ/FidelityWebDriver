@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Tests.Navigation
@@ -12,6 +13,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         private PageFactory _factory;
         private Mock<IWebDriver> _driverMock;
         private Mock<ICsvDownloadService> _csvDownloadServiceMock;
+        private Mock<IAccountSummariesExtractor> _positionsPageAccountsExtractorMock;
 
         [SetUp]
         public void SetupPageFactory()
@@ -20,7 +22,10 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
 
             _csvDownloadServiceMock = new Mock<ICsvDownloadService>();
 
-            _factory = new PageFactory(_driverMock.Object, _csvDownloadServiceMock.Object);
+            _positionsPageAccountsExtractorMock = new Mock<IAccountSummariesExtractor>();
+
+            _factory = new PageFactory(_driverMock.Object, _csvDownloadServiceMock.Object,
+                _positionsPageAccountsExtractorMock.Object);
         }
 
         [Test]

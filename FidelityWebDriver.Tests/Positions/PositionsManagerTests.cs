@@ -21,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             _accountsList = new List<IAccount>();
 
             _positionsPage = new Mock<IPositionsPage>();
-            _positionsPage.Setup(positionsPage => positionsPage.BuildAccounts()).Returns(_accountsList);
+            _positionsPage.Setup(positionsPage => positionsPage.GetAccountSummaries()).Returns(_accountsList);
 
             _summaryPageMock = new Mock<ISummaryPage>();
             _summaryPageMock.Setup(summaryPage => summaryPage.GoToPositionsPage()).Returns(_positionsPage.Object);

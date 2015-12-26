@@ -72,8 +72,10 @@
     <Compile Include="Navigation\SummaryPage.cs" />
     <Compile Include="Positions\IPositionsManager.cs" />
     <Compile Include="Positions\IPositionsPage.cs" />
+    <Compile Include="Positions\IAccountSummariesExtractor.cs" />
     <Compile Include="Positions\PositionsManager.cs" />
     <Compile Include="Positions\PositionsPage.cs" />
+    <Compile Include="Positions\PositionsPageAccountsExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transactions\ActivityPage.cs" />
     <Compile Include="Transactions\CSV\CsvDownloadService.cs" />
