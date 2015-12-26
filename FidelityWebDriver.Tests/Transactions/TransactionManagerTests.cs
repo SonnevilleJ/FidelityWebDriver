@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Tests.Navigation;
 using Sonneville.FidelityWebDriver.Transactions;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
 

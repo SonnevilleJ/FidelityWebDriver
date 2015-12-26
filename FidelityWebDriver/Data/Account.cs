@@ -10,9 +10,9 @@ namespace Sonneville.FidelityWebDriver.Data
             MostRecentValue = value;
         }
 
-        public AccountType AccountType { get; private set; }
-        public double MostRecentValue { get; private set; }
-        public string Name { get; private set; }
-        public string AccountNumber { get; private set; }
+        public AccountType AccountType { get; }
+        public double MostRecentValue { get; }
+        public string Name { get; }
+        public string AccountNumber { get; }
     }
 }

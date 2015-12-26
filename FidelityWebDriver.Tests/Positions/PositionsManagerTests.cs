@@ -5,7 +5,6 @@ using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Positions;
-using Sonneville.FidelityWebDriver.Tests.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Tests.Positions
 {
