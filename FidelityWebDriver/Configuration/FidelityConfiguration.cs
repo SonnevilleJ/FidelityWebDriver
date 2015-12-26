@@ -12,13 +12,13 @@ namespace Sonneville.FidelityWebDriver.Configuration
                 $"{Environment.MachineName}-{Environment.UserName}-{Assembly.GetExecutingAssembly().ManifestModule}";
             return new IsolatedStorageConfigurationProvider<FidelityConfiguration>
             {
-                PropertiesToEncrypt = "Password",
+                PropertiesToEncrypt = nameof(Password),
                 EncryptionKey = encryptionKey
             };
         }
 
         public string Username { get; set; }
-        
+
         public string Password { get; set; }
     }
 }

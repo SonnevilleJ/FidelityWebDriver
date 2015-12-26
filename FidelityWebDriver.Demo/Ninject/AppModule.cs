@@ -3,7 +3,7 @@ using System.IO;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Sonneville.FidelityWebDriver.Configuration;
-using Sonneville.FidelityWebDriver.CSV;
+using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Demo.Ninject
 {

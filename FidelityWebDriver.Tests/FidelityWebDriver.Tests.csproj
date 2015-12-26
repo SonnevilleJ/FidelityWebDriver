@@ -69,23 +69,23 @@
   <ItemGroup>
     <Compile Include="Configuration\FidelityConfigurationTests.cs" />
     <Compile Include="Configuration\IsolatedStorageConfigurationProviderTests.cs" />
-    <Compile Include="CSV\CsvDownloadServiceTests.cs" />
-    <Compile Include="CSV\FidelityCsvColumnMapperTests.cs" />
-    <Compile Include="CSV\TransactionMapperTests.cs" />
-    <Compile Include="CSV\TransactionsMapperTests.cs" />
-    <Compile Include="CSV\TransactionTypeMapperTests.cs" />
-    <Compile Include="Managers\LoginManagerTests.cs" />
-    <Compile Include="Managers\ManagerTestsBase.cs" />
-    <Compile Include="Managers\PositionsManagerTests.cs" />
-    <Compile Include="Managers\TransactionManagerTests.cs" />
-    <Compile Include="Pages\ActivityPageTests.cs" />
-    <Compile Include="Pages\LoginPageTests.cs" />
-    <Compile Include="Pages\PageFactoryTests.cs" />
-    <Compile Include="Pages\PositionsPageTests.cs" />
-    <Compile Include="Pages\SummaryPageTests.cs" />
-    <Compile Include="SiteNavigatorTests.cs" />
-    <Compile Include="Pages\HomePageTests.cs" />
+    <Compile Include="Login\LoginManagerTests.cs" />
+    <Compile Include="Login\LoginPageTests.cs" />
+    <Compile Include="ManagerTestsBase.cs" />
+    <Compile Include="Navigation\HomePageTests.cs" />
+    <Compile Include="Navigation\PageFactoryTests.cs" />
+    <Compile Include="Navigation\SiteNavigatorTests.cs" />
+    <Compile Include="Navigation\SummaryPageTests.cs" />
+    <Compile Include="Positions\PositionsManagerTests.cs" />
+    <Compile Include="Positions\PositionsPageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transactions\ActivityPageTests.cs" />
+    <Compile Include="Transactions\CSV\CsvDownloadServiceTests.cs" />
+    <Compile Include="Transactions\CSV\FidelityCsvColumnMapperTests.cs" />
+    <Compile Include="Transactions\CSV\TransactionMapperTests.cs" />
+    <Compile Include="Transactions\CSV\TransactionsMapperTests.cs" />
+    <Compile Include="Transactions\CSV\TransactionTypeMapperTests.cs" />
+    <Compile Include="Transactions\TransactionManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -96,6 +96,7 @@
       <Name>FidelityWebDriver</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

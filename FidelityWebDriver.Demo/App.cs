@@ -4,7 +4,8 @@ using System.Linq;
 using NDesk.Options;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Managers;
+using Sonneville.FidelityWebDriver.Positions;
+using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Demo
 {
