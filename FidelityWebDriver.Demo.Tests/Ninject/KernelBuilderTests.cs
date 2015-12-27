@@ -9,18 +9,24 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
     [TestFixture]
     public class KernelBuilderTests
     {
-        private KernelBuilder _kernelBuilder;
+        private IKernel _kernel;
 
         [SetUp]
         public void Setup()
         {
-            _kernelBuilder = new KernelBuilder();
+            _kernel = new KernelBuilder().Build();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _kernel?.Dispose();
         }
 
         [Test]
         public void ShouldGetApp()
         {
-            using (var app = _kernelBuilder.Build().Get<IApp>())
+            using (var app = _kernel.Get<IApp>())
             {
                 Assert.IsNotNull(app);
             }
@@ -29,7 +35,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
         [Test]
         public void ShouldGetChromeDriver()
         {
-            using (var webDriver = _kernelBuilder.Build().Get<IWebDriver>())
+            using (var webDriver = _kernel.Get<IWebDriver>())
             {
                 Assert.IsInstanceOf<ChromeDriver>(webDriver);
             }
