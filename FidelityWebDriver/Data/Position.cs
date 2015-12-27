@@ -2,6 +2,10 @@ namespace Sonneville.FidelityWebDriver.Data
 {
     public class Position : IPosition
     {
+        public Position()
+        {
+        }
+
         public Position(string ticker, string description, bool isCore, bool isMargin, decimal lastPrice,
             decimal totalGainDollar, decimal totalGainPercent, decimal currentValue, decimal quantity,
             decimal costBasisPerShare, decimal costBasisTotal)
@@ -19,26 +23,26 @@ namespace Sonneville.FidelityWebDriver.Data
             CostBasisTotal = costBasisTotal;
         }
 
-        public string Ticker { get; }
+        public string Ticker { get; set; }
 
-        public string Description { get; }
+        public string Description { get; set; }
 
-        public bool IsCore { get; }
+        public bool IsCore { get; set; }
 
-        public bool IsMargin { get; }
+        public bool IsMargin { get; set; }
 
-        public decimal LastPrice { get; }
+        public decimal LastPrice { get; set; }
 
-        public decimal TotalGainDollar { get; }
+        public decimal TotalGainDollar { get; set; }
 
-        public decimal TotalGainPercent { get; }
+        public decimal TotalGainPercent { get; set; }
 
-        public decimal CurrentValue { get; }
+        public decimal CurrentValue { get; set; }
 
-        public decimal Quantity { get; }
+        public decimal Quantity { get; set; }
 
-        public decimal CostBasisPerShare { get; }
+        public decimal CostBasisPerShare { get; set; }
 
-        public decimal CostBasisTotal { get; }
+        public decimal CostBasisTotal { get; set; }
     }
 }

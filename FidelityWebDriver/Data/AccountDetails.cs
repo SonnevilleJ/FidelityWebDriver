@@ -32,6 +32,6 @@ namespace Sonneville.FidelityWebDriver.Data
 
         public decimal TotalGainPercent { get; set; }
 
-        public IList<IPosition> Positions { get; set; }
+        public IEnumerable<IPosition> Positions { get; set; }
     }
 }

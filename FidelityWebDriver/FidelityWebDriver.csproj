@@ -80,6 +80,7 @@
     <Compile Include="Positions\IPositionsManager.cs" />
     <Compile Include="Positions\IPositionsPage.cs" />
     <Compile Include="Positions\IAccountSummariesExtractor.cs" />
+    <Compile Include="Positions\PositionDetailsExtractor.cs" />
     <Compile Include="Positions\PositionsManager.cs" />
     <Compile Include="Positions\PositionsPage.cs" />
     <Compile Include="Positions\AccountSummariesExtractor.cs" />

@@ -77,6 +77,7 @@
     <Compile Include="Navigation\SiteNavigatorTests.cs" />
     <Compile Include="Navigation\SummaryPageTests.cs" />
     <Compile Include="Positions\AccountDetailsExtractorTests.cs" />
+    <Compile Include="Positions\PositionDetailsExtractorTests.cs" />
     <Compile Include="Positions\PositionsManagerTests.cs" />
     <Compile Include="Positions\AccountSummariesExtractorTests.cs" />
     <Compile Include="Positions\PositionsPageTests.cs" />

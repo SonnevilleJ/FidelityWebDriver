@@ -6,6 +6,6 @@ namespace Sonneville.FidelityWebDriver.Positions
 {
     public interface IPositionDetailsExtractor
     {
-        List<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows);
+        IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows);
     }
 }

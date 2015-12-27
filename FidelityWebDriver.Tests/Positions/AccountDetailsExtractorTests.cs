@@ -39,7 +39,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         }
 
         [Test]
-        public void ShouldParseDetails()
+        public void ShouldExtractAccountDetails()
         {
             var actuals = _extractor.ExtractAccountDetails(_webDriverMock.Object).ToList();
 
