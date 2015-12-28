@@ -75,11 +75,13 @@
     <Compile Include="Navigation\SiteNavigator.cs" />
     <Compile Include="Navigation\SummaryPage.cs" />
     <Compile Include="Positions\AccountDetailsExtractor.cs" />
+    <Compile Include="Positions\DetailExtractors\IPositionCostBasisExtractor.cs" />
     <Compile Include="Positions\DetailExtractors\IPositionLastPriceExtractor.cs" />
     <Compile Include="Positions\DetailExtractors\IPositionQuantityExtractor.cs" />
     <Compile Include="Positions\DetailExtractors\IPositionTickerExtractor.cs" />
     <Compile Include="Positions\DetailExtractors\IPositionTotalGainExtractor.cs" />
     <Compile Include="Positions\DetailExtractors\PositionCoreExtractor.cs" />
+    <Compile Include="Positions\DetailExtractors\PositionCostBasisExtractor.cs" />
     <Compile Include="Positions\DetailExtractors\PositionCurrentValueExtractor.cs" />
     <Compile Include="Positions\DetailExtractors\PositionLastPriceExtractor.cs" />
     <Compile Include="Positions\DetailExtractors\PositionQuantityExtractor.cs" />

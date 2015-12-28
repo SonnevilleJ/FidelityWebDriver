@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
@@ -15,10 +14,15 @@ namespace Sonneville.FidelityWebDriver.Positions
         private readonly IPositionTotalGainExtractor _positionTotalGainExtractor;
         private readonly IPositionCurrentValueExtractor _positionCurrentValueExtractor;
         private readonly IPositionQuantityExtractor _positionQuantityExtractor;
+        private readonly IPositionCostBasisExtractor _positionCostBasisExtractor;
 
         public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor,
-            IPositionTickerExtractor positionTickerExtractor, IPositionLastPriceExtractor positionLastPriceExtractor,
-            IPositionTotalGainExtractor positionTotalGainExtractor, IPositionCurrentValueExtractor positionCurrentValueExtractor, IPositionQuantityExtractor positionQuantityExtractor)
+            IPositionTickerExtractor positionTickerExtractor,
+            IPositionLastPriceExtractor positionLastPriceExtractor,
+            IPositionTotalGainExtractor positionTotalGainExtractor,
+            IPositionCurrentValueExtractor positionCurrentValueExtractor,
+            IPositionQuantityExtractor positionQuantityExtractor,
+            IPositionCostBasisExtractor positionCostBasisExtractor)
         {
             _positionCoreExtractor = positionCoreExtractor;
             _positionTickerExtractor = positionTickerExtractor;
@@ -26,6 +30,7 @@ namespace Sonneville.FidelityWebDriver.Positions
             _positionTotalGainExtractor = positionTotalGainExtractor;
             _positionCurrentValueExtractor = positionCurrentValueExtractor;
             _positionQuantityExtractor = positionQuantityExtractor;
+            _positionCostBasisExtractor = positionCostBasisExtractor;
         }
 
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
@@ -48,30 +53,11 @@ namespace Sonneville.FidelityWebDriver.Positions
                 position.CurrentValue = _positionCurrentValueExtractor.ExtractCurrentValue(tdElements);
                 position.Quantity = _positionQuantityExtractor.ExtractQuantity(tdElements);
                 position.IsMargin = _positionQuantityExtractor.ExtractMargin(tdElements);
-                position.CostBasisPerShare = ExtractCostBasisPerShare(tdElements);
-                position.CostBasisTotal = ExtractCostBasisTotal(tdElements);
+                position.CostBasisPerShare = _positionCostBasisExtractor.ExtractCostBasisPerShare(tdElements);
+                position.CostBasisTotal = _positionCostBasisExtractor.ExtractCostBasisTotal(tdElements);
 
                 yield return position;
             }
-        }
-
-        private decimal ExtractCostBasisPerShare(IReadOnlyList<IWebElement> tdElements)
-        {
-            var spanText = tdElements[6].FindElements(By.ClassName("magicgrid--stacked-data-value"))[0].Text;
-            return spanText == "n/a" //TODO|| string.IsNullOrWhiteSpace(spanText)
-                ? 0
-                : decimal.Parse(spanText.Replace("/Share", ""), NumberStyles.Any);
-        }
-
-        private decimal ExtractCostBasisTotal(IReadOnlyList<IWebElement> tdElements)
-        {
-            var spanText = tdElements[6]
-                .FindElements(By.ClassName("magicgrid--stacked-data-value"))[1]
-                .FindElement(By.TagName("span"))
-                .Text;
-            return spanText == "n/a" //TODO|| string.IsNullOrWhiteSpace(spanText)
-                ? 0
-                : decimal.Parse(spanText, NumberStyles.Any);
         }
     }
 }

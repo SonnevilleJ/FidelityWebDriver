@@ -78,6 +78,7 @@
     <Compile Include="Navigation\SummaryPageTests.cs" />
     <Compile Include="Positions\AccountDetailsExtractorTests.cs" />
     <Compile Include="Positions\DetailExtractors\PositionCoreExtractorTests.cs" />
+    <Compile Include="Positions\DetailExtractors\PositionCostBasisExtractorTests.cs" />
     <Compile Include="Positions\DetailExtractors\PositionCurrentValueExtractorTests.cs" />
     <Compile Include="Positions\DetailExtractors\PositionLastPriceExtractorTests.cs" />
     <Compile Include="Positions\DetailExtractors\PositionQuantityExtractorTests.cs" />
