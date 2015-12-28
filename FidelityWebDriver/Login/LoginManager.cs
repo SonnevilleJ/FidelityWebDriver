@@ -5,7 +5,7 @@ namespace Sonneville.FidelityWebDriver.Login
 {
     public class LoginManager : ILoginManager
     {
-        private readonly ISiteNavigator _siteNavigator;
+        private ISiteNavigator _siteNavigator;
         private readonly FidelityConfiguration _fidelityConfiguration;
 
         public LoginManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration)
@@ -43,8 +43,8 @@ namespace Sonneville.FidelityWebDriver.Login
         {
             if (disposing)
             {
-                var siteNavigator = _siteNavigator;
-                if(siteNavigator != null) siteNavigator.Dispose();
+                _siteNavigator?.Dispose();
+                _siteNavigator = null;
             }
         }
     }

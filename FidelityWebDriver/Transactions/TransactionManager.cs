@@ -9,8 +9,8 @@ namespace Sonneville.FidelityWebDriver.Transactions
 {
     public class TransactionManager : ITransactionManager
     {
-        private readonly ISiteNavigator _siteNavigator;
-        private readonly ILoginManager _loginManager;
+        private ISiteNavigator _siteNavigator;
+        private ILoginManager _loginManager;
         private readonly ITransactionsMapper _transactionsMapper;
 
         public TransactionManager(ISiteNavigator siteNavigator, ILoginManager loginManager,
@@ -39,8 +39,11 @@ namespace Sonneville.FidelityWebDriver.Transactions
         {
             if (disposing)
             {
-                var fidelityDriver = _siteNavigator;
-                if (fidelityDriver != null) fidelityDriver.Dispose();
+                _siteNavigator?.Dispose();
+                _siteNavigator = null;
+
+                _loginManager?.Dispose();
+                _loginManager = null;
             }
         }
     }

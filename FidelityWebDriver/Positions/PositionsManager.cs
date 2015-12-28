@@ -7,8 +7,8 @@ namespace Sonneville.FidelityWebDriver.Positions
 {
     public class PositionsManager : IPositionsManager
     {
-        private readonly ISiteNavigator _siteNavigator;
-        private readonly ILoginManager _loginManager;
+        private ISiteNavigator _siteNavigator;
+        private ILoginManager _loginManager;
 
         public PositionsManager(ISiteNavigator siteNavigator, ILoginManager loginManager)
         {
@@ -16,9 +16,14 @@ namespace Sonneville.FidelityWebDriver.Positions
             _loginManager = loginManager;
         }
 
-        public IEnumerable<IAccountSummary> GetAccounts()
+        public IEnumerable<IAccountSummary> GetAccountSummaries()
         {
             return _loginManager.EnsureLoggedIn().GoToPositionsPage().GetAccountSummaries();
+        }
+
+        public IEnumerable<IAccountDetails> GetAccountDetails()
+        {
+            return _loginManager.EnsureLoggedIn().GoToPositionsPage().GetAccountDetails();
         }
 
         public void Dispose()
@@ -30,11 +35,11 @@ namespace Sonneville.FidelityWebDriver.Positions
         {
             if (disposing)
             {
-                var siteNavigator = _siteNavigator;
-                if (siteNavigator != null) siteNavigator.Dispose();
+                _siteNavigator?.Dispose();
+                _siteNavigator = null;
 
-                var loginManager = _loginManager;
-                if (loginManager != null) loginManager.Dispose();
+                _loginManager?.Dispose();
+                _loginManager = null;
             }
         }
     }

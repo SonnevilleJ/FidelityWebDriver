@@ -40,6 +40,14 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         }
 
         [Test]
+        public void ShouldDisposeLoginManager()
+        {
+            Manager.Dispose();
+
+            _loginManagerMock.Verify(loginManager => loginManager.Dispose());
+        }
+
+        [Test]
         public void ShouldReturnParsedTransactions()
         {
             var actualTransactions = Manager.DownloadTransactionHistory();

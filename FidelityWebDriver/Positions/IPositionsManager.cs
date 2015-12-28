@@ -5,6 +5,8 @@ namespace Sonneville.FidelityWebDriver.Positions
 {
     public interface IPositionsManager : IManager
     {
-        IEnumerable<IAccountSummary> GetAccounts();
+        IEnumerable<IAccountSummary> GetAccountSummaries();
+
+        IEnumerable<IAccountDetails> GetAccountDetails();
     }
 }

@@ -7,5 +7,7 @@ namespace Sonneville.FidelityWebDriver.Positions
     public interface IPositionsPage : IPage
     {
         IEnumerable<IAccountSummary> GetAccountSummaries();
+
+        IEnumerable<IAccountDetails> GetAccountDetails();
     }
 }

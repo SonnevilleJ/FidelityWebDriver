@@ -55,8 +55,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         public void ShouldDisposeWebDriver()
         {
             _siteNavigator.Dispose();
+            _siteNavigator.Dispose();
 
-            _webDriverMock.Verify(driver => driver.Dispose());
+            _webDriverMock.Verify(driver => driver.Dispose(), Times.Once());
         }
 
         [Test]

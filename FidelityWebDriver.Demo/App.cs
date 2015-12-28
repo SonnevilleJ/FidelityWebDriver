@@ -61,7 +61,7 @@ namespace Sonneville.FidelityWebDriver.Demo
                 _fidelityConfiguration.Write();
             }
 
-            var accounts = _positionsManager.GetAccounts().ToList();
+            var accounts = _positionsManager.GetAccountSummaries().ToList();
 
             Console.WriteLine("Found {0} accounts!", accounts.Count());
             foreach (var account in accounts)

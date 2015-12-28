@@ -43,7 +43,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             };
 
             _positionsManagerMock = new Mock<IPositionsManager>();
-            _positionsManagerMock.Setup(manager => manager.GetAccounts()).Returns(_accounts);
+            _positionsManagerMock.Setup(manager => manager.GetAccountSummaries()).Returns(_accounts);
 
             _transactionManagerMock = new Mock<ITransactionManager>();
             _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory()).Returns(_transactions);
@@ -190,12 +190,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         {
             if (disposing)
             {
-                var app = _app;
-                if (app != null)
-                {
-                    app.Dispose();
-                    _app = null;
-                }
+                _app?.Dispose();
+                _app = null;
             }
         }
     }

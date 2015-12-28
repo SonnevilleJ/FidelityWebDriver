@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Tests.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Tests.Login
 {
@@ -35,6 +34,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
             _loginPageMock.Setup(
                 loginPage => loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password))
                 .Returns(_summaryPageMock.Object);
+
             SiteNavigatorMock.Setup(navigator => navigator.GoTo<ILoginPage>()).Returns(_loginPageMock.Object);
         }
 

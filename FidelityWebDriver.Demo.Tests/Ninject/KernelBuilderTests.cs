@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using Moq;
+using Ninject;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -30,6 +31,17 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
             {
                 Assert.IsNotNull(app);
             }
+        }
+
+        [Test]
+        public void ShouldNotDisposeMoreThanOnce()
+        {
+            var webDriverMock = new Mock<IWebDriver>();
+            _kernel.Rebind<IWebDriver>().ToConstant(webDriverMock.Object);
+
+            _kernel.Get<IApp>().Dispose();
+
+            webDriverMock.Verify(webDriver => webDriver.Dispose(), Times.Once());
         }
 
         [Test]

@@ -14,14 +14,21 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private Mock<ILoginManager> _loginManagerMock;
         private Mock<ISummaryPage> _summaryPageMock;
         private Mock<IPositionsPage> _positionsPage;
-        private List<IAccountSummary> _accountsList;
+        private List<IAccountSummary> _accountSummaries;
+        private List<IAccountDetails> _accountDetails;
 
         protected override IPositionsManager InstantiateManager(ISiteNavigator siteNavigator)
         {
-            _accountsList = new List<IAccountSummary>();
+            _accountSummaries = new List<IAccountSummary>();
+            _accountDetails = new List<IAccountDetails>();
 
             _positionsPage = new Mock<IPositionsPage>();
-            _positionsPage.Setup(positionsPage => positionsPage.GetAccountSummaries()).Returns(_accountsList);
+            _positionsPage.Setup(positionsPage => positionsPage.GetAccountSummaries())
+                .Callback(()=>_loginManagerMock.Verify(loginManager=>loginManager.EnsureLoggedIn()))
+                .Returns(_accountSummaries);
+            _positionsPage.Setup(positionsPage => positionsPage.GetAccountDetails())
+                .Callback(() => _loginManagerMock.Verify(loginManager => loginManager.EnsureLoggedIn()))
+                .Returns(_accountDetails);
 
             _summaryPageMock = new Mock<ISummaryPage>();
             _summaryPageMock.Setup(summaryPage => summaryPage.GoToPositionsPage()).Returns(_positionsPage.Object);
@@ -33,11 +40,27 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         }
 
         [Test]
-        public void ShouldReturnAccountsFromPositionsPage()
+        public void ShouldDisposeLoginManager()
         {
-            var accounts = Manager.GetAccounts();
+            Manager.Dispose();
 
-            Assert.AreSame(_accountsList, accounts);
+            _loginManagerMock.Verify(loginManager => loginManager.Dispose());
+        }
+
+        [Test]
+        public void ShouldReturnAccountSummariesFromPositionsPage()
+        {
+            var accounts = Manager.GetAccountSummaries();
+
+            Assert.AreSame(_accountSummaries, accounts);
+        }
+
+        [Test]
+        public void ShouldReturnAccountDetailsFromPositionsPage()
+        {
+            var accounts = Manager.GetAccountDetails();
+
+            Assert.AreSame(_accountDetails, accounts);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Sonneville.FidelityWebDriver.Navigation
 {
     public class SiteNavigator : ISiteNavigator
     {
-        private readonly IWebDriver _webDriver;
+        private IWebDriver _webDriver;
         private readonly IPageFactory _pageFactory;
 
         private readonly Dictionary<Type, Action<ISiteNavigator, IWebDriver>> _pageNavigationActions = new Dictionary
@@ -41,8 +41,8 @@ namespace Sonneville.FidelityWebDriver.Navigation
         {
             if (disposing)
             {
-                var webDriver = _webDriver;
-                if (webDriver != null) webDriver.Dispose();
+                _webDriver?.Dispose();
+                _webDriver = null;
             }
         }
     }
