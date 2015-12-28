@@ -12,18 +12,23 @@ namespace Sonneville.FidelityWebDriver.Positions
         private readonly IPositionCoreExtractor _positionCoreExtractor;
         private readonly IPositionTickerExtractor _positionTickerExtractor;
         private readonly IPositionLastPriceExtractor _positionLastPriceExtractor;
+        private readonly IPositionTotalGainExtractor _positionTotalGainExtractor;
 
         public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor,
-            IPositionTickerExtractor positionTickerExtractor, IPositionLastPriceExtractor positionLastPriceExtractor)
+            IPositionTickerExtractor positionTickerExtractor, IPositionLastPriceExtractor positionLastPriceExtractor,
+            IPositionTotalGainExtractor positionTotalGainExtractor)
         {
             _positionCoreExtractor = positionCoreExtractor;
             _positionTickerExtractor = positionTickerExtractor;
             _positionLastPriceExtractor = positionLastPriceExtractor;
+            _positionTotalGainExtractor = positionTotalGainExtractor;
         }
 
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
         {
-            foreach (var positionTableRow in positionTableRows.Where(row=>row.GetAttribute("class").Contains("normal-row")))
+            foreach (
+                var positionTableRow in positionTableRows.Where(row => row.GetAttribute("class").Contains("normal-row"))
+                )
             {
                 var tdElements = positionTableRow.FindElements(By.XPath("./td"));
                 var position = new Position();
@@ -34,8 +39,8 @@ namespace Sonneville.FidelityWebDriver.Positions
                     : _positionTickerExtractor.ExtractNonCoreTicker(tdElements);
                 position.Description = _positionTickerExtractor.ExtractDescription(tdElements);
                 position.LastPrice = _positionLastPriceExtractor.ExtractLastPrice(tdElements);
-                position.TotalGainDollar = ExtractTotalGainDollar(tdElements);
-                position.TotalGainPercent = ExtractTotalGainPercent(tdElements);
+                position.TotalGainDollar = _positionTotalGainExtractor.ExtractTotalGainDollar(tdElements);
+                position.TotalGainPercent = _positionTotalGainExtractor.ExtractTotalGainPercent(tdElements);
                 position.CurrentValue = ExtractCurrentValue(tdElements);
                 position.Quantity = ExtractQuantity(tdElements);
                 position.IsMargin = ExtractMargin(tdElements);
@@ -44,26 +49,6 @@ namespace Sonneville.FidelityWebDriver.Positions
 
                 yield return position;
             }
-        }
-
-        private decimal ExtractTotalGainDollar(IReadOnlyList<IWebElement> tdElements)
-        {
-            var totalGainDollarText = tdElements[3]
-                .FindElements(By.ClassName("magicgrid--stacked-data-value"))[0]
-                .Text;
-            return totalGainDollarText == "n/a"
-                ? 0
-                : decimal.Parse(totalGainDollarText, NumberStyles.Any);
-        }
-
-        private decimal ExtractTotalGainPercent(IReadOnlyList<IWebElement> tdElements)
-        {
-            var totalGainPercentText = tdElements[3]
-                .FindElements(By.ClassName("magicgrid--stacked-data-value"))[1]
-                .Text.TrimEnd('%');
-            return totalGainPercentText == "n/a"
-                ? 0
-                : decimal.Parse(totalGainPercentText, NumberStyles.Any)/100m;
         }
 
         private decimal ExtractCurrentValue(IReadOnlyList<IWebElement> tdElements)

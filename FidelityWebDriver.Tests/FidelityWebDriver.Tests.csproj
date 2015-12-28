@@ -80,6 +80,7 @@
     <Compile Include="Positions\DetailExtractors\PositionCoreExtractorTests.cs" />
     <Compile Include="Positions\DetailExtractors\PositionLastPriceExtractorTests.cs" />
     <Compile Include="Positions\DetailExtractors\PositionTickerExtractorTests.cs" />
+    <Compile Include="Positions\DetailExtractors\PositionTotalGainExtractorTests.cs" />
     <Compile Include="Positions\PositionDetailsExtractorTests.cs" />
     <Compile Include="Positions\PositionsManagerTests.cs" />
     <Compile Include="Positions\AccountSummariesExtractorTests.cs" />
