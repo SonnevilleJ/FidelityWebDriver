@@ -61,10 +61,13 @@ namespace Sonneville.FidelityWebDriver.Demo
                 _fidelityConfiguration.Write();
             }
 
+            Console.WriteLine("Reading account summaries.....");
             PrintAccountSummaries(_positionsManager.GetAccountSummaries().ToList());
             PrintSeparator();
+            Console.WriteLine("Reading account details.......");
             PrintAccountDetails(_positionsManager.GetAccountDetails().ToList());
             PrintSeparator();
+            Console.WriteLine("Reading recent transactions...");
             PrintRecentTransactions(_transactionManager.DownloadTransactionHistory());
             PrintSeparator();
         }
@@ -87,12 +90,11 @@ namespace Sonneville.FidelityWebDriver.Demo
                 Console.WriteLine("Account Value: {0}", account.MostRecentValue.ToString("C"));
                 Console.WriteLine();
             }
-            Console.WriteLine();
         }
 
         private void PrintAccountDetails(List<IAccountDetails> accountDetails)
         {
-            Console.WriteLine($"Found {accountDetails} accounts!");
+            Console.WriteLine($"Found {accountDetails.Count()} accounts!");
             foreach (var accountDetail in accountDetails)
             {
                 Console.WriteLine("Account Name: {0}", accountDetail.Name);
@@ -104,8 +106,8 @@ namespace Sonneville.FidelityWebDriver.Demo
                     Console.WriteLine("Shares: {0}", position.Quantity.ToString("N"));
                     Console.WriteLine("Current value: {0}", position.CurrentValue.ToString("C"));
                     Console.WriteLine("Cost basis: {0}", position.CostBasisPerShare.ToString("C"));
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
             }
         }
 
