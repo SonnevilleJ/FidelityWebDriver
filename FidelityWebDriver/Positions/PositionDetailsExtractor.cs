@@ -35,9 +35,8 @@ namespace Sonneville.FidelityWebDriver.Positions
 
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
         {
-            foreach (
-                var positionTableRow in positionTableRows.Where(row => row.GetAttribute("class").Contains("normal-row"))
-                )
+            var normalRows = positionTableRows.Where(row => row.GetAttribute("class").Contains("normal-row"));
+            foreach (var positionTableRow in normalRows)
             {
                 var tdElements = positionTableRow.FindElements(By.XPath("./td"));
                 var position = new Position();

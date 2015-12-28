@@ -15,15 +15,33 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private PositionDetailsExtractor _extractor;
         private List<IWebElement> _positionTableRows;
         private List<IPosition> _positions;
+        private Mock<IPositionCoreExtractor> _coreExtractorMock;
+        private Mock<IPositionTickerExtractor> _tickerExtractorMock;
+        private Mock<IPositionLastPriceExtractor> _lastPriceExtractorMock;
+        private Mock<IPositionTotalGainExtractor> _totalGainExtractorMock;
+        private Mock<IPositionCurrentValueExtractor> _currentValueExtractorMock;
+        private Mock<IPositionQuantityExtractor> _quantityExtractorMock;
+        private Mock<IPositionCostBasisExtractor> _costBasisExtractorMock;
 
         [SetUp]
         public void Setup()
         {
-            _positions = SetupPositions();
+            _coreExtractorMock = new Mock<IPositionCoreExtractor>();
+            _tickerExtractorMock = new Mock<IPositionTickerExtractor>();
+            _lastPriceExtractorMock = new Mock<IPositionLastPriceExtractor>();
+            _totalGainExtractorMock = new Mock<IPositionTotalGainExtractor>();
+            _currentValueExtractorMock = new Mock<IPositionCurrentValueExtractor>();
+            _quantityExtractorMock = new Mock<IPositionQuantityExtractor>();
+            _costBasisExtractorMock = new Mock<IPositionCostBasisExtractor>();
+
+            _positions = SetupExpectedPositions();
 
             _positionTableRows = SetupPositionRows(_positions);
 
-            _extractor = new PositionDetailsExtractor(new PositionCoreExtractor(), new PositionTickerExtractor(), new PositionLastPriceExtractor(), new PositionTotalGainExtractor(), new PositionCurrentValueExtractor(), new PositionQuantityExtractor(), new PositionCostBasisExtractor());
+            _extractor = new PositionDetailsExtractor(_coreExtractorMock.Object,
+                _tickerExtractorMock.Object, _lastPriceExtractorMock.Object,
+                _totalGainExtractorMock.Object, _currentValueExtractorMock.Object,
+                _quantityExtractorMock.Object, _costBasisExtractorMock.Object);
         }
 
         [Test]
@@ -49,7 +67,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             }
         }
 
-        private List<IPosition> SetupPositions()
+        private List<IPosition> SetupExpectedPositions()
         {
             return new List<IPosition>
             {
@@ -66,122 +84,66 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
         private IEnumerable<IWebElement> CreatePositionRows(IPosition position)
         {
-            var tdMocks = new List<IWebElement>
+            var tdElements = new List<IWebElement>
             {
-                SetupSymbolTd(position),
-                SetupLastPriceTd(position),
-                SetupTodaysGainTd(position),
-                SetupTotalGainTd(position),
-                SetupCurrentValueTd(position),
-                SetupQuantityTd(position),
-                SetupCostBasisTd(position),
-            };
+                new Mock<IWebElement>().Object,
+                new Mock<IWebElement>().Object,
+                new Mock<IWebElement>().Object,
+                new Mock<IWebElement>().Object,
+                new Mock<IWebElement>().Object,
+                new Mock<IWebElement>().Object,
+                new Mock<IWebElement>().Object,
+            }.AsReadOnly();
+
+            _coreExtractorMock.Setup(extractor => extractor.ExtractIsCore(tdElements))
+                .Returns(position.IsCore);
+
+            if (position.IsCore)
+            {
+                _tickerExtractorMock.Setup(extractor => extractor.ExtractCoreTicker(tdElements))
+                    .Returns(position.Ticker);
+            }
+            else
+            {
+                _tickerExtractorMock.Setup(extractor => extractor.ExtractNonCoreTicker(tdElements))
+                    .Returns(position.Ticker);
+            }
+
+            _tickerExtractorMock.Setup(extractor => extractor.ExtractDescription(tdElements))
+                .Returns(position.Description);
+
+            _lastPriceExtractorMock.Setup(extractor => extractor.ExtractLastPrice(tdElements))
+                .Returns(position.LastPrice);
+
+            _totalGainExtractorMock.Setup(extractor => extractor.ExtractTotalGainDollar(tdElements))
+                .Returns(position.TotalGainDollar);
+
+            _totalGainExtractorMock.Setup(extractor => extractor.ExtractTotalGainPercent(tdElements))
+                .Returns(position.TotalGainPercent);
+
+            _currentValueExtractorMock.Setup(extractor => extractor.ExtractCurrentValue(tdElements))
+                .Returns(position.CurrentValue);
+
+            _quantityExtractorMock.Setup(extractor => extractor.ExtractQuantity(tdElements))
+                .Returns(position.Quantity);
+
+            _quantityExtractorMock.Setup(extractor => extractor.ExtractMargin(tdElements))
+                .Returns(position.IsMargin);
+
+            _costBasisExtractorMock.Setup(extractor => extractor.ExtractCostBasisPerShare(tdElements))
+                .Returns(position.CostBasisPerShare);
+
+            _costBasisExtractorMock.Setup(extractor => extractor.ExtractCostBasisTotal(tdElements))
+                .Returns(position.CostBasisTotal);
 
             var normalRowMock = new Mock<IWebElement>();
             normalRowMock.Setup(row => row.GetAttribute("class")).Returns("normal-row");
-            normalRowMock.Setup(row => row.FindElements(By.XPath("./td"))).Returns(tdMocks.AsReadOnly());
+            normalRowMock.Setup(row => row.FindElements(By.XPath("./td"))).Returns(tdElements);
             yield return normalRowMock.Object;
 
             var contentRowMock = new Mock<IWebElement>();
             contentRowMock.Setup(row => row.GetAttribute("class")).Returns("content-row");
             yield return contentRowMock.Object;
-        }
-
-        private IWebElement SetupSymbolTd(IPosition position)
-        {
-            var ticker = position.IsCore
-                ? $"{position.Ticker}**"
-                : position.Ticker;
-
-            var symbolSpanMock = new Mock<IWebElement>();
-            symbolSpanMock.Setup(span => span.Text).Returns(ticker);
-
-            var descriptionSpanMock = new Mock<IWebElement>();
-            descriptionSpanMock.Setup(span => span.Text).Returns(position.Description);
-
-            var tdMock = new Mock<IWebElement>();
-            tdMock.Setup(td => td.FindElement(By.ClassName("stock-symbol"))).Returns(symbolSpanMock.Object);
-            tdMock.Setup(td => td.FindElement(By.ClassName("stock-name"))).Returns(descriptionSpanMock.Object);
-            return tdMock.Object;
-        }
-
-        private IWebElement SetupLastPriceTd(IPosition position)
-        {
-            var spanMock = new Mock<IWebElement>();
-            spanMock.Setup(span => span.Text).Returns(position.LastPrice.ToString("C"));
-
-            var tdMock = new Mock<IWebElement>();
-            tdMock.Setup(td => td.FindElements(By.ClassName("magicgrid--stacked-data-value")))
-                .Returns(new List<IWebElement> {spanMock.Object}.AsReadOnly());
-            return tdMock.Object;
-        }
-
-        private IWebElement SetupTodaysGainTd(IPosition position)
-        {
-            return new Mock<IWebElement>().Object;
-        }
-
-        private IWebElement SetupTotalGainTd(IPosition position)
-        {
-            var totalGainDollarString = position.TotalGainDollar != 0
-                ? position.TotalGainDollar.ToString("C")
-                : "n/a";
-
-            var span1 = new Mock<IWebElement>();
-            span1.Setup(span => span.Text).Returns(totalGainDollarString);
-
-            var totalGainPercentString = position.TotalGainPercent != 0
-                ? position.TotalGainPercent.ToString("P")
-                : "n/a";
-            var span2 = new Mock<IWebElement>();
-            span2.Setup(span => span.Text).Returns(totalGainPercentString);
-
-            var tdMock = new Mock<IWebElement>();
-            tdMock.Setup(td => td.FindElements(By.ClassName("magicgrid--stacked-data-value")))
-                .Returns(new List<IWebElement> {span1.Object, span2.Object}.AsReadOnly());
-            return tdMock.Object;
-        }
-
-        private IWebElement SetupCurrentValueTd(IPosition position)
-        {
-            var tdMock = new Mock<IWebElement>();
-            tdMock.Setup(td => td.Text).Returns(position.CurrentValue.ToString("C"));
-            return tdMock.Object;
-        }
-
-        private IWebElement SetupQuantityTd(IPosition position)
-        {
-            var tdText = position.IsMargin
-                ? $"\"{position.Quantity.ToString("##.###")}\"<br>\"(Margin)\""
-                : position.Quantity.ToString("##.###");
-
-            var tdMock = new Mock<IWebElement>();
-            tdMock.Setup(td => td.Text).Returns(tdText);
-            return tdMock.Object;
-        }
-
-        private IWebElement SetupCostBasisTd(IPosition position)
-        {
-            var costBasisPerShareString = position.CostBasisPerShare != 0
-                ? $"{position.CostBasisPerShare.ToString("C")}/Share"
-                : "n/a";
-            var perShareSpanMock = new Mock<IWebElement>();
-            perShareSpanMock.Setup(span => span.Text).Returns(costBasisPerShareString);
-
-            var totalSpanMock = new Mock<IWebElement>();
-            var costBasisTotalString = position.CostBasisTotal != 0
-                ? $"{position.CostBasisTotal.ToString("C")}"
-                : "n/a";
-            totalSpanMock.Setup(span => span.Text).Returns(costBasisTotalString);
-
-            var totalDivMock = new Mock<IWebElement>();
-            totalDivMock.Setup(div => div.FindElement(By.TagName("span"))).Returns(totalSpanMock.Object);
-
-            var tdMock = new Mock<IWebElement>();
-            tdMock.Setup(td => td.FindElements(By.ClassName("magicgrid--stacked-data-value")))
-                .Returns(new List<IWebElement> {perShareSpanMock.Object, totalDivMock.Object}.AsReadOnly());
-
-            return tdMock.Object;
         }
     }
 }
