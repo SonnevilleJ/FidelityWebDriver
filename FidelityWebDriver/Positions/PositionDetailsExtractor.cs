@@ -13,15 +13,17 @@ namespace Sonneville.FidelityWebDriver.Positions
         private readonly IPositionTickerExtractor _positionTickerExtractor;
         private readonly IPositionLastPriceExtractor _positionLastPriceExtractor;
         private readonly IPositionTotalGainExtractor _positionTotalGainExtractor;
+        private readonly IPositionCurrentValueExtractor _positionCurrentValueExtractor;
 
         public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor,
             IPositionTickerExtractor positionTickerExtractor, IPositionLastPriceExtractor positionLastPriceExtractor,
-            IPositionTotalGainExtractor positionTotalGainExtractor)
+            IPositionTotalGainExtractor positionTotalGainExtractor, IPositionCurrentValueExtractor positionCurrentValueExtractor)
         {
             _positionCoreExtractor = positionCoreExtractor;
             _positionTickerExtractor = positionTickerExtractor;
             _positionLastPriceExtractor = positionLastPriceExtractor;
             _positionTotalGainExtractor = positionTotalGainExtractor;
+            _positionCurrentValueExtractor = positionCurrentValueExtractor;
         }
 
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
@@ -41,7 +43,7 @@ namespace Sonneville.FidelityWebDriver.Positions
                 position.LastPrice = _positionLastPriceExtractor.ExtractLastPrice(tdElements);
                 position.TotalGainDollar = _positionTotalGainExtractor.ExtractTotalGainDollar(tdElements);
                 position.TotalGainPercent = _positionTotalGainExtractor.ExtractTotalGainPercent(tdElements);
-                position.CurrentValue = ExtractCurrentValue(tdElements);
+                position.CurrentValue = _positionCurrentValueExtractor.ExtractCurrentValue(tdElements);
                 position.Quantity = ExtractQuantity(tdElements);
                 position.IsMargin = ExtractMargin(tdElements);
                 position.CostBasisPerShare = ExtractCostBasisPerShare(tdElements);
@@ -49,11 +51,6 @@ namespace Sonneville.FidelityWebDriver.Positions
 
                 yield return position;
             }
-        }
-
-        private decimal ExtractCurrentValue(IReadOnlyList<IWebElement> tdElements)
-        {
-            return decimal.Parse(tdElements[4].Text, NumberStyles.Any);
         }
 
         private decimal ExtractQuantity(IReadOnlyList<IWebElement> tdElements)
