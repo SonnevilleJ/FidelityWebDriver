@@ -11,11 +11,14 @@ namespace Sonneville.FidelityWebDriver.Positions
     {
         private readonly IPositionCoreExtractor _positionCoreExtractor;
         private readonly IPositionTickerExtractor _positionTickerExtractor;
+        private readonly IPositionLastPriceExtractor _positionLastPriceExtractor;
 
-        public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor, IPositionTickerExtractor positionTickerExtractor)
+        public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor,
+            IPositionTickerExtractor positionTickerExtractor, IPositionLastPriceExtractor positionLastPriceExtractor)
         {
             _positionCoreExtractor = positionCoreExtractor;
             _positionTickerExtractor = positionTickerExtractor;
+            _positionLastPriceExtractor = positionLastPriceExtractor;
         }
 
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
@@ -30,7 +33,7 @@ namespace Sonneville.FidelityWebDriver.Positions
                     ? _positionTickerExtractor.ExtractCoreTicker(tdElements)
                     : _positionTickerExtractor.ExtractNonCoreTicker(tdElements);
                 position.Description = _positionTickerExtractor.ExtractDescription(tdElements);
-                position.LastPrice = ExtractLastPrice(tdElements);
+                position.LastPrice = _positionLastPriceExtractor.ExtractLastPrice(tdElements);
                 position.TotalGainDollar = ExtractTotalGainDollar(tdElements);
                 position.TotalGainPercent = ExtractTotalGainPercent(tdElements);
                 position.CurrentValue = ExtractCurrentValue(tdElements);
@@ -41,13 +44,6 @@ namespace Sonneville.FidelityWebDriver.Positions
 
                 yield return position;
             }
-        }
-
-        private decimal ExtractLastPrice(IReadOnlyList<IWebElement> tdElements)
-        {
-            return decimal.Parse(tdElements[1].FindElements(By.ClassName("magicgrid--stacked-data-value"))
-                .First()
-                .Text, NumberStyles.Any);
         }
 
         private decimal ExtractTotalGainDollar(IReadOnlyList<IWebElement> tdElements)
