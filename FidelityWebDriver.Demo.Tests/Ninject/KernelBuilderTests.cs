@@ -43,14 +43,5 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
 
             webDriverMock.Verify(webDriver => webDriver.Dispose(), Times.Once());
         }
-
-        [Test]
-        public void ShouldGetChromeDriver()
-        {
-            using (var webDriver = _kernel.Get<IWebDriver>())
-            {
-                Assert.IsInstanceOf<ChromeDriver>(webDriver);
-            }
-        }
     }
 }
