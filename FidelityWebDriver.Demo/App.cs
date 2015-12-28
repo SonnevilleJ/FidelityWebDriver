@@ -11,9 +11,9 @@ namespace Sonneville.FidelityWebDriver.Demo
 {
     public class App : IApp
     {
-        private readonly IPositionsManager _positionsManager;
+        private IPositionsManager _positionsManager;
 
-        private readonly ITransactionManager _transactionManager;
+        private ITransactionManager _transactionManager;
 
         private readonly FidelityConfiguration _fidelityConfiguration;
         private readonly OptionSet _optionSet;
@@ -61,10 +61,25 @@ namespace Sonneville.FidelityWebDriver.Demo
                 _fidelityConfiguration.Write();
             }
 
-            var accounts = _positionsManager.GetAccountSummaries().ToList();
+            PrintAccountSummaries(_positionsManager.GetAccountSummaries().ToList());
+            PrintSeparator();
+            PrintAccountDetails(_positionsManager.GetAccountDetails().ToList());
+            PrintSeparator();
+            PrintRecentTransactions(_transactionManager.DownloadTransactionHistory());
+            PrintSeparator();
+        }
 
-            Console.WriteLine("Found {0} accounts!", accounts.Count());
-            foreach (var account in accounts)
+        private void PrintSeparator()
+        {
+            Console.WriteLine();
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Console.WriteLine();
+        }
+
+        private void PrintAccountSummaries(List<IAccountSummary> accountSummaries)
+        {
+            Console.WriteLine("Found {0} accounts!", accountSummaries.Count());
+            foreach (var account in accountSummaries)
             {
                 Console.WriteLine("Account Name: {0}", account.Name);
                 Console.WriteLine("Account Number: {0}", account.AccountNumber);
@@ -72,8 +87,30 @@ namespace Sonneville.FidelityWebDriver.Demo
                 Console.WriteLine("Account Value: {0}", account.MostRecentValue.ToString("C"));
                 Console.WriteLine();
             }
+            Console.WriteLine();
+        }
 
-            var transactions = _transactionManager.DownloadTransactionHistory();
+        private void PrintAccountDetails(List<IAccountDetails> accountDetails)
+        {
+            Console.WriteLine($"Found {accountDetails} accounts!");
+            foreach (var accountDetail in accountDetails)
+            {
+                Console.WriteLine("Account Name: {0}", accountDetail.Name);
+                Console.WriteLine("Account Number: {0}", accountDetail.AccountNumber);
+                Console.WriteLine("Found {0} positions in this account!", accountDetail.Positions.Count());
+                foreach (var position in accountDetail.Positions)
+                {
+                    Console.WriteLine("Ticker: {0}", position.Ticker);
+                    Console.WriteLine("Shares: {0}", position.Quantity.ToString("N"));
+                    Console.WriteLine("Current value: {0}", position.CurrentValue.ToString("C"));
+                    Console.WriteLine("Cost basis: {0}", position.CostBasisPerShare.ToString("C"));
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private void PrintRecentTransactions(IList<IFidelityTransaction> transactions)
+        {
             Console.WriteLine("Found {0} recent transactions!", transactions.Count());
             foreach (var transaction in transactions)
             {
@@ -81,9 +118,10 @@ namespace Sonneville.FidelityWebDriver.Demo
                     transaction.RunDate, transaction.Quantity, transaction.Symbol, Translate(transaction),
                     transaction.Price);
             }
+            Console.WriteLine();
         }
 
-        private static string Translate(IFidelityTransaction transaction)
+        private string Translate(IFidelityTransaction transaction)
         {
             switch (transaction.Type)
             {
@@ -117,10 +155,11 @@ namespace Sonneville.FidelityWebDriver.Demo
         {
             if (disposing)
             {
-                var positionsManager = _positionsManager;
-                positionsManager?.Dispose();
-                var transactionManager = _transactionManager;
-                transactionManager?.Dispose();
+                _positionsManager?.Dispose();
+                _positionsManager = null;
+
+                _transactionManager?.Dispose();
+                _transactionManager = null;
             }
         }
     }

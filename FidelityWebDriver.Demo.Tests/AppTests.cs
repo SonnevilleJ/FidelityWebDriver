@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
@@ -18,10 +19,11 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         private FidelityConfiguration _fidelityConfiguration;
         private string _cliUserName;
         private string _cliPassword;
-        private List<AccountSummary> _accounts;
+        private List<AccountSummary> _accountSummaries;
 
         private Mock<ITransactionManager> _transactionManagerMock;
         private List<IFidelityTransaction> _transactions;
+        private List<AccountDetails> _accountDetails;
 
         [SetUp]
         public void Setup()
@@ -29,7 +31,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _cliUserName = "Batman";
             _cliPassword = "I am vengeance. I am the night. I am Batman.";
 
-            _accounts = new List<AccountSummary>
+            _accountSummaries = new List<AccountSummary>
             {
                 new AccountSummary("acct 1", AccountType.InvestmentAccount, "play money", 5000),
                 new AccountSummary("acct 2", AccountType.RetirementAccount, "play money", 88176),
@@ -37,13 +39,63 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                 new AccountSummary("acct 4", AccountType.CreditCard, "debt", 1200),
             };
 
+            _accountDetails = new List<AccountDetails>()
+            {
+                new AccountDetails
+                {
+                    Name = "first account",
+                    AccountNumber = "acct a",
+                    Positions = new List<IPosition>
+                    {
+                        new Position
+                        {
+                            Ticker = "asdf",
+                            Quantity = 2,
+                            CostBasisPerShare = 5.27m,
+                            CurrentValue = 10.54m,
+                        },
+                        new Position
+                        {
+                            Ticker = "querty",
+                            Quantity = 35,
+                            CostBasisPerShare = 8.49m,
+                            CurrentValue = 297.15m,
+                        },
+                    }
+                },
+                new AccountDetails
+                {
+                    Name = "second account",
+                    AccountNumber = "acct b",
+                    Positions = new List<IPosition>
+                    {
+                        new Position
+                        {
+                            Ticker = "aapl",
+                            Quantity = 2,
+                            CostBasisPerShare = 195.27m,
+                            CurrentValue = 390.54m,
+                        },
+                        new Position
+                        {
+                            Ticker = "msft",
+                            Quantity = 35,
+                            CostBasisPerShare = 1.04m,
+                            CurrentValue = 36.4m,
+                        },
+                    }
+                },
+            };
+
             _transactions = new List<IFidelityTransaction>
             {
-                new FidelityTransaction(new DateTime(2015, 12, 25), null, null, TransactionType.Buy, "DE", null, null, 12.3m, 45.67m, 8.9m, 0.0m, 0.0m, 0.0m, new DateTime(2015, 12, 31))
+                new FidelityTransaction(new DateTime(2015, 12, 25), null, null, TransactionType.Buy, "DE", null, null,
+                    12.3m, 45.67m, 8.9m, 0.0m, 0.0m, 0.0m, new DateTime(2015, 12, 31))
             };
 
             _positionsManagerMock = new Mock<IPositionsManager>();
-            _positionsManagerMock.Setup(manager => manager.GetAccountSummaries()).Returns(_accounts);
+            _positionsManagerMock.Setup(manager => manager.GetAccountSummaries()).Returns(_accountSummaries);
+            _positionsManagerMock.Setup(manager => manager.GetAccountDetails()).Returns(_accountDetails);
 
             _transactionManagerMock = new Mock<ITransactionManager>();
             _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory()).Returns(_transactions);
@@ -65,20 +117,45 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         }
 
         [Test]
-        public void ShouldFetchAccountInfoFromPositionsManager()
+        public void ShouldFetchAccountSummariesFromPositionsManager()
         {
             using (var memoryStream = new MemoryStream())
             {
                 RedirectConsoleOutput(memoryStream);
-                
+
                 _app.Run(new string[0]);
 
                 var consoleOutput = ReadConsoleOutput(memoryStream);
-                _accounts.ForEach(account =>
+                _accountSummaries.ForEach(account =>
                 {
                     Assert.IsTrue(consoleOutput.Contains(account.AccountNumber));
                     Assert.IsTrue(consoleOutput.Contains(account.Name));
                     Assert.IsTrue(consoleOutput.Contains(account.MostRecentValue.ToString("C")));
+                });
+            }
+        }
+
+        [Test]
+        public void ShouldFetchAccountDetailsFromPositionsManager()
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                RedirectConsoleOutput(memoryStream);
+
+                _app.Run(new string[0]);
+
+                var consoleOutput = ReadConsoleOutput(memoryStream);
+                _accountDetails.ForEach(account =>
+                {
+                    Assert.IsTrue(consoleOutput.Contains(account.Name));
+                    Assert.IsTrue(consoleOutput.Contains(account.AccountNumber));
+                    account.Positions.ToList().ForEach(position =>
+                    {
+                        Assert.IsTrue(consoleOutput.Contains(position.Ticker));
+                        Assert.IsTrue(consoleOutput.Contains(position.Quantity.ToString("N")));
+                        Assert.IsTrue(consoleOutput.Contains(position.CurrentValue.ToString("C")));
+                        Assert.IsTrue(consoleOutput.Contains(position.CostBasisPerShare.ToString("C")));
+                    });
                 });
             }
         }
