@@ -10,13 +10,13 @@ namespace Sonneville.FidelityWebDriver.Positions
     {
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
         {
-            foreach (var positionTableRow in positionTableRows)
+            foreach (var positionTableRow in positionTableRows.Where(row=>row.GetAttribute("class").Contains("normal-row")))
             {
                 var tdElements = positionTableRow.FindElements(By.XPath("./td"));
                 var position = new Position();
 
                 position.IsCore = ExtractIsCore(tdElements);
-                position.Ticker = position.IsCore
+                position.Ticker = ExtractIsCore(tdElements)
                     ? ExtractCoreTicker(tdElements)
                     : ExtractNonCoreTicker(tdElements);
                 position.Description = ExtractDescription(tdElements);
@@ -102,7 +102,7 @@ namespace Sonneville.FidelityWebDriver.Positions
         private decimal ExtractCostBasisPerShare(IReadOnlyList<IWebElement> tdElements)
         {
             var spanText = tdElements[6].FindElements(By.ClassName("magicgrid--stacked-data-value"))[0].Text;
-            return spanText == "n/a"
+            return spanText == "n/a" //TODO|| string.IsNullOrWhiteSpace(spanText)
                 ? 0
                 : decimal.Parse(spanText.Replace("/Share", ""), NumberStyles.Any);
         }
@@ -113,7 +113,7 @@ namespace Sonneville.FidelityWebDriver.Positions
                 .FindElements(By.ClassName("magicgrid--stacked-data-value"))[1]
                 .FindElement(By.TagName("span"))
                 .Text;
-            return spanText == "n/a"
+            return spanText == "n/a" //TODO|| string.IsNullOrWhiteSpace(spanText)
                 ? 0
                 : decimal.Parse(spanText, NumberStyles.Any);
         }

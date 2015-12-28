@@ -60,10 +60,10 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
         private List<IWebElement> SetupPositionRows(IEnumerable<IPosition> positions)
         {
-            return positions.Select(CreatePositionRow).ToList();
+            return positions.SelectMany(CreatePositionRows).ToList();
         }
 
-        private IWebElement CreatePositionRow(IPosition position)
+        private IEnumerable<IWebElement> CreatePositionRows(IPosition position)
         {
             var tdMocks = new List<IWebElement>
             {
@@ -76,10 +76,14 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                 SetupCostBasisTd(position),
             };
 
-            var rowMock = new Mock<IWebElement>();
-            rowMock.Setup(row => row.FindElements(By.XPath("./td"))).Returns(tdMocks.AsReadOnly());
+            var normalRowMock = new Mock<IWebElement>();
+            normalRowMock.Setup(row => row.GetAttribute("class")).Returns("normal-row");
+            normalRowMock.Setup(row => row.FindElements(By.XPath("./td"))).Returns(tdMocks.AsReadOnly());
+            yield return normalRowMock.Object;
 
-            return rowMock.Object;
+            var contentRowMock = new Mock<IWebElement>();
+            contentRowMock.Setup(row => row.GetAttribute("class")).Returns("content-row");
+            yield return contentRowMock.Object;
         }
 
         private IWebElement SetupSymbolTd(IPosition position)

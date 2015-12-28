@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Navigation;
@@ -28,6 +29,7 @@ namespace Sonneville.FidelityWebDriver.Positions
 
         public IEnumerable<IAccountDetails> GetAccountDetails()
         {
+            Thread.Sleep(1000);
             return _accountDetailsExtractor.ExtractAccountDetails(_webDriver);
         }
     }

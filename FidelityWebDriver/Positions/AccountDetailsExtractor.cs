@@ -16,7 +16,7 @@ namespace Sonneville.FidelityWebDriver.Positions
 
         public IEnumerable<IAccountDetails> ExtractAccountDetails(IWebDriver webDriver)
         {
-            var table = webDriver.FindElement(By.ClassName("p-positions-tbody"));
+            var table = webDriver.FindElements(By.ClassName("p-positions-tbody"))[1];
             var tableRows = table.FindElements(By.TagName("tr"));
 
             var collectingPositionRows = false;
@@ -36,16 +36,21 @@ namespace Sonneville.FidelityWebDriver.Positions
                     }
                     if (IsTotalRow(tableRow))
                     {
-                        var rawPendingActivityText = tableRow
-                            .FindElement(By.ClassName("magicgrid--total-pending-activity-link"))
-                            .FindElement(By.ClassName("value"))
-                            .Text;
-                        accountDetails.PendingActivity = decimal.Parse(rawPendingActivityText, NumberStyles.Any);
+                        var pendingActivityDiv = tableRow.FindElement(By.ClassName("magicgrid--total-pending-activity-link-cell"));
+                        if (!string.IsNullOrWhiteSpace(pendingActivityDiv.Text))
+                        {
+                            var rawPendingActivityText = pendingActivityDiv
+                                .FindElement(By.ClassName("magicgrid--total-pending-activity-link"))
+                                .FindElement(By.ClassName("value"))
+                                .Text;
+                            accountDetails.PendingActivity = decimal.Parse(rawPendingActivityText, NumberStyles.Any);
+                        }
 
                         var totalGainSpans = tableRow.FindElements(By.ClassName("magicgrid--stacked-data-value"));
                         accountDetails.TotalGainDollar = decimal.Parse(totalGainSpans[0].Text.Trim(), NumberStyles.Any);
                         var trimmedPercentString = totalGainSpans[1].Text.Trim('%');
                         accountDetails.TotalGainPercent = decimal.Parse(trimmedPercentString, NumberStyles.Any)/100m;
+                        collectingPositionRows = false;
                     }
                 }
                 if (IsNewAccountRow(tableRow))
@@ -89,7 +94,7 @@ namespace Sonneville.FidelityWebDriver.Positions
         {
             var classes = tableRow.GetAttribute("class");
             return !string.IsNullOrWhiteSpace(classes)
-                   && (classes.Contains("magicgrid--total-row"));
+                   && classes.Contains("magicgrid--total-row");
         }
 
         private bool IsPositionRow(IWebElement tableRow)

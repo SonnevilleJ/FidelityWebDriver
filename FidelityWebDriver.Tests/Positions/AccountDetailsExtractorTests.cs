@@ -32,8 +32,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                 .Returns(tableRows.AsReadOnly);
 
             _webDriverMock = new Mock<IWebDriver>();
-            _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("p-positions-tbody")))
-                .Returns(tableBodyMock.Object);
+            _webDriverMock.Setup(webDriver => webDriver.FindElements(By.ClassName("p-positions-tbody")))
+                .Returns(new List<IWebElement> {new Mock<IWebElement>().Object, tableBodyMock.Object}.AsReadOnly());
 
             _extractor = new AccountDetailsExtractor(_positionDetailsExtractorMock.Object);
         }
@@ -64,7 +64,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             {
                 new AccountDetails(AccountType.InvestmentAccount, "INDIVIDUAL", "abcd1234", 12.34m, 1234.56m, 0.7890m,
                     new List<IPosition> {new Mock<IPosition>().Object}),
-                new AccountDetails(AccountType.InvestmentAccount, "BrokerageLink", "xyz", 56.78m, 987.65m, 0.4321m,
+                new AccountDetails(AccountType.InvestmentAccount, "BrokerageLink", "xyz", 0, 987.65m, 0.4321m,
                     new List<IPosition> {new Mock<IPosition>().Object}),
             };
         }
@@ -99,7 +99,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                 SetupPositionRowContent(),
                 SetupIgnoredRow(),
                 SetupIgnoredRow(),
-                SetupAccountTotalRow(account)
+                SetupAccountTotalRow(account),
+                SetupFakeTotalRow()
             };
             var positions = new List<IPosition>();
             _positionsByAccount.Add(account.Name, positions);
@@ -114,14 +115,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
         private IWebElement SetupAccountTotalRow(IAccountDetails account)
         {
-            var valueSpanMock = new Mock<IWebElement>();
-            valueSpanMock.Setup(span => span.Text)
-                .Returns(account.PendingActivity.ToString("C"));
-
-            var pendingActivityAnchorMock = new Mock<IWebElement>();
-            pendingActivityAnchorMock.Setup(anchor => anchor.FindElement(By.ClassName("value")))
-                .Returns(valueSpanMock.Object);
-
             var totalGainDollarSpanMock = new Mock<IWebElement>();
             totalGainDollarSpanMock.Setup(span => span.GetAttribute("class")).Returns("magicgrid--stacked-data-value");
             totalGainDollarSpanMock.Setup(span => span.Text)
@@ -138,10 +131,52 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             var totalRowMock = new Mock<IWebElement>();
             totalRowMock.Setup(row => row.GetAttribute("class"))
                 .Returns("magicgrid--total-row");
-            totalRowMock.Setup(row => row.FindElement(By.ClassName("magicgrid--total-pending-activity-link")))
-                .Returns(pendingActivityAnchorMock.Object);
             totalRowMock.Setup(row => row.FindElements(By.ClassName("magicgrid--stacked-data-value")))
                 .Returns(totalGainSpans.AsReadOnly());
+            SetupPendingActivity(account, totalRowMock);
+
+            return totalRowMock.Object;
+        }
+
+        private void SetupPendingActivity(IAccountDetails account, Mock<IWebElement> totalRowMock)
+        {
+            if (account.PendingActivity != 0)
+            {
+                var valueSpanMock = new Mock<IWebElement>();
+                valueSpanMock.Setup(span => span.Text)
+                    .Returns(account.PendingActivity.ToString("C"));
+
+                var pendingActivityAnchorMock = new Mock<IWebElement>();
+                pendingActivityAnchorMock.Setup(anchor => anchor.FindElement(By.ClassName("value")))
+                    .Returns(valueSpanMock.Object);
+
+                var pendingActivityTdMock = new Mock<IWebElement>();
+                pendingActivityTdMock.Setup(td => td.Text).Returns("you have xyz in pending activity");
+                pendingActivityTdMock.Setup(td => td.FindElement(By.ClassName("magicgrid--total-pending-activity-link")))
+                    .Returns(pendingActivityAnchorMock.Object);
+
+                totalRowMock.Setup(row => row.FindElement(By.ClassName("magicgrid--total-pending-activity-link-cell")))
+                    .Returns(pendingActivityTdMock.Object);
+            }
+            else
+            {
+                var pendingActivityTdMock = new Mock<IWebElement>();
+                pendingActivityTdMock.Setup(td => td.Text).Returns("");
+
+                totalRowMock.Setup(row => row.FindElement(It.IsAny<By>()))
+                    .Throws(new NoSuchElementException("should not attempt reading pending activity"));
+                totalRowMock.Setup(row => row.FindElement(By.ClassName("magicgrid--total-pending-activity-link-cell")))
+                    .Returns(pendingActivityTdMock.Object);
+            }
+        }
+
+        private IWebElement SetupFakeTotalRow()
+        {
+            var totalRowMock = new Mock<IWebElement>();
+            totalRowMock.Setup(row => row.GetAttribute("class"))
+                .Returns("magicgrid--total-row");
+            totalRowMock.Setup(row => row.FindElement(It.IsAny<By>()))
+                .Throws(new NoSuchElementException("should ignore this table row"));
 
             return totalRowMock.Object;
         }
