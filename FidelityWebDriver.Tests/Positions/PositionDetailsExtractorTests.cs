@@ -33,8 +33,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             Assert.AreEqual(_positions.Count(), actuals.Count());
             foreach (var actual in actuals)
             {
-                var matchingExpected = _positions.Single(expected => expected.Ticker == actual.Ticker
-                    /* && expected.IsMargin == actual.IsMargin */);
+                var matchingExpected = _positions.Single(expected =>
+                    expected.Ticker == actual.Ticker && expected.IsMargin == actual.IsMargin);
 
                 Assert.AreEqual(matchingExpected.Description, actual.Description);
                 Assert.AreEqual(matchingExpected.IsCore, actual.IsCore);
@@ -54,6 +54,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             {
                 new Position("a", "b", true, false, 1.23m, 0, 0, 901.23m, 45.678m, 0, 0),
                 new Position("c", "d", false, false, 3.21m, 2.34m, 0.56m, 246m, 45.678m, 1.23m, 123456.78m),
+                new Position("c", "d", false, true, 4.56m, 7.89m, 0.56m, 246m, 45.678m, 1.23m, 123456.78m),
             };
         }
 
@@ -145,8 +146,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
         private IWebElement SetupQuantityTd(IPosition position)
         {
+            var tdText = position.IsMargin
+                ? $"\"{position.Quantity.ToString("##.###")}\"<br>\"(Margin)\""
+                : position.Quantity.ToString("##.###");
+
             var tdMock = new Mock<IWebElement>();
-            tdMock.Setup(td => td.Text).Returns(position.Quantity.ToString("##.###"));
+            tdMock.Setup(td => td.Text).Returns(tdText);
             return tdMock.Object;
         }
 
@@ -169,7 +174,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
             var tdMock = new Mock<IWebElement>();
             tdMock.Setup(td => td.FindElements(By.ClassName("magicgrid--stacked-data-value")))
-                .Returns(new List<IWebElement> { perShareSpanMock.Object, totalDivMock.Object }.AsReadOnly());
+                .Returns(new List<IWebElement> {perShareSpanMock.Object, totalDivMock.Object}.AsReadOnly());
 
             return tdMock.Object;
         }

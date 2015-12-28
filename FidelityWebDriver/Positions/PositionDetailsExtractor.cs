@@ -25,6 +25,7 @@ namespace Sonneville.FidelityWebDriver.Positions
                 position.TotalGainPercent = ExtractTotalGainPercent(tdElements);
                 position.CurrentValue = ExtractCurrentValue(tdElements);
                 position.Quantity = ExtractQuantity(tdElements);
+                position.IsMargin = ExtractMargin(tdElements);
                 position.CostBasisPerShare = ExtractCostBasisPerShare(tdElements);
                 position.CostBasisTotal = ExtractCostBasisTotal(tdElements);
 
@@ -86,7 +87,16 @@ namespace Sonneville.FidelityWebDriver.Positions
 
         private decimal ExtractQuantity(IReadOnlyList<IWebElement> tdElements)
         {
-            return decimal.Parse(tdElements[5].Text, NumberStyles.Any);
+            var rawText = tdElements[5].Text;
+            var quantityText = ExtractMargin(tdElements)
+                ? rawText.Replace("<br>", "").Replace("(Margin)", "").Replace("\"", "")
+                : rawText;
+            return decimal.Parse(quantityText.Trim(), NumberStyles.Any);
+        }
+
+        private bool ExtractMargin(IReadOnlyList<IWebElement> tdElements)
+        {
+            return tdElements[5].Text.Contains("(Margin)");
         }
 
         private decimal ExtractCostBasisPerShare(IReadOnlyList<IWebElement> tdElements)
