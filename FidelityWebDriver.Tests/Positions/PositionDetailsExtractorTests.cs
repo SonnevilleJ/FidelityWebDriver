@@ -5,6 +5,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Positions;
+using Sonneville.FidelityWebDriver.Positions.DetailExtractors;
 
 namespace Sonneville.FidelityWebDriver.Tests.Positions
 {
@@ -22,7 +23,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
             _positionTableRows = SetupPositionRows(_positions);
 
-            _extractor = new PositionDetailsExtractor();
+            _extractor = new PositionDetailsExtractor(new PositionCoreExtractor());
         }
 
         [Test]

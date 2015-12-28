@@ -8,6 +8,13 @@ namespace Sonneville.FidelityWebDriver.Positions
 {
     public class PositionDetailsExtractor : IPositionDetailsExtractor
     {
+        private readonly IPositionCoreExtractor _positionCoreExtractor;
+
+        public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor)
+        {
+            _positionCoreExtractor = positionCoreExtractor;
+        }
+
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
         {
             foreach (var positionTableRow in positionTableRows.Where(row=>row.GetAttribute("class").Contains("normal-row")))
@@ -15,8 +22,8 @@ namespace Sonneville.FidelityWebDriver.Positions
                 var tdElements = positionTableRow.FindElements(By.XPath("./td"));
                 var position = new Position();
 
-                position.IsCore = ExtractIsCore(tdElements);
-                position.Ticker = ExtractIsCore(tdElements)
+                position.IsCore = _positionCoreExtractor.ExtractIsCore(tdElements);
+                position.Ticker = _positionCoreExtractor.ExtractIsCore(tdElements)
                     ? ExtractCoreTicker(tdElements)
                     : ExtractNonCoreTicker(tdElements);
                 position.Description = ExtractDescription(tdElements);
@@ -31,11 +38,6 @@ namespace Sonneville.FidelityWebDriver.Positions
 
                 yield return position;
             }
-        }
-
-        private bool ExtractIsCore(IReadOnlyList<IWebElement> tdElements)
-        {
-            return tdElements[0].FindElement(By.ClassName("stock-symbol")).Text.Contains("**");
         }
 
         private string ExtractCoreTicker(IReadOnlyList<IWebElement> tdElements)
