@@ -103,7 +103,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _fidelityConfiguration = new FidelityConfiguration();
             _fidelityConfiguration.Initialize();
 
-            _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration);
+            _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration, new TransactionTranslator());
         }
 
         [TearDown]

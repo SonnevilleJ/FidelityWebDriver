@@ -10,17 +10,30 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
     public class PositionTickerExtractorTests
     {
         [Test]
-        [TestCase(true, "asdf", "super fund")]
-        [TestCase(false, "blah", "garbage fund")]
-        public void Test(bool shouldBeCore, string expectedTicker, string expectedDescription)
+        [TestCase("asdf", "garbage fund")]
+        public void ShouldExtractCoreTickerAndDescription(string expectedCoreTicker, string expectedDescription)
         {
-            var tdElements = new List<IWebElement> {SetupSymbolTd(shouldBeCore, expectedTicker, expectedDescription)};
+            var tdElements = new List<IWebElement> {SetupSymbolTd(true, expectedCoreTicker, expectedDescription)};
 
             var extractor = new PositionTickerExtractor();
-            var actualTicker = extractor.ExtractCoreTicker(tdElements);
+            var actualCoreTicker = extractor.ExtractCoreTicker(tdElements);
             var actualDescription = extractor.ExtractDescription(tdElements);
 
-            Assert.AreEqual(expectedTicker, actualTicker);
+            Assert.AreEqual(expectedCoreTicker, actualCoreTicker);
+            Assert.AreEqual(expectedDescription, actualDescription);
+        }
+
+        [Test]
+        [TestCase("blah", "super fund")]
+        public void ShouldExtractNonCoreTickerAndDescription(string expectedNonCoreTicker, string expectedDescription)
+        {
+            var tdElements = new List<IWebElement> {SetupSymbolTd(false, expectedNonCoreTicker, expectedDescription)};
+
+            var extractor = new PositionTickerExtractor();
+            var actualNonCoreTicker = extractor.ExtractNonCoreTicker(tdElements);
+            var actualDescription = extractor.ExtractDescription(tdElements);
+
+            Assert.AreEqual(expectedNonCoreTicker, actualNonCoreTicker);
             Assert.AreEqual(expectedDescription, actualDescription);
         }
 
