@@ -3,16 +3,19 @@ using System.Globalization;
 using System.Linq;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Positions.DetailExtractors;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
     public class PositionDetailsExtractor : IPositionDetailsExtractor
     {
         private readonly IPositionCoreExtractor _positionCoreExtractor;
+        private readonly IPositionTickerExtractor _positionTickerExtractor;
 
-        public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor)
+        public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor, IPositionTickerExtractor positionTickerExtractor)
         {
             _positionCoreExtractor = positionCoreExtractor;
+            _positionTickerExtractor = positionTickerExtractor;
         }
 
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
@@ -24,9 +27,9 @@ namespace Sonneville.FidelityWebDriver.Positions
 
                 position.IsCore = _positionCoreExtractor.ExtractIsCore(tdElements);
                 position.Ticker = _positionCoreExtractor.ExtractIsCore(tdElements)
-                    ? ExtractCoreTicker(tdElements)
-                    : ExtractNonCoreTicker(tdElements);
-                position.Description = ExtractDescription(tdElements);
+                    ? _positionTickerExtractor.ExtractCoreTicker(tdElements)
+                    : _positionTickerExtractor.ExtractNonCoreTicker(tdElements);
+                position.Description = _positionTickerExtractor.ExtractDescription(tdElements);
                 position.LastPrice = ExtractLastPrice(tdElements);
                 position.TotalGainDollar = ExtractTotalGainDollar(tdElements);
                 position.TotalGainPercent = ExtractTotalGainPercent(tdElements);
@@ -38,21 +41,6 @@ namespace Sonneville.FidelityWebDriver.Positions
 
                 yield return position;
             }
-        }
-
-        private string ExtractCoreTicker(IReadOnlyList<IWebElement> tdElements)
-        {
-            return tdElements[0].FindElement(By.ClassName("stock-symbol")).Text.Replace("**", "");
-        }
-
-        private string ExtractNonCoreTicker(IReadOnlyList<IWebElement> tdElements)
-        {
-            return tdElements[0].FindElement(By.ClassName("stock-symbol")).Text;
-        }
-
-        private string ExtractDescription(IReadOnlyList<IWebElement> tdElements)
-        {
-            return tdElements[0].FindElement(By.ClassName("stock-name")).Text;
         }
 
         private decimal ExtractLastPrice(IReadOnlyList<IWebElement> tdElements)
