@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using OpenQA.Selenium;
@@ -28,18 +27,15 @@ namespace Sonneville.FidelityWebDriver.Positions
             var results = new List<IAccountDetails>();
             foreach (var tableRow in tableRows)
             {
-                Console.WriteLine("Iterating rows...");
                 if (collectingPositionRows)
                 {
                     if (IsPositionRow(tableRow))
                     {
-                        Console.WriteLine("Found position row!");
                         positionRows.Add(tableRow);
                         continue;
                     }
                     if (IsTotalRow(tableRow))
                     {
-                        Console.WriteLine("Found total row!");
                         var rawPendingActivityText = tableRow
                             .FindElement(By.ClassName("magicgrid--total-pending-activity-link"))
                             .FindElement(By.ClassName("value"))
@@ -54,7 +50,6 @@ namespace Sonneville.FidelityWebDriver.Positions
                 }
                 if (IsNewAccountRow(tableRow))
                 {
-                    Console.WriteLine("Found new account!");
                     if (accountDetails != null)
                     {
                         results.Add(PrepareAccountDetails(accountDetails, positionRows));
