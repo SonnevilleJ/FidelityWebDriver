@@ -23,7 +23,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
             _positionTableRows = SetupPositionRows(_positions);
 
-            _extractor = new PositionDetailsExtractor(new PositionCoreExtractor(), new PositionTickerExtractor(), new PositionLastPriceExtractor(), new PositionTotalGainExtractor(), new PositionCurrentValueExtractor());
+            _extractor = new PositionDetailsExtractor(new PositionCoreExtractor(), new PositionTickerExtractor(), new PositionLastPriceExtractor(), new PositionTotalGainExtractor(), new PositionCurrentValueExtractor(), new PositionQuantityExtractor());
         }
 
         [Test]

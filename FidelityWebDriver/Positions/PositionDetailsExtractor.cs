@@ -14,16 +14,18 @@ namespace Sonneville.FidelityWebDriver.Positions
         private readonly IPositionLastPriceExtractor _positionLastPriceExtractor;
         private readonly IPositionTotalGainExtractor _positionTotalGainExtractor;
         private readonly IPositionCurrentValueExtractor _positionCurrentValueExtractor;
+        private readonly IPositionQuantityExtractor _positionQuantityExtractor;
 
         public PositionDetailsExtractor(IPositionCoreExtractor positionCoreExtractor,
             IPositionTickerExtractor positionTickerExtractor, IPositionLastPriceExtractor positionLastPriceExtractor,
-            IPositionTotalGainExtractor positionTotalGainExtractor, IPositionCurrentValueExtractor positionCurrentValueExtractor)
+            IPositionTotalGainExtractor positionTotalGainExtractor, IPositionCurrentValueExtractor positionCurrentValueExtractor, IPositionQuantityExtractor positionQuantityExtractor)
         {
             _positionCoreExtractor = positionCoreExtractor;
             _positionTickerExtractor = positionTickerExtractor;
             _positionLastPriceExtractor = positionLastPriceExtractor;
             _positionTotalGainExtractor = positionTotalGainExtractor;
             _positionCurrentValueExtractor = positionCurrentValueExtractor;
+            _positionQuantityExtractor = positionQuantityExtractor;
         }
 
         public IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows)
@@ -44,27 +46,13 @@ namespace Sonneville.FidelityWebDriver.Positions
                 position.TotalGainDollar = _positionTotalGainExtractor.ExtractTotalGainDollar(tdElements);
                 position.TotalGainPercent = _positionTotalGainExtractor.ExtractTotalGainPercent(tdElements);
                 position.CurrentValue = _positionCurrentValueExtractor.ExtractCurrentValue(tdElements);
-                position.Quantity = ExtractQuantity(tdElements);
-                position.IsMargin = ExtractMargin(tdElements);
+                position.Quantity = _positionQuantityExtractor.ExtractQuantity(tdElements);
+                position.IsMargin = _positionQuantityExtractor.ExtractMargin(tdElements);
                 position.CostBasisPerShare = ExtractCostBasisPerShare(tdElements);
                 position.CostBasisTotal = ExtractCostBasisTotal(tdElements);
 
                 yield return position;
             }
-        }
-
-        private decimal ExtractQuantity(IReadOnlyList<IWebElement> tdElements)
-        {
-            var rawText = tdElements[5].Text;
-            var quantityText = ExtractMargin(tdElements)
-                ? rawText.Replace("<br>", "").Replace("(Margin)", "").Replace("\"", "")
-                : rawText;
-            return decimal.Parse(quantityText.Trim(), NumberStyles.Any);
-        }
-
-        private bool ExtractMargin(IReadOnlyList<IWebElement> tdElements)
-        {
-            return tdElements[5].Text.Contains("(Margin)");
         }
 
         private decimal ExtractCostBasisPerShare(IReadOnlyList<IWebElement> tdElements)
