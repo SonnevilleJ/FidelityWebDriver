@@ -68,7 +68,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Configuration\FidelityConfigurationTests.cs" />
-    <Compile Include="Configuration\IsolatedStorageConfigurationProviderTests.cs" />
     <Compile Include="Login\LoginManagerTests.cs" />
     <Compile Include="Login\LoginPageTests.cs" />
     <Compile Include="ManagerTestsBase.cs" />

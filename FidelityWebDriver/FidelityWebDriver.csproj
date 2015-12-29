@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sonneville.Utilities, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sonneville.Utilities.1.0.1.0\lib\net452\Sonneville.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -45,7 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\FidelityConfiguration.cs" />
-    <Compile Include="Configuration\IsolatedStorageConfigurationProvider.cs" />
     <Compile Include="Data\AccountDetails.cs" />
     <Compile Include="Data\AccountSummary.cs" />
     <Compile Include="Data\AccountType.cs" />

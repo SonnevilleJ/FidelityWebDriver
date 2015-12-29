@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Sonneville.Utilities;
 using Westwind.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Configuration
