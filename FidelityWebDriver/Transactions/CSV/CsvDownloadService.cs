@@ -1,29 +1,30 @@
 ﻿using System.IO;
 using System.Threading;
+using Sonneville.FidelityWebDriver.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Transactions.CSV
 {
     public class CsvDownloadService : ICsvDownloadService
     {
-        private readonly string _downloadFilePath;
+        private readonly FidelityConfiguration _fidelityConfiguration;
 
-        public CsvDownloadService(string downloadFilePath)
+        public CsvDownloadService(FidelityConfiguration fidelityConfiguration)
         {
-            _downloadFilePath = downloadFilePath;
+            _fidelityConfiguration = fidelityConfiguration;
         }
 
         public string GetDownloadedContent()
         {
             Thread.Sleep(2000);
-            return File.ReadAllText(_downloadFilePath);
+            return File.ReadAllText(_fidelityConfiguration.DownloadPath);
         }
 
         public void Cleanup()
         {
             Thread.Sleep(1000);
-            if (File.Exists(_downloadFilePath))
+            if (File.Exists(_fidelityConfiguration.DownloadPath))
             {
-                File.Delete(_downloadFilePath);
+                File.Delete(_fidelityConfiguration.DownloadPath);
             }
         }
     }

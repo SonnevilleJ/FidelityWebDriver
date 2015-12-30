@@ -13,20 +13,20 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
         {
             public IConfigurationProvider CreateDefaultProvider(string sectionName, object configData)
             {
-                return base.OnCreateDefaultProvider(sectionName, configData);
+                return OnCreateDefaultProvider(sectionName, configData);
             }
         }
 
         [SetUp]
         public void Setup()
         {
-            ClearPersistedConfiguration();
+            ConfigurationTestUtil.ClearPersistedConfiguration();
         }
 
         [TearDown]
         public void Teardown()
         {
-            ClearPersistedConfiguration();
+            ConfigurationTestUtil.ClearPersistedConfiguration();
         }
 
         [Test]
@@ -60,17 +60,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
             var expectedDownloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "Downloads", "Accounts_History.csv");
             Assert.AreEqual(expectedDownloadPath, actualDownloadPath);
-        }
-
-        private void ClearPersistedConfiguration()
-        {
-            var fidelityConfiguration = new FidelityConfiguration();
-            fidelityConfiguration.Initialize();
-
-            fidelityConfiguration.Username = null;
-            fidelityConfiguration.Password = null;
-            fidelityConfiguration.DownloadPath = null;
-            fidelityConfiguration.Write();
         }
     }
 }

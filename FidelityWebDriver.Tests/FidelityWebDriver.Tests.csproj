@@ -67,6 +67,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationTestUtil.cs" />
     <Compile Include="Configuration\FidelityConfigurationTests.cs" />
     <Compile Include="Login\LoginManagerTests.cs" />
     <Compile Include="Login\LoginPageTests.cs" />

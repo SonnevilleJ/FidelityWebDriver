@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using Sonneville.FidelityWebDriver.Configuration;
+using Sonneville.FidelityWebDriver.Tests.Configuration;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
@@ -10,27 +12,31 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         private CsvDownloadService _downloadService;
         private string _tempFile;
         private string _fileContents;
+        private FidelityConfiguration _fidelityConfiguration;
 
         [SetUp]
         public void Setup()
         {
-            _tempFile = Path.GetTempFileName();
-
             _fileContents = @"line 1
 line 2
 line 3";
-            File.WriteAllText(_tempFile, _fileContents);
+            _tempFile = SetupTempFile(_fileContents);
 
-            _downloadService = new CsvDownloadService(_tempFile);
+            ConfigurationTestUtil.ClearPersistedConfiguration();
+
+            _fidelityConfiguration = new FidelityConfiguration();
+            _fidelityConfiguration.Initialize();
+            _fidelityConfiguration.DownloadPath = _tempFile;
+
+            _downloadService = new CsvDownloadService(_fidelityConfiguration);
         }
 
         [TearDown]
         public void TearDown()
         {
-            if (File.Exists(_tempFile))
-            {
-                File.Delete(_tempFile);
-            }
+            ConfigurationTestUtil.ClearPersistedConfiguration();
+
+            ClearTempFile(_tempFile);
         }
 
         [Test]
@@ -47,6 +53,32 @@ line 3";
             var content = _downloadService.GetDownloadedContent();
 
             Assert.AreEqual(_fileContents, content);
+        }
+
+        [Test]
+        public void ShouldReturnFileContentsAfterConfigurationIsChanged()
+        {
+            ClearTempFile(_tempFile);
+            _fidelityConfiguration.DownloadPath = SetupTempFile(_fileContents);
+
+            var content = _downloadService.GetDownloadedContent();
+
+            Assert.AreEqual(_fileContents, content);
+        }
+
+        private string SetupTempFile(string fileContents)
+        {
+            var tempFile = Path.GetTempFileName();
+            File.WriteAllText(tempFile, fileContents);
+            return tempFile;
+        }
+
+        private void ClearTempFile(string tempFile)
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
         }
     }
 }
