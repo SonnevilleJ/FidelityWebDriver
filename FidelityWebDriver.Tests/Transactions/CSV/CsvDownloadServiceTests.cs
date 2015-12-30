@@ -1,8 +1,10 @@
 ﻿using System.IO;
+using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Tests.Configuration;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
+using Sonneville.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
 {
@@ -13,6 +15,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         private string _tempFile;
         private string _fileContents;
         private FidelityConfiguration _fidelityConfiguration;
+        private Mock<ISleepUtil> _sleepUtilMock;
 
         [SetUp]
         public void Setup()
@@ -24,11 +27,13 @@ line 3";
 
             ConfigurationTestUtil.ClearPersistedConfiguration();
 
+            _sleepUtilMock = new Mock<ISleepUtil>();
+
             _fidelityConfiguration = new FidelityConfiguration();
             _fidelityConfiguration.Initialize();
             _fidelityConfiguration.DownloadPath = _tempFile;
 
-            _downloadService = new CsvDownloadService(_fidelityConfiguration);
+            _downloadService = new CsvDownloadService(_fidelityConfiguration, _sleepUtilMock.Object);
         }
 
         [TearDown]
@@ -45,6 +50,7 @@ line 3";
             _downloadService.Cleanup();
 
             Assert.False(File.Exists(_tempFile));
+            _sleepUtilMock.Verify(util => util.Sleep(1000));
         }
 
         [Test]
@@ -53,6 +59,7 @@ line 3";
             var content = _downloadService.GetDownloadedContent();
 
             Assert.AreEqual(_fileContents, content);
+            _sleepUtilMock.Verify(util => util.Sleep(2000));
         }
 
         [Test]
