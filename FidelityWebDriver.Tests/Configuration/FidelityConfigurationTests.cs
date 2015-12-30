@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.IO;
+using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
 using Westwind.Utilities.Configuration;
 
@@ -13,6 +15,18 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
             {
                 return base.OnCreateDefaultProvider(sectionName, configData);
             }
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            ClearPersistedConfiguration();
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            ClearPersistedConfiguration();
         }
 
         [Test]
@@ -33,6 +47,30 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
 
             Assert.AreNotSame(provider1, provider2);
             Assert.AreEqual(provider1.EncryptionKey, provider2.EncryptionKey);
+        }
+
+        [Test]
+        public void ShouldHaveDefaultDownloadPath()
+        {
+            var configuration = new FidelityConfiguration();
+            configuration.Initialize();
+
+            var actualDownloadPath = configuration.DownloadPath;
+
+            var expectedDownloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "Downloads", "Accounts_History.csv");
+            Assert.AreEqual(expectedDownloadPath, actualDownloadPath);
+        }
+
+        private void ClearPersistedConfiguration()
+        {
+            var fidelityConfiguration = new FidelityConfiguration();
+            fidelityConfiguration.Initialize();
+
+            fidelityConfiguration.Username = null;
+            fidelityConfiguration.Password = null;
+            fidelityConfiguration.DownloadPath = null;
+            fidelityConfiguration.Write();
         }
     }
 }
