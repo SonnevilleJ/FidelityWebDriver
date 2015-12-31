@@ -41,6 +41,37 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         [Test]
         public void ShouldExtractAccountDetails()
         {
+            var accountTypeStrings = new Dictionary<AccountType, string>
+            {
+                {AccountType.InvestmentAccount, "IA"},
+                {AccountType.RetirementAccount, "RA"},
+                {AccountType.HealthSavingsAccount, "HS"},
+                {AccountType.Other, "OA"},
+                {AccountType.CreditCard, "CC"},
+            };
+
+            foreach (var accountType in accountTypeStrings.Keys)
+            {
+                var accountGroupDivMock = new Mock<IWebElement>();
+                var accountNumberSpans = _setupAccountDetails
+                    .Where(accountDetails => accountDetails.AccountType == accountType)
+                    .Select(accountDetails => accountDetails.AccountNumber)
+                    .Select(accountNumber =>
+                    {
+                        var accountNumberSpanMock = new Mock<IWebElement>();
+                        accountNumberSpanMock.Setup(span => span.Text).Returns(accountNumber);
+                        return accountNumberSpanMock.Object;
+                    })
+                    .ToList()
+                    .AsReadOnly();
+
+                accountGroupDivMock.Setup(div => div.FindElements(By.ClassName("account-selector--account-number")))
+                    .Returns(accountNumberSpans);
+
+                _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName(accountTypeStrings[accountType])))
+                    .Returns(accountGroupDivMock.Object);
+            }
+
             var actuals = _extractor.ExtractAccountDetails(_webDriverMock.Object).ToList();
 
             Assert.AreEqual(_setupAccountDetails.Count(), actuals.Count());
@@ -51,6 +82,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
                 Assert.AreEqual(matchingExpected.AccountNumber, actual.AccountNumber);
                 Assert.AreEqual(matchingExpected.Name, actual.Name);
+                Assert.AreEqual(matchingExpected.AccountType, actual.AccountType);
                 Assert.AreSame(_positionsByAccount[actual.Name], actual.Positions);
                 Assert.AreEqual(matchingExpected.PendingActivity, actual.PendingActivity);
                 Assert.AreEqual(matchingExpected.TotalGainDollar, actual.TotalGainDollar);

@@ -14,10 +14,20 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
     {
         private Mock<IWebDriver> _webDriverMock;
         private List<Dictionary<string, string>> _expectedAccountDetails;
+        private Dictionary<string, AccountType> _accountTypeStrings;
 
         [SetUp]
         public void Setup()
         {
+            _accountTypeStrings = new Dictionary<string, AccountType>
+            {
+                {"IA", AccountType.InvestmentAccount},
+                {"RA", AccountType.RetirementAccount},
+                {"HS", AccountType.HealthSavingsAccount},
+                {"OA", AccountType.Other},
+                {"CC", AccountType.CreditCard},
+            };
+
             _expectedAccountDetails = new List<Dictionary<string, string>>
             {
                 CreateAccountValues("abc1234", "IA", "my taxable investment account", "123.45678"),
@@ -38,15 +48,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         [Test]
         public void ShouldReturnOneAccountPerAccountOnPage()
         {
-            var accountTypeStrings = new Dictionary<string, AccountType>
-            {
-                {"IA", AccountType.InvestmentAccount},
-                {"RA", AccountType.RetirementAccount},
-                {"HS", AccountType.HealthSavingsAccount},
-                {"OA", AccountType.Other},
-                {"CC", AccountType.CreditCard},
-            };
-
             var accounts = new AccountSummariesExtractor().ExtractAccountSummaries(_webDriverMock.Object).ToList();
 
             Assert.AreEqual(_expectedAccountDetails.Count(), accounts.Count());
@@ -56,12 +57,13 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                     _expectedAccountDetails.Single(values => values["accountNumber"] == account.AccountNumber);
 
                 Assert.AreEqual(matchingExpected["accountName"], account.Name);
-                Assert.AreEqual(accountTypeStrings[matchingExpected["accountType"]], account.AccountType);
+                Assert.AreEqual(_accountTypeStrings[matchingExpected["accountType"]], account.AccountType);
                 Assert.AreEqual(double.Parse(matchingExpected["accountValue"]), account.MostRecentValue);
             }
         }
 
-        private ReadOnlyCollection<IWebElement> SetupAccountDivs(IEnumerable<Dictionary<string, string>> expectedAccountDetails)
+        private ReadOnlyCollection<IWebElement> SetupAccountDivs(
+            IEnumerable<Dictionary<string, string>> expectedAccountDetails)
         {
             return expectedAccountDetails
                 .GroupBy(d => d["accountType"])

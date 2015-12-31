@@ -6,19 +6,14 @@ namespace Sonneville.FidelityWebDriver.Positions
 {
     public class AccountSummariesExtractor : IAccountSummariesExtractor
     {
-        private readonly Dictionary<string, AccountType> _groupIds;
-
-        public AccountSummariesExtractor()
+        private static readonly Dictionary<string, AccountType> GroupIdsToAccountTypes = new Dictionary<string, AccountType>
         {
-            _groupIds = new Dictionary<string, AccountType>
-            {
-                {"IA", AccountType.InvestmentAccount},
-                {"RA", AccountType.RetirementAccount},
-                {"HS", AccountType.HealthSavingsAccount},
-                {"OA", AccountType.Other},
-                {"CC", AccountType.CreditCard},
-            };
-        }
+            {"IA", AccountType.InvestmentAccount},
+            {"RA", AccountType.RetirementAccount},
+            {"HS", AccountType.HealthSavingsAccount},
+            {"OA", AccountType.Other},
+            {"CC", AccountType.CreditCard},
+        };
 
         public IEnumerable<IAccountSummary> ExtractAccountSummaries(IWebDriver webDriver)
         {
@@ -26,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Positions
 
             foreach (var accountGroupDiv in accountGroupDivs)
             {
-                var accountType = _groupIds[accountGroupDiv.GetAttribute("data-group-id")];
+                var accountType = GroupIdsToAccountTypes[accountGroupDiv.GetAttribute("data-group-id")];
                 var accountDivs = accountGroupDiv.FindElements(By.ClassName("js-account"));
 
                 foreach (var accountDiv in accountDivs)
