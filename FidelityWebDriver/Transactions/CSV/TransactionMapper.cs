@@ -17,21 +17,23 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
         {
             var values = row.Split(',');
             var actionText = ParseStringField(values[headers[FidelityCsvColumn.Action]]);
-            return new FidelityTransaction(
-                ParseDateField(values[headers[FidelityCsvColumn.RunDate]]),
-                ParseStringField(values[headers[FidelityCsvColumn.Account]]),
-                actionText,
-                _transactionTypeMapper.Map(actionText),
-                ParseStringField(values[headers[FidelityCsvColumn.Symbol]]),
-                ParseStringField(values[headers[FidelityCsvColumn.SecurityDescription]]),
-                ParseStringField(values[headers[FidelityCsvColumn.SecurityType]]),
-                ParseDecimalField(values[headers[FidelityCsvColumn.Quantity]]),
-                ParseDecimalField(values[headers[FidelityCsvColumn.Price]]),
-                ParseDecimalField(values[headers[FidelityCsvColumn.Commission]]),
-                ParseDecimalField(values[headers[FidelityCsvColumn.Fees]]),
-                ParseDecimalField(values[headers[FidelityCsvColumn.AccruedInterest]]),
-                ParseDecimalField(values[headers[FidelityCsvColumn.Amount]]),
-                ParseDateField(values[headers[FidelityCsvColumn.SettlementDate]]));
+            return new FidelityTransaction
+            {
+                RunDate = ParseDateField(values[headers[FidelityCsvColumn.RunDate]]),
+                Account = ParseStringField(values[headers[FidelityCsvColumn.Account]]),
+                Action = actionText,
+                Type = _transactionTypeMapper.Map(actionText),
+                Symbol = ParseStringField(values[headers[FidelityCsvColumn.Symbol]]),
+                SecurityDescription = ParseStringField(values[headers[FidelityCsvColumn.SecurityDescription]]),
+                SecurityType = ParseStringField(values[headers[FidelityCsvColumn.SecurityType]]),
+                Quantity = ParseDecimalField(values[headers[FidelityCsvColumn.Quantity]]),
+                Price = ParseDecimalField(values[headers[FidelityCsvColumn.Price]]),
+                Commission = ParseDecimalField(values[headers[FidelityCsvColumn.Commission]]),
+                Fees = ParseDecimalField(values[headers[FidelityCsvColumn.Fees]]),
+                AccruedInterest = ParseDecimalField(values[headers[FidelityCsvColumn.AccruedInterest]]),
+                Amount = ParseDecimalField(values[headers[FidelityCsvColumn.Amount]]),
+                SettlementDate = ParseDateField(values[headers[FidelityCsvColumn.SettlementDate]]),
+            };
         }
 
         private decimal? ParseDecimalField(string decimalString)

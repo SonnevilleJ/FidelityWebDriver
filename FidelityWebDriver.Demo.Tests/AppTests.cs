@@ -33,10 +33,34 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
             _accountSummaries = new List<AccountSummary>
             {
-                new AccountSummary("acct 1", AccountType.InvestmentAccount, "play money", 5000),
-                new AccountSummary("acct 2", AccountType.RetirementAccount, "play money", 88176),
-                new AccountSummary("acct 3", AccountType.HealthSavingsAccount, "don't get sick", 1800),
-                new AccountSummary("acct 4", AccountType.CreditCard, "debt", 1200),
+                new AccountSummary
+                {
+                    AccountNumber = "acct 1",
+                    AccountType = AccountType.InvestmentAccount,
+                    Name = "play money",
+                    MostRecentValue = 5000
+                },
+                new AccountSummary
+                {
+                    AccountNumber = "acct 2",
+                    AccountType = AccountType.RetirementAccount,
+                    Name = "play money",
+                    MostRecentValue = 88176
+                },
+                new AccountSummary
+                {
+                    AccountNumber = "acct 3",
+                    AccountType = AccountType.HealthSavingsAccount,
+                    Name = "don't get sick",
+                    MostRecentValue = 1800
+                },
+                new AccountSummary
+                {
+                    AccountNumber = "acct 4",
+                    AccountType = AccountType.CreditCard,
+                    Name = "debt",
+                    MostRecentValue = 1200
+                },
             };
 
             _accountDetails = new List<AccountDetails>()
@@ -89,8 +113,23 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
             _transactions = new List<IFidelityTransaction>
             {
-                new FidelityTransaction(new DateTime(2015, 12, 25), null, null, TransactionType.Buy, "DE", null, null,
-                    12.3m, 45.67m, 8.9m, 0.0m, 0.0m, 0.0m, new DateTime(2015, 12, 31))
+                new FidelityTransaction
+                {
+                    RunDate = new DateTime(2015, 12, 25),
+                    Account = null,
+                    Action = null,
+                    Type = TransactionType.Buy,
+                    Symbol = "DE",
+                    SecurityDescription = null,
+                    SecurityType = null,
+                    Quantity = 12.3m,
+                    Price = 45.67m,
+                    Commission = 8.9m,
+                    Fees = 0.0m,
+                    AccruedInterest = 0.0m,
+                    Amount = 0.0m,
+                    SettlementDate = new DateTime(2015, 12, 31),
+                }
             };
 
             _positionsManagerMock = new Mock<IPositionsManager>();
@@ -103,7 +142,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _fidelityConfiguration = new FidelityConfiguration();
             _fidelityConfiguration.Initialize();
 
-            _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration, new TransactionTranslator());
+            _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration,
+                new TransactionTranslator());
         }
 
         [TearDown]

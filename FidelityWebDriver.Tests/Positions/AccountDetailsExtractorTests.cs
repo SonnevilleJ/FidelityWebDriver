@@ -62,10 +62,26 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         {
             return new List<IAccountDetails>
             {
-                new AccountDetails(AccountType.InvestmentAccount, "INDIVIDUAL", "abcd1234", 12.34m, 1234.56m, 0.7890m,
-                    new List<IPosition> {new Mock<IPosition>().Object}),
-                new AccountDetails(AccountType.InvestmentAccount, "BrokerageLink", "xyz", 0, 987.65m, 0.4321m,
-                    new List<IPosition> {new Mock<IPosition>().Object}),
+                new AccountDetails
+                {
+                    AccountType = AccountType.InvestmentAccount,
+                    Name = "INDIVIDUAL",
+                    AccountNumber = "abcd1234",
+                    PendingActivity = 12.34m,
+                    TotalGainDollar = .56m,
+                    TotalGainPercent = .7890m,
+                    Positions = new List<IPosition> {new Mock<IPosition>().Object}
+                },
+                new AccountDetails
+                {
+                    AccountType = AccountType.InvestmentAccount,
+                    Name = "BrokerageLink",
+                    AccountNumber = "xyz",
+                    PendingActivity = 0,
+                    TotalGainDollar = 987.65m,
+                    TotalGainPercent = 0.4321m,
+                    Positions = new List<IPosition> {new Mock<IPosition>().Object}
+                },
             };
         }
 
