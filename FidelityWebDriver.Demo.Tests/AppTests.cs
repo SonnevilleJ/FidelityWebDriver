@@ -189,6 +189,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                 {
                     Assert.IsTrue(consoleOutput.Contains(account.Name));
                     Assert.IsTrue(consoleOutput.Contains(account.AccountNumber));
+                    Assert.IsTrue(consoleOutput.Contains(account.AccountType.ToString()));
                     account.Positions.ToList().ForEach(position =>
                     {
                         Assert.IsTrue(consoleOutput.Contains(position.Ticker));

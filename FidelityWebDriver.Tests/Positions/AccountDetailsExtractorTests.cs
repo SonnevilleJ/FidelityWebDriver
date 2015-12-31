@@ -55,7 +55,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                 var accountGroupDivMock = new Mock<IWebElement>();
                 var accountNumberSpans = _setupAccountDetails
                     .Where(accountDetails => accountDetails.AccountType == accountType)
-                    .Select(accountDetails => accountDetails.AccountNumber)
+                    .Select(accountDetails => FilterIllegalCharacters(accountDetails.AccountNumber))
                     .Select(accountNumber =>
                     {
                         var accountNumberSpanMock = new Mock<IWebElement>();
@@ -77,10 +77,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             Assert.AreEqual(_setupAccountDetails.Count(), actuals.Count());
             foreach (var actual in actuals)
             {
-                var matchingExpected =
-                    _setupAccountDetails.Single(expected => expected.AccountNumber == actual.AccountNumber);
+                var matchingExpected = _setupAccountDetails.Single(
+                    expected => FilterIllegalCharacters(expected.AccountNumber) == actual.AccountNumber);
 
-                Assert.AreEqual(matchingExpected.AccountNumber, actual.AccountNumber);
                 Assert.AreEqual(matchingExpected.Name, actual.Name);
                 Assert.AreEqual(matchingExpected.AccountType, actual.AccountType);
                 Assert.AreSame(_positionsByAccount[actual.Name], actual.Positions);
@@ -88,6 +87,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                 Assert.AreEqual(matchingExpected.TotalGainDollar, actual.TotalGainDollar);
                 Assert.AreEqual(matchingExpected.TotalGainPercent, actual.TotalGainPercent);
             }
+        }
+
+        private string FilterIllegalCharacters(string accountNumber)
+        {
+            return accountNumber.Replace("†", "");
         }
 
         private static List<IAccountDetails> SetupAccountDetails()
@@ -106,9 +110,19 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                 },
                 new AccountDetails
                 {
-                    AccountType = AccountType.InvestmentAccount,
+                    AccountType = AccountType.RetirementAccount,
                     Name = "BrokerageLink",
                     AccountNumber = "xyz",
+                    PendingActivity = 0,
+                    TotalGainDollar = 987.65m,
+                    TotalGainPercent = 0.4321m,
+                    Positions = new List<IPosition> {new Mock<IPosition>().Object}
+                },
+                new AccountDetails
+                {
+                    AccountType = AccountType.Other,
+                    Name = "OtherAccount",
+                    AccountNumber = "qwerty57†",
                     PendingActivity = 0,
                     TotalGainDollar = 987.65m,
                     TotalGainPercent = 0.4321m,

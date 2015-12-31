@@ -72,7 +72,7 @@ namespace Sonneville.FidelityWebDriver.Demo
             PrintAccountDetails(_positionsManager.GetAccountDetails().ToList());
             PrintSeparator();
             Console.WriteLine("Reading recent transactions...");
-            PrintRecentTransactions(_transactionManager.DownloadTransactionHistory());
+            PrintRecentTransactions(_transactionManager.DownloadTransactionHistory().ToList());
             PrintSeparator();
         }
 
@@ -83,7 +83,7 @@ namespace Sonneville.FidelityWebDriver.Demo
             Console.WriteLine();
         }
 
-        private void PrintAccountSummaries(List<IAccountSummary> accountSummaries)
+        private void PrintAccountSummaries(IReadOnlyCollection<IAccountSummary> accountSummaries)
         {
             Console.WriteLine("Found {0} accounts!", accountSummaries.Count());
             foreach (var account in accountSummaries)
@@ -96,13 +96,14 @@ namespace Sonneville.FidelityWebDriver.Demo
             }
         }
 
-        private void PrintAccountDetails(List<IAccountDetails> accountDetails)
+        private void PrintAccountDetails(IReadOnlyCollection<IAccountDetails> accountDetails)
         {
             Console.WriteLine($"Found {accountDetails.Count()} accounts!");
             foreach (var accountDetail in accountDetails)
             {
                 Console.WriteLine("Account Name: {0}", accountDetail.Name);
                 Console.WriteLine("Account Number: {0}", accountDetail.AccountNumber);
+                Console.WriteLine("Account Type: {0}", accountDetail.AccountType);
                 Console.WriteLine("Found {0} positions in this account!", accountDetail.Positions.Count());
                 foreach (var position in accountDetail.Positions)
                 {
@@ -115,14 +116,14 @@ namespace Sonneville.FidelityWebDriver.Demo
             }
         }
 
-        private void PrintRecentTransactions(IList<IFidelityTransaction> transactions)
+        private void PrintRecentTransactions(IReadOnlyCollection<IFidelityTransaction> transactions)
         {
             Console.WriteLine("Found {0} recent transactions!", transactions.Count());
             foreach (var transaction in transactions)
             {
                 Console.WriteLine("On {0:d} {1:F} shares of {2} were {3} at {4:C} per share",
-                    transaction.RunDate, transaction.Quantity, transaction.Symbol, _transactionTranslator.Translate(transaction.Type),
-                    transaction.Price);
+                    transaction.RunDate, transaction.Quantity, transaction.Symbol,
+                    _transactionTranslator.Translate(transaction.Type), transaction.Price);
             }
             Console.WriteLine();
         }
