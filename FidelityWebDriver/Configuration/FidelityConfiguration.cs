@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Reflection;
 using Sonneville.Utilities;
 using Westwind.Utilities.Configuration;
@@ -8,11 +9,20 @@ namespace Sonneville.FidelityWebDriver.Configuration
 {
     public class FidelityConfiguration : AppConfiguration
     {
+        public static FidelityConfiguration Initialize(IsolatedStorageFile isolatedStore)
+        {
+            var configuration = new FidelityConfiguration {Store = isolatedStore};
+            configuration.Initialize();
+            return configuration;
+        }
+
+        private IsolatedStorageFile Store { get; set; }
+
         protected override IConfigurationProvider OnCreateDefaultProvider(string sectionName, object configData)
         {
             var encryptionKey =
                 $"{Environment.MachineName}-{Environment.UserName}-{Assembly.GetExecutingAssembly().ManifestModule}";
-            return new IsolatedStorageConfigurationProvider<FidelityConfiguration>
+            return new IsolatedStorageConfigurationProvider<FidelityConfiguration>(Store)
             {
                 PropertiesToEncrypt = nameof(Password),
                 EncryptionKey = encryptionKey

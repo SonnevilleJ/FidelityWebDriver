@@ -1,4 +1,5 @@
-﻿using Ninject.Extensions.Conventions;
+﻿using System.IO.IsolatedStorage;
+using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Sonneville.FidelityWebDriver.Configuration;
 
@@ -13,9 +14,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
                 .BindDefaultInterface()
                 .Configure(configurationAction => configurationAction.InSingletonScope()));
 
-            var fidelityConfiguration = new FidelityConfiguration();
-            fidelityConfiguration.Initialize();
-            Kernel.Bind<FidelityConfiguration>().ToConstant(fidelityConfiguration);
+            var isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
+            Kernel.Bind<FidelityConfiguration>().ToConstant(FidelityConfiguration.Initialize(isolatedStore));
         }
     }
 }

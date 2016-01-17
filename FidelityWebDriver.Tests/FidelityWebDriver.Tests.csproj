@@ -47,8 +47,8 @@
     <Reference Include="Sonneville.Investing">
       <HintPath>..\packages\Sonneville.Investing.1.0.27.0\lib\net461\Sonneville.Investing.dll</HintPath>
     </Reference>
-    <Reference Include="Sonneville.Utilities, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sonneville.Utilities.1.0.3.0\lib\net452\Sonneville.Utilities.dll</HintPath>
+    <Reference Include="Sonneville.Utilities, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sonneville.Utilities.1.0.7.0\lib\net452\Sonneville.Utilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

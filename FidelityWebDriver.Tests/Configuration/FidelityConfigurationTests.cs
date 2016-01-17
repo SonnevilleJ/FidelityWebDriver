@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.IsolatedStorage;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
 using Westwind.Utilities.Configuration;
@@ -9,6 +10,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
     [TestFixture]
     public class FidelityConfigurationTests
     {
+        private IsolatedStorageFile _isolatedStore;
+
         private class FidelityConfigurationInheritor : FidelityConfiguration
         {
             public IConfigurationProvider CreateDefaultProvider(string sectionName, object configData)
@@ -20,20 +23,19 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
         [SetUp]
         public void Setup()
         {
-            ConfigurationTestUtil.ClearPersistedConfiguration();
+            _isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
         }
 
         [TearDown]
         public void Teardown()
         {
-            ConfigurationTestUtil.ClearPersistedConfiguration();
+            ConfigurationTestUtil.ClearPersistedConfiguration(_isolatedStore);
         }
 
         [Test]
         public void ShouldCreateProviderWithPasswordEncrypted()
         {
-            var inheritor = new FidelityConfigurationInheritor();
-            var provider = inheritor.CreateDefaultProvider(null, null);
+            var provider = new FidelityConfigurationInheritor().CreateDefaultProvider(null, null);
 
             var actualPropertiesToEncrypt = provider.PropertiesToEncrypt.Split(',');
             Assert.Contains("Password", actualPropertiesToEncrypt);
@@ -52,8 +54,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
         [Test]
         public void ShouldHaveDefaultDownloadPath()
         {
-            var configuration = new FidelityConfiguration();
-            configuration.Initialize();
+            var configuration = FidelityConfiguration.Initialize(_isolatedStore);
 
             var actualDownloadPath = configuration.DownloadPath;
 

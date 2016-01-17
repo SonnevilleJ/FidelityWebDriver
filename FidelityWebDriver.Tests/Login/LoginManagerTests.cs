@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.IO.IsolatedStorage;
+using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Login;
@@ -15,11 +16,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
 
         protected override LoginManager InstantiateManager(ISiteNavigator siteNavigator)
         {
-            _fidelityConfiguration = new FidelityConfiguration
-            {
-                Username = "username",
-                Password = "password"
-            };
+            _fidelityConfiguration = FidelityConfiguration.Initialize(IsolatedStorageFile.GetUserStoreForAssembly());
+            _fidelityConfiguration.Username = "username";
+            _fidelityConfiguration.Password = "password";
 
             return new LoginManager(siteNavigator, _fidelityConfiguration);
         }

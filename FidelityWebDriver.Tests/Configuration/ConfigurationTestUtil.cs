@@ -1,18 +1,15 @@
-﻿using Sonneville.FidelityWebDriver.Configuration;
+﻿using System.IO.IsolatedStorage;
 
 namespace Sonneville.FidelityWebDriver.Tests.Configuration
 {
     public class ConfigurationTestUtil
     {
-        public static void ClearPersistedConfiguration()
+        public static void ClearPersistedConfiguration(IsolatedStorageFile isolatedStore)
         {
-            var fidelityConfiguration = new FidelityConfiguration();
-            fidelityConfiguration.Initialize();
-
-            fidelityConfiguration.Username = null;
-            fidelityConfiguration.Password = null;
-            fidelityConfiguration.DownloadPath = null;
-            fidelityConfiguration.Write();
+            foreach (var fileName in isolatedStore.GetFileNames())
+            {
+                isolatedStore.DeleteFile(fileName);
+            }
         }
     }
 }

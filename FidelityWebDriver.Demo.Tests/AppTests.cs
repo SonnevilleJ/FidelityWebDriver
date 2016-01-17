@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -24,6 +25,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         private Mock<ITransactionManager> _transactionManagerMock;
         private List<IFidelityTransaction> _transactions;
         private List<AccountDetails> _accountDetails;
+        private IsolatedStorageFile _isolatedStore;
 
         [SetUp]
         public void Setup()
@@ -139,8 +141,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _transactionManagerMock = new Mock<ITransactionManager>();
             _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory()).Returns(_transactions);
 
-            _fidelityConfiguration = new FidelityConfiguration();
-            _fidelityConfiguration.Initialize();
+            _isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
+            _fidelityConfiguration = FidelityConfiguration.Initialize(_isolatedStore);
 
             _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration,
                 new TransactionTranslator());
@@ -242,8 +244,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
             _app.Run(args);
 
-            var fidelityConfiguration = new FidelityConfiguration();
-            fidelityConfiguration.Initialize();
+            var fidelityConfiguration = FidelityConfiguration.Initialize(_isolatedStore);
             Assert.AreEqual(_cliUserName, fidelityConfiguration.Username);
             Assert.AreEqual(_cliPassword, fidelityConfiguration.Password);
         }

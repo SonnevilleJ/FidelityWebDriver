@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.IO.IsolatedStorage;
 using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
@@ -16,6 +17,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         private string _fileContents;
         private FidelityConfiguration _fidelityConfiguration;
         private Mock<ISleepUtil> _sleepUtilMock;
+        private IsolatedStorageFile _isolatedStore;
 
         [SetUp]
         public void Setup()
@@ -25,12 +27,12 @@ line 2
 line 3";
             _tempFile = SetupTempFile(_fileContents);
 
-            ConfigurationTestUtil.ClearPersistedConfiguration();
+            _isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
+            ConfigurationTestUtil.ClearPersistedConfiguration(_isolatedStore);
 
             _sleepUtilMock = new Mock<ISleepUtil>();
 
-            _fidelityConfiguration = new FidelityConfiguration();
-            _fidelityConfiguration.Initialize();
+            _fidelityConfiguration = FidelityConfiguration.Initialize(_isolatedStore);
             _fidelityConfiguration.DownloadPath = _tempFile;
 
             _downloadService = new CsvDownloadService(_fidelityConfiguration, _sleepUtilMock.Object);
@@ -39,7 +41,7 @@ line 3";
         [TearDown]
         public void TearDown()
         {
-            ConfigurationTestUtil.ClearPersistedConfiguration();
+            ConfigurationTestUtil.ClearPersistedConfiguration(_isolatedStore);
 
             ClearTempFile(_tempFile);
         }
