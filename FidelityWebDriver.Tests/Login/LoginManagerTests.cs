@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Tests.Login
 {
@@ -16,7 +17,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
 
         protected override LoginManager InstantiateManager(ISiteNavigator siteNavigator)
         {
-            _fidelityConfiguration = FidelityConfiguration.Initialize(IsolatedStorageFile.GetUserStoreForAssembly());
+            _fidelityConfiguration = new ConfigStore(IsolatedStorageFile.GetUserStoreForAssembly()).Get<FidelityConfiguration>();
             _fidelityConfiguration.Username = "username";
             _fidelityConfiguration.Password = "password";
 

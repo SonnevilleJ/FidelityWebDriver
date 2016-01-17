@@ -52,6 +52,10 @@
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Sonneville.Utilities, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sonneville.Utilities.1.0.9.0\lib\net452\Sonneville.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="WebDriver, Version=2.46.0.0, Culture=neutral, processorArchitecture=MSIL">

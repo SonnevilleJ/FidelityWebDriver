@@ -9,11 +9,12 @@ using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.FidelityWebDriver.Transactions;
+using Sonneville.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests
 {
     [TestFixture]
-    public class AppTests : IDisposable
+    public class AppTests
     {
         private App _app;
         private Mock<IPositionsManager> _positionsManagerMock;
@@ -26,6 +27,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         private List<IFidelityTransaction> _transactions;
         private List<AccountDetails> _accountDetails;
         private IsolatedStorageFile _isolatedStore;
+        private ConfigStore _configStore;
 
         [SetUp]
         public void Setup()
@@ -142,7 +144,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory()).Returns(_transactions);
 
             _isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
-            _fidelityConfiguration = FidelityConfiguration.Initialize(_isolatedStore);
+            _configStore = new ConfigStore(_isolatedStore);
+            _fidelityConfiguration = _configStore.Get<FidelityConfiguration>();
 
             _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration,
                 new TransactionTranslator());
@@ -153,9 +156,9 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         {
             Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) {AutoFlush = true});
 
-            _fidelityConfiguration.Username = null;
-            _fidelityConfiguration.Password = null;
-            _fidelityConfiguration.Write();
+            _configStore.Clear();
+
+            _app?.Dispose();
         }
 
         [Test]
@@ -244,7 +247,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
             _app.Run(args);
 
-            var fidelityConfiguration = FidelityConfiguration.Initialize(_isolatedStore);
+            var fidelityConfiguration = _configStore.Get<FidelityConfiguration>();
             Assert.AreEqual(_cliUserName, fidelityConfiguration.Username);
             Assert.AreEqual(_cliPassword, fidelityConfiguration.Password);
         }
@@ -283,9 +286,9 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
         private void AssertUnchangedConfig()
         {
-            _fidelityConfiguration.Read();
-            Assert.IsNull(_fidelityConfiguration.Username);
-            Assert.IsNull(_fidelityConfiguration.Password);
+            var fidelityConfiguration = _configStore.Get<FidelityConfiguration>();
+            Assert.IsNull(fidelityConfiguration.Username);
+            Assert.IsNull(fidelityConfiguration.Password);
         }
 
         private static void RedirectConsoleOutput(Stream memoryStream)
@@ -298,20 +301,6 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         {
             memoryStream.Position = 0;
             return new StreamReader(memoryStream).ReadToEnd();
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _app?.Dispose();
-                _app = null;
-            }
         }
     }
 }

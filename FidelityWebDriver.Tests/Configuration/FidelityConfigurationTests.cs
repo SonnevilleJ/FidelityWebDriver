@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
-using Westwind.Utilities.Configuration;
+using Sonneville.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Tests.Configuration
 {
@@ -11,31 +11,28 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
     public class FidelityConfigurationTests
     {
         private IsolatedStorageFile _isolatedStore;
-
-        private class FidelityConfigurationInheritor : FidelityConfiguration
-        {
-            public IConfigurationProvider CreateDefaultProvider(string sectionName, object configData)
-            {
-                return OnCreateDefaultProvider(sectionName, configData);
-            }
-        }
+        private FidelityConfiguration _config;
+        private ConfigStore _configStore;
 
         [SetUp]
         public void Setup()
         {
             _isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
+
+            _configStore = new ConfigStore(_isolatedStore);
+            _config = _configStore.Get<FidelityConfiguration>();
         }
 
         [TearDown]
         public void Teardown()
         {
-            ConfigurationTestUtil.ClearPersistedConfiguration(_isolatedStore);
+            _configStore.Clear();
         }
 
         [Test]
         public void ShouldCreateProviderWithPasswordEncrypted()
         {
-            var provider = new FidelityConfigurationInheritor().CreateDefaultProvider(null, null);
+            var provider = _config.Provider;
 
             var actualPropertiesToEncrypt = provider.PropertiesToEncrypt.Split(',');
             Assert.Contains("Password", actualPropertiesToEncrypt);
@@ -44,8 +41,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
         [Test]
         public void ShouldCreateSameEncryptionKey()
         {
-            var provider1 = new FidelityConfigurationInheritor().CreateDefaultProvider(null, null);
-            var provider2 = new FidelityConfigurationInheritor().CreateDefaultProvider(null, null);
+            var provider1 = _configStore.Get<FidelityConfiguration>().Provider;
+            var provider2 = _configStore.Get<FidelityConfiguration>().Provider;
 
             Assert.AreNotSame(provider1, provider2);
             Assert.AreEqual(provider1.EncryptionKey, provider2.EncryptionKey);
@@ -54,9 +51,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Configuration
         [Test]
         public void ShouldHaveDefaultDownloadPath()
         {
-            var configuration = FidelityConfiguration.Initialize(_isolatedStore);
-
-            var actualDownloadPath = configuration.DownloadPath;
+            var actualDownloadPath = _config.DownloadPath;
 
             var expectedDownloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "Downloads", "Accounts_History.csv");

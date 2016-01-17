@@ -2,6 +2,7 @@
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Sonneville.FidelityWebDriver.Configuration;
+using Sonneville.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Demo.Ninject
 {
@@ -14,8 +15,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
                 .BindDefaultInterface()
                 .Configure(configurationAction => configurationAction.InSingletonScope()));
 
-            var isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
-            Kernel.Bind<FidelityConfiguration>().ToConstant(FidelityConfiguration.Initialize(isolatedStore));
+            var configStore = new ConfigStore(IsolatedStorageFile.GetUserStoreForAssembly());
+            Kernel.Bind<FidelityConfiguration>().ToConstant(configStore.Get<FidelityConfiguration>());
         }
     }
 }
