@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Authentication;
 using OpenQA.Selenium;
@@ -18,6 +19,8 @@ namespace Sonneville.FidelityWebDriver.Login
 
         public ISummaryPage LogIn(string username, string password)
         {
+            ValidateCredentials(username, password);
+
             InsertTextIntoInput(By.Id("userId-input"), username);
             InsertTextIntoInput(By.Id("password"), password);
             _webDriver.FindElement(By.Id("fs-login-button")).Click();
@@ -27,6 +30,12 @@ namespace Sonneville.FidelityWebDriver.Login
                 throw new InvalidCredentialException("Failed to log into Fidelity.com with given credentials!");
             }
             return _pageFactory.GetPage<ISummaryPage>();
+        }
+
+        private void ValidateCredentials(string username, string password)
+        {
+            if (string.IsNullOrEmpty(username)) throw new ArgumentNullException(nameof(username));
+            if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password));
         }
 
         private void InsertTextIntoInput(By @by, string username)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Authentication;
 using Moq;
 using NUnit.Framework;
@@ -51,6 +52,20 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
                 .Returns(_summaryPageMock.Object);
 
             _loginPage = new LoginPage(_webDriverMock.Object, _pageFactoryMock.Object);
+        }
+
+        [Test]
+        public void ShouldValidateNonEmptyUsername()
+        {
+            Assert.Throws<ArgumentNullException>(() => _loginPage.LogIn(null, "asdf"));
+            Assert.Throws<ArgumentNullException>(() => _loginPage.LogIn("", "asdf"));
+        }
+
+        [Test]
+        public void ShouldValidateNonEmptyPassword()
+        {
+            Assert.Throws<ArgumentNullException>(() => _loginPage.LogIn("asdf", null));
+            Assert.Throws<ArgumentNullException>(() => _loginPage.LogIn("asdf", ""));
         }
 
         [Test]
