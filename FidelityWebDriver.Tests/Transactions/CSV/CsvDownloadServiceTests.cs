@@ -2,10 +2,10 @@
 using System.IO.IsolatedStorage;
 using Moq;
 using NUnit.Framework;
+using Sonneville.Configuration;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
 using Sonneville.Utilities;
-using Sonneville.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
 {

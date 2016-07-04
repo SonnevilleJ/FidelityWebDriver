@@ -5,11 +5,11 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using Sonneville.Configuration;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.FidelityWebDriver.Transactions;
-using Sonneville.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests
 {

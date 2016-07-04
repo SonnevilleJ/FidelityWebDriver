@@ -1,10 +1,10 @@
 ﻿using System.IO.IsolatedStorage;
 using Moq;
 using NUnit.Framework;
+using Sonneville.Configuration;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Tests.Login
 {

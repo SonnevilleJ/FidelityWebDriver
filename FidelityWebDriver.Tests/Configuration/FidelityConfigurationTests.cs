@@ -2,8 +2,8 @@
 using System.IO;
 using System.IO.IsolatedStorage;
 using NUnit.Framework;
+using Sonneville.Configuration;
 using Sonneville.FidelityWebDriver.Configuration;
-using Sonneville.Utilities.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Tests.Configuration
 {

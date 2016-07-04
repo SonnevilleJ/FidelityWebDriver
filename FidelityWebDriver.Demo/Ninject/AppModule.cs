@@ -2,7 +2,7 @@
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Sonneville.FidelityWebDriver.Configuration;
-using Sonneville.Utilities.Configuration;
+using Sonneville.Configuration;
 
 namespace Sonneville.FidelityWebDriver.Demo.Ninject
 {
