@@ -6,7 +6,7 @@ namespace Sonneville.FidelityWebDriver.Demo
 {
     public class Program
     {
-        public static IKernel Kernel { get; private set; }
+        public static IKernel Kernel { get; }
 
         static Program()
         {

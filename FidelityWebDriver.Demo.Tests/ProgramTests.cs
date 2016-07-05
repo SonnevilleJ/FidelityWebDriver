@@ -25,6 +25,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             Program.Main(_cliArgs);
 
             _appMock.Verify(app => app.Run(_cliArgs), Times.Once());
+            _appMock.Verify(app => app.Dispose(), Times.Once());
         }
     }
 }
