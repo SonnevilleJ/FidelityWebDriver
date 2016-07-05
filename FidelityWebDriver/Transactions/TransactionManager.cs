@@ -21,11 +21,11 @@ namespace Sonneville.FidelityWebDriver.Transactions
             _transactionsMapper = transactionsMapper;
         }
 
-        public IList<IFidelityTransaction> DownloadTransactionHistory()
+        public IList<IFidelityTransaction> DownloadTransactionHistory(DateTime startDate, DateTime endDate)
         {
             _loginManager.EnsureLoggedIn();
             var activityPage = _siteNavigator.GoTo<IActivityPage>();
-            var downloadPath = activityPage.DownloadHistory(DateTime.MinValue, DateTime.Today);
+            var downloadPath = activityPage.DownloadHistory(startDate, endDate);
 
             return _transactionsMapper.ParseCsv(downloadPath);
         }

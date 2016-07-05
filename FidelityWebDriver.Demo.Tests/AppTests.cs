@@ -28,12 +28,17 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         private List<AccountDetails> _accountDetails;
         private IsolatedStorageFile _isolatedStore;
         private ConfigStore _configStore;
+        private DateTime _startDate;
+        private DateTime _endDate;
 
         [SetUp]
         public void Setup()
         {
             _cliUserName = "Batman";
             _cliPassword = "I am vengeance. I am the night. I am Batman.";
+
+            _startDate = DateTime.MinValue;
+            _endDate = DateTime.Today;
 
             _accountSummaries = new List<AccountSummary>
             {
@@ -141,7 +146,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _positionsManagerMock.Setup(manager => manager.GetAccountDetails()).Returns(_accountDetails);
 
             _transactionManagerMock = new Mock<ITransactionManager>();
-            _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory()).Returns(_transactions);
+            _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory(_startDate, _endDate)).Returns(_transactions);
 
             _isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
             _configStore = new ConfigStore(_isolatedStore);
@@ -225,7 +230,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                 });
             }
 
-            _transactionManagerMock.Verify(manager => manager.DownloadTransactionHistory());
+            _transactionManagerMock.Verify(manager => manager.DownloadTransactionHistory(_startDate, _endDate));
         }
 
         [Test]

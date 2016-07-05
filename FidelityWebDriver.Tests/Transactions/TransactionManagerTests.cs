@@ -17,15 +17,20 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private Mock<IActivityPage> _activityPageMock;
         private Mock<ITransactionsMapper> _csvParserMock;
         private List<IFidelityTransaction> _transactions;
+        private DateTime _startDate;
+        private DateTime _endDate;
 
         protected override TransactionManager InstantiateManager(ISiteNavigator siteNavigator)
         {
-            var downloadPath = "file path";
+            const string downloadPath = "file path";
+            _startDate = DateTime.MinValue;
+            _endDate = DateTime.Today;
+
             _transactions = new List<IFidelityTransaction>();
 
             _activityPageMock = new Mock<IActivityPage>();
             _activityPageMock.Setup(
-                activityPage => activityPage.DownloadHistory(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                activityPage => activityPage.DownloadHistory(_startDate, _endDate))
                 .Returns(downloadPath);
 
             SiteNavigatorMock.Setup(navigator => navigator.GoTo<IActivityPage>())
@@ -50,7 +55,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void ShouldReturnParsedTransactions()
         {
-            var actualTransactions = Manager.DownloadTransactionHistory();
+            var actualTransactions = Manager.DownloadTransactionHistory(_startDate, _endDate);
 
             _loginManagerMock.Verify(manager => manager.EnsureLoggedIn());
             SiteNavigatorMock.Verify(navigator => navigator.GoTo<IActivityPage>());
