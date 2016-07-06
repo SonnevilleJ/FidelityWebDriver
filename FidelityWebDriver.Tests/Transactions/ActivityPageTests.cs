@@ -21,6 +21,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private Mock<IWebElement> _downloadLinkMock;
         private Mock<ICsvDownloadService> _downloadServiceMock;
         private string _fileContents;
+        private Mock<IWebElement> _historyExpanderLinkMock;
 
         [SetUp]
         public void Setup()
@@ -31,9 +32,17 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
             _downloadLinkMock = new Mock<IWebElement>();
             _downloadLinkMock.Setup(link => link.Click())
-                .Callback(() => _downloadServiceMock.Verify(service => service.Cleanup(), Times.Once()));
+                .Callback(() =>
+                {
+                    _historyExpanderLinkMock.Verify(link => link.Click());
+                    _downloadServiceMock.Verify(service => service.Cleanup(), Times.Once());
+                });
+
+            _historyExpanderLinkMock = new Mock<IWebElement>();
 
             _webDriverMock = new Mock<IWebDriver>();
+            _webDriverMock.Setup(webDriver => webDriver.FindElement(By.Id("historyExpander")))
+                .Returns(_historyExpanderLinkMock.Object);
             _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("activity--history-download-link")))
                 .Returns(_downloadLinkMock.Object);
 

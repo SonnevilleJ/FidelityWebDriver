@@ -21,6 +21,8 @@ namespace Sonneville.FidelityWebDriver.Transactions
         public string DownloadHistory(DateTime minValue, DateTime maxValue)
         {
             _csvDownloadService.Cleanup();
+            var historyExpanderLink = _webDriver.FindElement(By.Id("historyExpander"));
+            historyExpanderLink.Click();
             var downloadLink = _webDriver.FindElement(By.ClassName("activity--history-download-link"));
             downloadLink.Click();
 
