@@ -11,7 +11,7 @@ namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
             var totalGainDollarText = tdElements[3]
                 .FindElements(By.ClassName("magicgrid--stacked-data-value"))[0]
                 .Text;
-            return totalGainDollarText == "n/a" || totalGainDollarText == "--"
+            return totalGainDollarText == "n/a" || totalGainDollarText.Contains("--")
                 ? 0
                 : decimal.Parse(totalGainDollarText, NumberStyles.Any);
         }
@@ -21,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
             var totalGainPercentText = tdElements[3]
                 .FindElements(By.ClassName("magicgrid--stacked-data-value"))[1]
                 .Text.TrimEnd('%');
-            return totalGainPercentText == "n/a" || totalGainPercentText == "--"
+            return totalGainPercentText == "n/a" || totalGainPercentText.Contains("--")
                 ? 0
                 : decimal.Parse(totalGainPercentText, NumberStyles.Any)/100m;
         }

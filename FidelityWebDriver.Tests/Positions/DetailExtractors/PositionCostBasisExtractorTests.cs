@@ -26,6 +26,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
         }
 
         [Test]
+        [TestCase("--", "--")]
+        [TestCase("--2", "--2")]
         [TestCase("n/a", "n/a")]
         [TestCase("$0.00", "$0.00")]
         [TestCase("", "")]

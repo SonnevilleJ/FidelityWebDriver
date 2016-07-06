@@ -27,6 +27,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
 
         [Test]
         [TestCase("--", "--")]
+        [TestCase("--2", "--2")]
         [TestCase("n/a", "n/a")]
         public void ShouldExtractZeroForInvalidAmounts(string totalGainDollarString, string totalGainPercentString)
         {
