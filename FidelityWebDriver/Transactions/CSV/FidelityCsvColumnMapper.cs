@@ -45,7 +45,9 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
         {
             var columns = headerRow.Split(',');
             var count = 0;
-            return columns.ToDictionary(GetHeader, s => count++);
+            return columns.Select(s => new KeyValuePair<FidelityCsvColumn, int>(GetHeader(s), count++))
+                    .Where(header => header.Key != FidelityCsvColumn.Unknown)
+                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
     }
 }

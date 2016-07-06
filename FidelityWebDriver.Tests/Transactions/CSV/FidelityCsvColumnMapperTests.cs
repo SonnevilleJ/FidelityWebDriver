@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
@@ -32,12 +31,29 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         [Test]
         public void ShouldMapMultipleColumns()
         {
-            var headers = new FidelityCsvColumnMapper().GetColumnMappings($"{" Account "}, {" Settlement Date "}, {" Amount ($) "}");
+            var headers = new FidelityCsvColumnMapper().GetColumnMappings(" Account ,  Settlement Date ,  Amount ($) ");
 
             Assert.AreEqual(0, headers[FidelityCsvColumn.Account]);
             Assert.AreEqual(1, headers[FidelityCsvColumn.SettlementDate]);
             Assert.AreEqual(2, headers[FidelityCsvColumn.Amount]);
-            Assert.AreEqual(3, headers.Count());
+            Assert.AreEqual(3, headers.Count);
+        }
+
+        [Test]
+        public void ShouldMapMultipleUnknownColumns()
+        {
+            var headers = new FidelityCsvColumnMapper().GetColumnMappings("asdf,xyz,blahblah");
+
+            Assert.AreEqual(0, headers.Count);
+        }
+
+        [Test]
+        public void ShouldMapCorrectIdsDespiteSkippedColumns()
+        {
+            var headers = new FidelityCsvColumnMapper().GetColumnMappings("asdf, Account ");
+
+            Assert.AreEqual(1, headers[FidelityCsvColumn.Account]);
+            Assert.AreEqual(1, headers.Count);
         }
     }
 }
