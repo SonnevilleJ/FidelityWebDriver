@@ -14,11 +14,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         [TestCase(" Security Description ", FidelityCsvColumn.SecurityDescription)]
         [TestCase(" Security Type ", FidelityCsvColumn.SecurityType)]
         [TestCase(" Quantity ", FidelityCsvColumn.Quantity)]
-        [TestCase(" Price ($) ", FidelityCsvColumn.Price)]
-        [TestCase(" Commission ($) ", FidelityCsvColumn.Commission)]
-        [TestCase(" Fees ($) ", FidelityCsvColumn.Fees)]
-        [TestCase(" Accrued Interest ($) ", FidelityCsvColumn.AccruedInterest)]
-        [TestCase(" Amount ($) ", FidelityCsvColumn.Amount)]
+        [TestCase(" Price ", FidelityCsvColumn.Price)]
+        [TestCase(" Commission ", FidelityCsvColumn.Commission)]
+        [TestCase(" Fees ", FidelityCsvColumn.Fees)]
+        [TestCase(" Accrued Interest ", FidelityCsvColumn.AccruedInterest)]
+        [TestCase(" Amount ", FidelityCsvColumn.Amount)]
         [TestCase(" Settlement Date ", FidelityCsvColumn.SettlementDate)]
         [TestCase(" gibberish ", FidelityCsvColumn.Unknown)]
         public void ShouldMapAndTrimValues(string value, FidelityCsvColumn expectedColumn)
@@ -31,7 +31,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         [Test]
         public void ShouldMapMultipleColumns()
         {
-            var headers = new FidelityCsvColumnMapper().GetColumnMappings(" Account ,  Settlement Date ,  Amount ($) ");
+            var headers = new FidelityCsvColumnMapper().GetColumnMappings(" Account ,  Settlement Date ,  Amount ");
 
             Assert.AreEqual(0, headers[FidelityCsvColumn.Account]);
             Assert.AreEqual(1, headers[FidelityCsvColumn.SettlementDate]);

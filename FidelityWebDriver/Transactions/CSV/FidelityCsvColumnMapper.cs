@@ -24,15 +24,15 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
                     return FidelityCsvColumn.SecurityType;
                 case "Quantity":
                     return FidelityCsvColumn.Quantity;
-                case "Price ($)":
+                case "Price":
                     return FidelityCsvColumn.Price;
-                case "Commission ($)":
+                case "Commission":
                     return FidelityCsvColumn.Commission;
-                case "Fees ($)":
+                case "Fees":
                     return FidelityCsvColumn.Fees;
-                case "Accrued Interest ($)":
+                case "Accrued Interest":
                     return FidelityCsvColumn.AccruedInterest;
-                case "Amount ($)":
+                case "Amount":
                     return FidelityCsvColumn.Amount;
                 case "Settlement Date":
                     return FidelityCsvColumn.SettlementDate;
