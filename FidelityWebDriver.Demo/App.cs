@@ -72,7 +72,7 @@ namespace Sonneville.FidelityWebDriver.Demo
             PrintAccountDetails(_positionsManager.GetAccountDetails().ToList());
             PrintSeparator();
             Console.WriteLine("Reading recent transactions...");
-            PrintRecentTransactions(_transactionManager.DownloadTransactionHistory(DateTime.MinValue, DateTime.Today).ToList());
+            PrintRecentTransactions(_transactionManager.DownloadTransactionHistory(DateTime.Today.AddDays(-30), DateTime.Today).ToList());
             PrintSeparator();
         }
 

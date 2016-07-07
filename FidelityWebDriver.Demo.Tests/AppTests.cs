@@ -37,7 +37,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _cliUserName = "Batman";
             _cliPassword = "I am vengeance. I am the night. I am Batman.";
 
-            _startDate = DateTime.MinValue;
+            _startDate = DateTime.Today.AddDays(-30);
             _endDate = DateTime.Today;
 
             _accountSummaries = new List<AccountSummary>

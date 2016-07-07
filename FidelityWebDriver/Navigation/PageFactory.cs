@@ -21,20 +21,20 @@ namespace Sonneville.FidelityWebDriver.Navigation
         {
             _pages = new Dictionary<Type, IPage>
             {
-                {typeof (IHomePage), new HomePage(webDriver, this)},
-                {typeof (ILoginPage), new LoginPage(webDriver, this)},
-                {typeof (ISummaryPage), new SummaryPage(webDriver, this)},
+                {typeof(IHomePage), new HomePage(webDriver, this)},
+                {typeof(ILoginPage), new LoginPage(webDriver, this)},
+                {typeof(ISummaryPage), new SummaryPage(webDriver, this)},
                 {
-                    typeof (IPositionsPage),
+                    typeof(IPositionsPage),
                     new PositionsPage(webDriver, this, accountSummariesExtractor, accountDetailsExtractor, sleepUtil)
                 },
-                {typeof (IActivityPage), new ActivityPage(webDriver, this, csvDownloadService)},
+                {typeof(IActivityPage), new ActivityPage(webDriver, this, csvDownloadService, sleepUtil)},
             };
         }
 
         public T GetPage<T>() where T : IPage
         {
-            return (T) _pages[typeof (T)];
+            return (T) _pages[typeof(T)];
         }
     }
 }

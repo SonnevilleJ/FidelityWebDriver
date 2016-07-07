@@ -2,6 +2,7 @@ using System;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
+using Sonneville.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
@@ -10,12 +11,14 @@ namespace Sonneville.FidelityWebDriver.Transactions
         private readonly IWebDriver _webDriver;
         private readonly IPageFactory _pageFactory;
         private readonly ICsvDownloadService _csvDownloadService;
+        private readonly ISleepUtil _sleepUtil;
 
-        public ActivityPage(IWebDriver webDriver, IPageFactory pageFactory, ICsvDownloadService csvDownloadService)
+        public ActivityPage(IWebDriver webDriver, IPageFactory pageFactory, ICsvDownloadService csvDownloadService, ISleepUtil sleepUtil)
         {
             _webDriver = webDriver;
             _pageFactory = pageFactory;
             _csvDownloadService = csvDownloadService;
+            _sleepUtil = sleepUtil;
         }
 
         public string DownloadHistory(DateTime startDate, DateTime endDate)
@@ -37,6 +40,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
             var setTimePeriodButton = dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-display-button"));
             setTimePeriodButton.Click();
 
+            _sleepUtil.Sleep(500);
             var downloadLink = _webDriver.FindElement(By.ClassName("activity--history-download-link"));
             downloadLink.Click();
 

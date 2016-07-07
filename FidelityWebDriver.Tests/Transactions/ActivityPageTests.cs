@@ -6,6 +6,7 @@ using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Tests.Navigation;
 using Sonneville.FidelityWebDriver.Transactions;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
+using Sonneville.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
@@ -30,6 +31,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private DateTime _endDate;
         private Mock<IWebElement> _fromDateInputMock;
         private Mock<IWebElement> _toDateInputMock;
+        private Mock<ISleepUtil> _sleepUtilMock;
 
         [SetUp]
         public void Setup()
@@ -55,6 +57,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _historyRangeDropdownMock.Setup(dropdown => dropdown.FindElement(By.CssSelector("option[value='custom']")))
                 .Returns(_customHistoryRangeOptionMock.Object);
 
+            _sleepUtilMock = new Mock<ISleepUtil>();
+
             _setTimePeriodButtonMock = new Mock<IWebElement>();
             _setTimePeriodButtonMock.Setup(button => button.Click())
                 .Callback(() =>
@@ -62,6 +66,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                     _fromDateInputMock.Verify(input => input.SendKeys(_startDate.ToString("MM/dd/yyyy")));
                     _toDateInputMock.Verify(input => input.SendKeys(_endDate.ToString("MM/dd/yyyy")));
                     Assert.IsTrue(_customHistoryRangeOptionMock.Object.Selected);
+                    _sleepUtilMock.Verify(util => util.Sleep(It.IsAny<int>()), Times.Never());
                 });
 
             _downloadLinkMock = new Mock<IWebElement>();
@@ -70,6 +75,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 {
                     _setTimePeriodButtonMock.Verify(button => button.Click());
                     _downloadServiceMock.Verify(service => service.Cleanup(), Times.Once());
+                    _sleepUtilMock.Verify(util => util.Sleep(It.Is<int>(i => i > 500)), Times.Never());
                 });
 
             _historyExpanderLinkMock = new Mock<IWebElement>();
@@ -99,7 +105,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
             _pageFactoryMock = new Mock<IPageFactory>();
 
-            _activityPage = new ActivityPage(_webDriverMock.Object, _pageFactoryMock.Object, _downloadServiceMock.Object);
+            _activityPage = new ActivityPage(_webDriverMock.Object, _pageFactoryMock.Object, _downloadServiceMock.Object, _sleepUtilMock.Object);
         }
 
         [Test]
@@ -120,7 +126,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _startDate = DateTime.Parse(startDateString);
             _endDate = DateTime.Parse(endDateString);
 
-            Assert.Throws<ArgumentException>(()=> _activityPage.DownloadHistory(_startDate, _endDate));
+            Assert.Throws<ArgumentException>(() => _activityPage.DownloadHistory(_startDate, _endDate));
         }
     }
 }
