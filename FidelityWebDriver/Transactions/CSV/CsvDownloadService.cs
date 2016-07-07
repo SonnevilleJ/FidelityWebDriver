@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.Utilities;
 
