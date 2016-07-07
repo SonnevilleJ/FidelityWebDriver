@@ -18,11 +18,23 @@ namespace Sonneville.FidelityWebDriver.Transactions
             _csvDownloadService = csvDownloadService;
         }
 
-        public string DownloadHistory(DateTime minValue, DateTime maxValue)
+        public string DownloadHistory(DateTime startDate, DateTime endDate)
         {
             _csvDownloadService.Cleanup();
             var historyExpanderLink = _webDriver.FindElement(By.Id("historyExpander"));
             historyExpanderLink.Click();
+
+            var rangeDropdown = _webDriver.FindElement(By.Id("activity--history-range-dropdown"));
+            rangeDropdown.FindElement(By.CssSelector("option[value='custom']")).Click();
+
+            var dateRangeDiv = _webDriver.FindElement(By.ClassName("activity--history-custom-date-container"));
+            var fromDateInput = dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-from-field"));
+            fromDateInput.SendKeys(startDate.ToString("MM/dd/yyyy"));
+            var toDateInput = dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-to-field"));
+            toDateInput.SendKeys(endDate.ToString("MM/dd/yyyy"));
+            var setTimePeriodButton = dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-display-button"));
+            setTimePeriodButton.Click();
+
             var downloadLink = _webDriver.FindElement(By.ClassName("activity--history-download-link"));
             downloadLink.Click();
 

@@ -5,6 +5,6 @@ namespace Sonneville.FidelityWebDriver.Transactions
 {
     public interface IActivityPage : IPage
     {
-        string DownloadHistory(DateTime minValue, DateTime maxValue);
+        string DownloadHistory(DateTime startDate, DateTime endDate);
     }
 }
