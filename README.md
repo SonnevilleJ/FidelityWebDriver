@@ -1,7 +1,7 @@
 # Project Overview
 FidelityWebDriver is a wrapper around the [Selenium WebDriver](http://www.seleniumhq.org/projects/webdriver/), used to perform semantic driving of the Fidelity website.
 
-Current build status: ![Build Status](http://sonnevillej.ddns.net:9000/app/rest/builds/buildType:(id:FidelityWebDriver_Build)/statusIcon)
+Current build status: ![Build Status](http://sonnevillej.privatedns.org:9000/app/rest/builds/buildType:(id:FidelityWebDriver_Build)/statusIcon)
 
 ## Demo app
 _This project depends on ChromeDriver, so be sure you have Chrome installed!_
