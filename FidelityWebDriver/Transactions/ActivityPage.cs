@@ -20,6 +20,8 @@ namespace Sonneville.FidelityWebDriver.Transactions
 
         public string DownloadHistory(DateTime startDate, DateTime endDate)
         {
+            ThrowIfDateRangeIsInvalid(startDate, endDate);
+
             _csvDownloadService.Cleanup();
             var historyExpanderLink = _webDriver.FindElement(By.Id("historyExpander"));
             historyExpanderLink.Click();
@@ -41,6 +43,16 @@ namespace Sonneville.FidelityWebDriver.Transactions
             var content = _csvDownloadService.GetDownloadedContent();
             _csvDownloadService.Cleanup();
             return content;
+        }
+
+        private void ThrowIfDateRangeIsInvalid(DateTime startDate, DateTime endDate)
+        {
+            if (startDate > endDate)
+                throw new ArgumentException("Start Date must preceed End Date!");
+            if (endDate - startDate > TimeSpan.FromDays(90))
+                throw new ArgumentException("Date range must be less than or equal to 90 days!");
+            if (endDate.Date > DateTime.Today)
+                throw new ArgumentException("Cannot query for future dates!");
         }
     }
 }

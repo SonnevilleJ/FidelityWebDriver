@@ -34,8 +34,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [SetUp]
         public void Setup()
         {
-            _startDate = DateTime.MinValue;
-            _endDate = DateTime.MaxValue;
+            _startDate = DateTime.Today.AddDays(-30);
+            _endDate = DateTime.Today;
 
             _fileContents = "file contents";
 
@@ -109,6 +109,18 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
             Assert.AreEqual(_fileContents, actualContents);
             _downloadServiceMock.Verify(service => service.Cleanup(), Times.Exactly(2));
+        }
+
+        [Test]
+        [TestCase("11/12/2013", "11/11/2013")]
+        [TestCase("11/12/2012", "11/11/2013")]
+        [TestCase("11/11/9000", "11/12/9000")]
+        public void DownloadHistoryShouldValidateDates(string startDateString, string endDateString)
+        {
+            _startDate = DateTime.Parse(startDateString);
+            _endDate = DateTime.Parse(endDateString);
+
+            Assert.Throws<ArgumentException>(()=> _activityPage.DownloadHistory(_startDate, _endDate));
         }
     }
 }
