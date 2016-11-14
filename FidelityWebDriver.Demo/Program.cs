@@ -1,10 +1,9 @@
-﻿using System;
-using Ninject;
+﻿using Ninject;
 using Sonneville.FidelityWebDriver.Demo.Ninject;
 
 namespace Sonneville.FidelityWebDriver.Demo
 {
-    public class Program
+    public static class Program
     {
         public static IKernel Kernel { get; }
 
@@ -18,8 +17,6 @@ namespace Sonneville.FidelityWebDriver.Demo
             using (var app = Kernel.Get<IApp>())
             {
                 app.Run(args);
-                Console.WriteLine("Press enter to continue...");
-                Console.ReadLine();
             }
         }
     }
