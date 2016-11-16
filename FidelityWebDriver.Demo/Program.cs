@@ -5,12 +5,7 @@ namespace Sonneville.FidelityWebDriver.Demo
 {
     public static class Program
     {
-        public static IKernel Kernel { get; }
-
-        static Program()
-        {
-            Kernel = new KernelBuilder().Build();
-        }
+        public static readonly IKernel Kernel = new KernelBuilder().Build();
 
         public static void Main(string[] args)
         {
