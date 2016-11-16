@@ -188,3 +188,4 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 */README-ChromeDriver.txt
+.idea/.idea.*/.idea/workspace.xml
