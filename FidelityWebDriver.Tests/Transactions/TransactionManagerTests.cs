@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
@@ -20,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private DateTime _startDate;
         private DateTime _endDate;
 
-        protected override TransactionManager InstantiateManager(ISiteNavigator siteNavigator)
+        protected override TransactionManager InstantiateManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration)
         {
             const string downloadPath = "file path";
             _startDate = DateTime.MinValue;

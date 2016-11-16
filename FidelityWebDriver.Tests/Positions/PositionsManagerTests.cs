@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
@@ -17,7 +18,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private List<IAccountSummary> _accountSummaries;
         private List<IAccountDetails> _accountDetails;
 
-        protected override IPositionsManager InstantiateManager(ISiteNavigator siteNavigator)
+        protected override IPositionsManager InstantiateManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration)
         {
             _accountSummaries = new List<IAccountSummary>();
             _accountDetails = new List<IAccountDetails>();

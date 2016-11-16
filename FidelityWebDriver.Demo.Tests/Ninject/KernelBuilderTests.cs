@@ -2,7 +2,7 @@
 using Ninject;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Demo.Ninject;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
@@ -31,6 +31,15 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
             {
                 Assert.IsNotNull(app);
             }
+        }
+
+        [Test]
+        public void ShouldGetSameConfigEachTime()
+        {
+            var config1 = _kernel.Get<FidelityConfiguration>();
+            var config2 = _kernel.Get<FidelityConfiguration>();
+
+            Assert.AreSame(config1, config2);
         }
 
         [Test]

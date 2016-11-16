@@ -1,5 +1,6 @@
 using Moq;
 using NUnit.Framework;
+using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Tests
@@ -14,10 +15,10 @@ namespace Sonneville.FidelityWebDriver.Tests
         public void SetupTestsBase()
         {
             SiteNavigatorMock = new Mock<ISiteNavigator>();
-            Manager = InstantiateManager(SiteNavigatorMock.Object);
+            Manager = InstantiateManager(SiteNavigatorMock.Object, new FidelityConfiguration());
         }
 
-        protected abstract T InstantiateManager(ISiteNavigator siteNavigator);
+        protected abstract T InstantiateManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration);
 
         [Test]
         public void ShouldDisposeSiteNavigator()

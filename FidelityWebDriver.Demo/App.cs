@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NDesk.Options;
+using Nini.Config;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Positions;
@@ -27,6 +29,10 @@ namespace Sonneville.FidelityWebDriver.Demo
             FidelityConfiguration fidelityConfiguration,
             TransactionTranslator transactionTranslator)
         {
+            _fidelityConfiguration = fidelityConfiguration;
+            _positionsManager = positionsManager;
+            _transactionManager = transactionManager;
+            _transactionTranslator = transactionTranslator;
             _optionSet = new OptionSet
             {
                 {
@@ -46,10 +52,6 @@ namespace Sonneville.FidelityWebDriver.Demo
                     help => { _shouldShowHelp = true; }
                 },
             };
-            _fidelityConfiguration = fidelityConfiguration;
-            _positionsManager = positionsManager;
-            _transactionManager = transactionManager;
-            _transactionTranslator = transactionTranslator;
         }
 
         public void Run(IEnumerable<string> args)
@@ -62,7 +64,14 @@ namespace Sonneville.FidelityWebDriver.Demo
             }
             if (_shouldPersistOptions)
             {
-                _fidelityConfiguration.Write();
+                File.Create("./demo.ini").Dispose();
+                var iniConfigSource = new IniConfigSource("./demo.ini");
+                iniConfigSource.AddConfig("Fidelity");
+                var config = iniConfigSource.Configs["Fidelity"];
+                config.Set("DownloadPath", _fidelityConfiguration.DownloadPath);
+                config.Set("Username", _fidelityConfiguration.Username);
+                config.Set("Password", _fidelityConfiguration.Password);
+                iniConfigSource.Save();
             }
 
             Console.WriteLine("Reading account summaries.....");

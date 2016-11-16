@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using Sonneville.Configuration;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Positions;
+using Sonneville.FidelityWebDriver.Tests.Configuration;
 using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests
@@ -16,24 +15,25 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
     [TestFixture]
     public class AppTests
     {
-        private App _app;
-        private Mock<IPositionsManager> _positionsManagerMock;
         private FidelityConfiguration _fidelityConfiguration;
+        private string _downloadPath;
         private string _cliUserName;
         private string _cliPassword;
-        private List<AccountSummary> _accountSummaries;
 
+        private Mock<IPositionsManager> _positionsManagerMock;
         private Mock<ITransactionManager> _transactionManagerMock;
         private List<IFidelityTransaction> _transactions;
+        private List<AccountSummary> _accountSummaries;
         private List<AccountDetails> _accountDetails;
-        private IsolatedStorageFile _isolatedStore;
-        private ConfigStore _configStore;
         private DateTime _startDate;
         private DateTime _endDate;
+
+        private App _app;
 
         [SetUp]
         public void Setup()
         {
+            _downloadPath = Path.GetTempPath();
             _cliUserName = "Batman";
             _cliPassword = "I am vengeance. I am the night. I am Batman.";
 
@@ -148,9 +148,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _transactionManagerMock = new Mock<ITransactionManager>();
             _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory(_startDate, _endDate)).Returns(_transactions);
 
-            _isolatedStore = IsolatedStorageFile.GetUserStoreForAssembly();
-            _configStore = new ConfigStore(_isolatedStore);
-            _fidelityConfiguration = _configStore.Get<FidelityConfiguration>();
+            _fidelityConfiguration = FidelityConfigurationProviderTests.SetupConfiguration(_downloadPath, _cliUserName, _cliPassword);
 
             _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration,
                 new TransactionTranslator());
@@ -159,9 +157,9 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         [TearDown]
         public void Teardown()
         {
-            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) {AutoFlush = true});
+            FidelityConfigurationProviderTests.DeletePersistedConfig();
 
-            _configStore.Clear();
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) {AutoFlush = true});
 
             _app?.Dispose();
         }
@@ -252,7 +250,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
             _app.Run(args);
 
-            var fidelityConfiguration = _configStore.Get<FidelityConfiguration>();
+            var fidelityConfiguration = FidelityConfigurationProviderTests.ReadConfiguration();
             Assert.AreEqual(_cliUserName, fidelityConfiguration.Username);
             Assert.AreEqual(_cliPassword, fidelityConfiguration.Password);
         }
@@ -289,11 +287,11 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _app.Dispose();
         }
 
-        private void AssertUnchangedConfig()
+        private static void AssertUnchangedConfig()
         {
-            var fidelityConfiguration = _configStore.Get<FidelityConfiguration>();
-            Assert.IsNull(fidelityConfiguration.Username);
-            Assert.IsNull(fidelityConfiguration.Password);
+            var fidelityConfiguration = FidelityConfigurationProviderTests.ReadConfiguration();
+            Assert.IsEmpty(fidelityConfiguration.Username);
+            Assert.IsEmpty(fidelityConfiguration.Password);
         }
 
         private static void RedirectConsoleOutput(Stream memoryStream)
