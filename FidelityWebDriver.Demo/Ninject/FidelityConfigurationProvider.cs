@@ -2,8 +2,9 @@
 using System.IO;
 using Nini.Config;
 using Ninject.Activation;
+using Sonneville.FidelityWebDriver.Configuration;
 
-namespace Sonneville.FidelityWebDriver.Configuration
+namespace Sonneville.FidelityWebDriver.Demo.Ninject
 {
     public class FidelityConfigurationProvider : IProvider<FidelityConfiguration>
     {

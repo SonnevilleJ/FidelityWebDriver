@@ -6,8 +6,8 @@ using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Demo.Tests.Ninject;
 using Sonneville.FidelityWebDriver.Positions;
-using Sonneville.FidelityWebDriver.Tests.Configuration;
 using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests

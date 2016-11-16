@@ -3,8 +3,9 @@ using System.IO;
 using Nini.Config;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
+using Sonneville.FidelityWebDriver.Demo.Ninject;
 
-namespace Sonneville.FidelityWebDriver.Tests.Configuration
+namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
 {
     [TestFixture]
     public class FidelityConfigurationProviderTests
