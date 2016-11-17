@@ -82,7 +82,7 @@ namespace Sonneville.FidelityWebDriver.Positions
                         results.Add(PrepareAccountDetails(accountDetails, positionRows));
                     }
                     positionRows = new List<IWebElement>();
-                    var accountNumber = ExctractAccountNumber(tableRow).Replace("†", "");
+                    var accountNumber = ExctractAccountNumber(tableRow).Replace("â€ ", "");
                     accountDetails = new AccountDetails
                     {
                         Name = ExtractAccountName(tableRow),
