@@ -44,7 +44,7 @@ namespace Sonneville.FidelityWebDriver.Demo
                     password => { _fidelityConfiguration.Password = password; }
                 },
                 {
-                    "s|save", "indicates options should be persisted.",
+                    "s|save", "indicates options should be persisted to demo.ini file.",
                     save => { _shouldPersistOptions = true; }
                 },
                 {

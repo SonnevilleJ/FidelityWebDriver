@@ -10,12 +10,17 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
     [TestFixture]
     public class KernelBuilderTests
     {
+        private Mock<IWebDriver> _webDriverMock;
         private IKernel _kernel;
 
         [SetUp]
         public void Setup()
         {
+            // mock out web driver because these tests focus on Ninject bindings, not Selenium
+            _webDriverMock = new Mock<IWebDriver>();
+
             _kernel = new KernelBuilder().Build();
+            _kernel.Rebind<IWebDriver>().ToConstant(_webDriverMock.Object);
         }
 
         [TearDown]
@@ -45,12 +50,9 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
         [Test]
         public void ShouldNotDisposeMoreThanOnce()
         {
-            var webDriverMock = new Mock<IWebDriver>();
-            _kernel.Rebind<IWebDriver>().ToConstant(webDriverMock.Object);
-
             _kernel.Get<IApp>().Dispose();
 
-            webDriverMock.Verify(webDriver => webDriver.Dispose(), Times.Once());
+            _webDriverMock.Verify(webDriver => webDriver.Dispose(), Times.Once());
         }
     }
 }
