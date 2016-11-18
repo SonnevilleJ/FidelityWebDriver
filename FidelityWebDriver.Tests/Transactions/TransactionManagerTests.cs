@@ -45,6 +45,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             return new TransactionManager(siteNavigator, _loginManagerMock.Object, _csvParserMock.Object);
         }
 
+        [SetUp]
+        public void Setup()
+        {
+            base.SetupTestsBase();
+        }
+
         [Test]
         public void ShouldDisposeLoginManager()
         {

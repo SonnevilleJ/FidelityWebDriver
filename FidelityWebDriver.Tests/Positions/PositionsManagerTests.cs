@@ -40,6 +40,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             return new PositionsManager(siteNavigator, _loginManagerMock.Object);
         }
 
+        [SetUp]
+        public void Setup()
+        {
+            base.SetupTestsBase();
+        }
+
         [Test]
         public void ShouldDisposeLoginManager()
         {

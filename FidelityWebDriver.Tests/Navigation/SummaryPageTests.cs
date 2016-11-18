@@ -28,6 +28,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         [SetUp]
         public void Setup()
         {
+            base.SetupPageFactory();
+
             _balanceNumber = 1234.56;
 
             _fullBalanceSpan = new Mock<IWebElement>();

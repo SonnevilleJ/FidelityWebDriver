@@ -27,6 +27,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         [SetUp]
         public void Setup()
         {
+            base.SetupPageFactory();
+
             _username = "username";
             _password = "password";
 

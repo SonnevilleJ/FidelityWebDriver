@@ -25,6 +25,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         [SetUp]
         public void Setup()
         {
+            base.SetupTestsBase();
             _summaryPageMock = new Mock<ISummaryPage>();
             SiteNavigatorMock.Setup(navigator => navigator.GoTo<ISummaryPage>()).Returns(_summaryPageMock.Object);
 

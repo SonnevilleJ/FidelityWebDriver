@@ -36,6 +36,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [SetUp]
         public void Setup()
         {
+            base.SetupPageFactory();
+
             _startDate = DateTime.Today.AddDays(-30);
             _endDate = DateTime.Today;
 
