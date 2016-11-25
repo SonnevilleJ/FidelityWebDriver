@@ -27,6 +27,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private Mock<IWebElement> _customHistoryRangeOptionMock;
         private Mock<IWebElement> _setTimePeriodButtonMock;
         private Mock<IWebElement> _dateRangeDiv;
+        private Mock<IWebElement> _progressBarDiv;
         private DateTime _startDate;
         private DateTime _endDate;
         private Mock<IWebElement> _fromDateInputMock;
@@ -47,6 +48,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _downloadServiceMock.Setup(service => service.GetDownloadedContent())
                 .Returns(() =>
                 {
+                    Assert.IsFalse(_progressBarDiv.Object.Displayed);
                     _downloadLinkMock.Verify(link => link.Click());
                     return _fileContents;
                 });
@@ -94,6 +96,19 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _dateRangeDiv.Setup(div => div.FindElement(By.ClassName("activity--history-custom-date-display-button")))
                 .Returns(_setTimePeriodButtonMock.Object);
 
+            _progressBarDiv = new Mock<IWebElement>();
+            _progressBarDiv.Setup(div => div.Displayed).Returns(() =>
+            {
+                try
+                {
+                    return true;
+                }
+                finally
+                {
+                    _progressBarDiv.Setup(div => div.Displayed).Returns(false);
+                }
+            });
+
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(webDriver => webDriver.FindElement(By.Id("historyExpander")))
                 .Returns(_historyExpanderLinkMock.Object);
@@ -104,6 +119,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _webDriverMock.Setup(
                 webDriver => webDriver.FindElement(By.ClassName("activity--history-custom-date-container")))
                 .Returns(_dateRangeDiv.Object);
+            _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("progress-bar")))
+                .Returns(_progressBarDiv.Object);
 
             _pageFactoryMock = new Mock<IPageFactory>();
 

@@ -1,5 +1,6 @@
 using System;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
 using Sonneville.Utilities;
@@ -26,6 +27,10 @@ namespace Sonneville.FidelityWebDriver.Transactions
             ThrowIfDateRangeIsInvalid(startDate, endDate);
 
             _csvDownloadService.Cleanup();
+
+            new WebDriverWait(_webDriver, TimeSpan.FromMinutes(1))
+                .Until(webDriver => !webDriver.FindElement(By.ClassName("progress-bar")).Displayed);
+
             var historyExpanderLink = _webDriver.FindElement(By.Id("historyExpander"));
             historyExpanderLink.Click();
 
