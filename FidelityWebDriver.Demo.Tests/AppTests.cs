@@ -16,9 +16,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
     public class AppTests
     {
         private FidelityConfiguration _fidelityConfiguration;
-        private string _downloadPath;
-        private string _cliUserName;
-        private string _cliPassword;
+        private string _username;
+        private string _password;
 
         private Mock<IPositionsManager> _positionsManagerMock;
         private Mock<ITransactionManager> _transactionManagerMock;
@@ -33,9 +32,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         [SetUp]
         public void Setup()
         {
-            _downloadPath = Path.GetTempPath();
-            _cliUserName = "Batman";
-            _cliPassword = "I am vengeance. I am the night. I am Batman.";
+            _username = "Batman";
+            _password = "I am vengeance. I am the night. I am Batman.";
 
             _startDate = DateTime.Today.AddDays(-30);
             _endDate = DateTime.Today;
@@ -146,9 +144,10 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _positionsManagerMock.Setup(manager => manager.GetAccountDetails()).Returns(_accountDetails);
 
             _transactionManagerMock = new Mock<ITransactionManager>();
-            _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory(_startDate, _endDate)).Returns(_transactions);
+            _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory(_startDate, _endDate))
+                .Returns(_transactions);
 
-            _fidelityConfiguration = FidelityConfigurationProviderTests.SetupConfiguration(_downloadPath, _cliUserName, _cliPassword);
+            _fidelityConfiguration = new FidelityConfiguration();
 
             _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration,
                 new TransactionTranslator());
@@ -160,6 +159,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             FidelityConfigurationProviderTests.DeletePersistedConfig();
 
             Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) {AutoFlush = true});
+            Console.SetIn(new StreamReader(Console.OpenStandardInput()));
 
             _app?.Dispose();
         }
@@ -167,6 +167,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         [Test]
         public void ShouldFetchAccountSummariesFromPositionsManager()
         {
+            SetCredentials();
             using (var memoryStream = new MemoryStream())
             {
                 RedirectConsoleOutput(memoryStream);
@@ -186,6 +187,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         [Test]
         public void ShouldFetchAccountDetailsFromPositionsManager()
         {
+            SetCredentials();
             using (var memoryStream = new MemoryStream())
             {
                 RedirectConsoleOutput(memoryStream);
@@ -198,13 +200,14 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                     Assert.IsTrue(consoleOutput.Contains(account.Name));
                     Assert.IsTrue(consoleOutput.Contains(account.AccountNumber));
                     Assert.IsTrue(consoleOutput.Contains(account.AccountType.ToString()));
-                    account.Positions.ToList().ForEach(position =>
-                    {
-                        Assert.IsTrue(consoleOutput.Contains(position.Ticker));
-                        Assert.IsTrue(consoleOutput.Contains(position.Quantity.ToString("N")));
-                        Assert.IsTrue(consoleOutput.Contains(position.CurrentValue.ToString("C")));
-                        Assert.IsTrue(consoleOutput.Contains(position.CostBasisPerShare.ToString("C")));
-                    });
+                    account.Positions.ToList()
+                        .ForEach(position =>
+                        {
+                            Assert.IsTrue(consoleOutput.Contains(position.Ticker));
+                            Assert.IsTrue(consoleOutput.Contains(position.Quantity.ToString("N")));
+                            Assert.IsTrue(consoleOutput.Contains(position.CurrentValue.ToString("C")));
+                            Assert.IsTrue(consoleOutput.Contains(position.CostBasisPerShare.ToString("C")));
+                        });
                 });
             }
         }
@@ -212,6 +215,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         [Test]
         public void ShouldDownloadTransactionHistoryFromTransactionsManager()
         {
+            SetCredentials();
             using (var memoryStream = new MemoryStream())
             {
                 RedirectConsoleOutput(memoryStream);
@@ -234,25 +238,25 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         [Test]
         public void ShouldSetConfigFromCliArgsWithoutPersisting()
         {
-            var args = new[] {"-u", _cliUserName, "-p", _cliPassword};
+            var args = new[] {"-u", _username, "-p", _password};
 
             _app.Run(args);
 
-            Assert.AreEqual(_cliUserName, _fidelityConfiguration.Username);
-            Assert.AreEqual(_cliPassword, _fidelityConfiguration.Password);
+            Assert.AreEqual(_username, _fidelityConfiguration.Username);
+            Assert.AreEqual(_password, _fidelityConfiguration.Password);
             AssertUnchangedConfig();
         }
 
         [Test]
         public void ShouldSetConfigFromCliArgsAndPersist()
         {
-            var args = new[] {"-u", _cliUserName, "-p", _cliPassword, "-s"};
+            var args = new[] {"-u", _username, "-p", _password, "-s"};
 
             _app.Run(args);
 
             var fidelityConfiguration = FidelityConfigurationProviderTests.ReadConfiguration();
-            Assert.AreEqual(_cliUserName, fidelityConfiguration.Username);
-            Assert.AreEqual(_cliPassword, fidelityConfiguration.Password);
+            Assert.AreEqual(_username, fidelityConfiguration.Username);
+            Assert.AreEqual(_password, fidelityConfiguration.Password);
         }
 
         [Test]
@@ -262,12 +266,30 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             {
                 RedirectConsoleOutput(memoryStream);
 
-                _app.Run(new[] {"-u", _cliUserName, "-p", _cliPassword, "-s", "-h"});
+                _app.Run(new[] {"-u", _username, "-p", _password, "-s", "-h"});
 
                 var consoleOutput = ReadConsoleOutput(memoryStream);
                 Assert.IsTrue(consoleOutput.Contains("-h"),
                     $"Actual console output follows:{Environment.NewLine}{consoleOutput}");
                 AssertUnchangedConfig();
+            }
+        }
+
+        [Test]
+        public void ShouldPromptForCredentials()
+        {
+            using (var inStream = new MemoryStream())
+            {
+                var inWriter = new StreamWriter(inStream) {AutoFlush = true};
+                RedirectConsoleInput(inStream);
+                inWriter.WriteLine(_username);
+                inWriter.WriteLine(_password);
+                inStream.Position -= _username.Length + 1 + _password.Length + 1;
+
+                _app.Run(new string[] { });
+
+                Assert.AreEqual(_username, _fidelityConfiguration.Username);
+                Assert.AreEqual(_password, _fidelityConfiguration.Password);
             }
         }
 
@@ -287,11 +309,23 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _app.Dispose();
         }
 
+        private void SetCredentials()
+        {
+            _fidelityConfiguration.Username = _username;
+            _fidelityConfiguration.Password = _password;
+        }
+
         private static void AssertUnchangedConfig()
         {
             var fidelityConfiguration = FidelityConfigurationProviderTests.ReadConfiguration();
             Assert.IsEmpty(fidelityConfiguration.Username);
             Assert.IsEmpty(fidelityConfiguration.Password);
+        }
+
+        private static void RedirectConsoleInput(Stream memoryStream)
+        {
+            var streamReader = new StreamReader(memoryStream);
+            Console.SetIn(streamReader);
         }
 
         private static void RedirectConsoleOutput(Stream memoryStream)

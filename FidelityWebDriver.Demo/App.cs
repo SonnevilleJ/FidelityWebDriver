@@ -73,6 +73,13 @@ namespace Sonneville.FidelityWebDriver.Demo
                 config.Set("Password", _fidelityConfiguration.Password);
                 iniConfigSource.Save();
             }
+            if (string.IsNullOrEmpty(_fidelityConfiguration.Username))
+            {
+                Console.Write("Please enter a username for Fidelity.com: ");
+                _fidelityConfiguration.Username = Console.ReadLine();
+                Console.Write("Please enter a password for Fidelity.com: ");
+                _fidelityConfiguration.Password = Console.ReadLine();
+            }
 
             Console.WriteLine("Reading account summaries.....");
             PrintAccountSummaries(_positionsManager.GetAccountSummaries().ToList());
@@ -94,20 +101,20 @@ namespace Sonneville.FidelityWebDriver.Demo
 
         private void PrintAccountSummaries(IReadOnlyCollection<IAccountSummary> accountSummaries)
         {
-            Console.WriteLine("Found {0} accounts!", accountSummaries.Count());
+            Console.WriteLine("Found {0} accounts!", accountSummaries.Count);
             foreach (var account in accountSummaries)
             {
                 Console.WriteLine("Account Name: {0}", account.Name);
                 Console.WriteLine("Account Number: {0}", account.AccountNumber);
                 Console.WriteLine("Account Type: {0}", account.AccountType);
-                Console.WriteLine("Account Value: {0}", account.MostRecentValue.ToString("C"));
+                Console.WriteLine("Account Value: {0:C}", account.MostRecentValue);
                 Console.WriteLine();
             }
         }
 
         private void PrintAccountDetails(IReadOnlyCollection<IAccountDetails> accountDetails)
         {
-            Console.WriteLine($"Found {accountDetails.Count()} accounts!");
+            Console.WriteLine($"Found {accountDetails.Count} accounts!");
             foreach (var accountDetail in accountDetails)
             {
                 Console.WriteLine("Account Name: {0}", accountDetail.Name);
@@ -117,9 +124,9 @@ namespace Sonneville.FidelityWebDriver.Demo
                 foreach (var position in accountDetail.Positions)
                 {
                     Console.WriteLine("Ticker: {0}", position.Ticker);
-                    Console.WriteLine("Shares: {0}", position.Quantity.ToString("N"));
-                    Console.WriteLine("Current value: {0}", position.CurrentValue.ToString("C"));
-                    Console.WriteLine("Cost basis: {0}", position.CostBasisPerShare.ToString("C"));
+                    Console.WriteLine("Shares: {0:N}", position.Quantity);
+                    Console.WriteLine("Current value: {0:C}", position.CurrentValue);
+                    Console.WriteLine("Cost basis: {0:C}", position.CostBasisPerShare);
                     Console.WriteLine();
                 }
             }
@@ -127,7 +134,7 @@ namespace Sonneville.FidelityWebDriver.Demo
 
         private void PrintRecentTransactions(IReadOnlyCollection<IFidelityTransaction> transactions)
         {
-            Console.WriteLine("Found {0} recent transactions!", transactions.Count());
+            Console.WriteLine("Found {0} recent transactions!", transactions.Count);
             foreach (var transaction in transactions)
             {
                 Console.WriteLine("On {0:d} {1:F} shares of {2} were {3} at {4:C} per share",
