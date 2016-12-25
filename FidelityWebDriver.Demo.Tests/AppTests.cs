@@ -284,7 +284,8 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                 RedirectConsoleInput(inStream);
                 inWriter.WriteLine(_username);
                 inWriter.WriteLine(_password);
-                inStream.Position -= _username.Length + 1 + _password.Length + 1;
+                var endlineLength = Environment.NewLine.Length;
+                inStream.Position -= _username.Length + endlineLength + _password.Length + endlineLength;
 
                 _app.Run(new string[] { });
 
