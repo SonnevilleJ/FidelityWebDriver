@@ -123,7 +123,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                 new FidelityTransaction
                 {
                     RunDate = new DateTime(2015, 12, 25),
-                    Account = null,
+                    AccountNumber = null,
                     Action = null,
                     Type = TransactionType.Buy,
                     Symbol = "DE",

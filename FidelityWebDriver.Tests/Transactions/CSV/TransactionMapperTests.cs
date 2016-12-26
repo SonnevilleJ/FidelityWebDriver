@@ -51,7 +51,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
 
             var first = actualTransaction;
             Assert.AreEqual(new DateTime(2015, 12, 18), first.RunDate);
-            Assert.AreEqual("Account 1234", first.Account);
+            Assert.AreEqual("Account 1234", first.AccountNumber);
             Assert.AreEqual("awesome profit", first.Action);
             Assert.AreEqual("ticker", first.Symbol);
             Assert.AreEqual("ticker description", first.SecurityDescription);

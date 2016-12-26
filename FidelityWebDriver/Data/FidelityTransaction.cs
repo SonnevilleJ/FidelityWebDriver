@@ -6,7 +6,9 @@ namespace Sonneville.FidelityWebDriver.Data
     {
         public DateTime? RunDate { get; set; }
 
-        public string Account { get; set; }
+        public string AccountName { get; set; }
+
+        public string AccountNumber { get; set; }
 
         public string Action { get; set; }
 
