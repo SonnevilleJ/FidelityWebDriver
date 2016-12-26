@@ -4,12 +4,16 @@ namespace Sonneville.FidelityWebDriver.Data
     {
         Unknown,
         Deposit,
+        DepositBrokeragelink,
+        DepositHSA,
         Withdrawal,
         Buy,
         Sell,
         DividendReceipt,
+        ShortTermCapGain,
+        LongTermCapGain,
         DividendReinvestment,
         SellShort,
-        BuyToCover
+        BuyToCover,
     }
 }

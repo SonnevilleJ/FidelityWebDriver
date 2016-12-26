@@ -35,7 +35,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
             };
 
             var transactionTypeMapperMock = new Mock<ITransactionTypeMapper>();
-            transactionTypeMapperMock.Setup(mapper => mapper.Map("awesome profit"))
+            transactionTypeMapperMock.Setup(mapper => mapper.MapValue("awesome profit"))
                 .Returns(TransactionType.Sell);
 
             _transactionMapper = new TransactionMapper(transactionTypeMapperMock.Object);

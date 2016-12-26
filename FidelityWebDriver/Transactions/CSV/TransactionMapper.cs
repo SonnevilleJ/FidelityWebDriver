@@ -22,7 +22,7 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
                 RunDate = ParseDateField(values[headers[FidelityCsvColumn.RunDate]]),
                 Account = ParseStringField(values[headers[FidelityCsvColumn.Account]]),
                 Action = actionText,
-                Type = _transactionTypeMapper.Map(actionText),
+                Type = _transactionTypeMapper.MapValue(actionText),
                 Symbol = ParseStringField(values[headers[FidelityCsvColumn.Symbol]]),
                 SecurityDescription = ParseStringField(values[headers[FidelityCsvColumn.SecurityDescription]]),
                 SecurityType = ParseStringField(values[headers[FidelityCsvColumn.SecurityType]]),

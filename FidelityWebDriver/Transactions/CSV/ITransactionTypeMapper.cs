@@ -4,6 +4,6 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
 {
     public interface ITransactionTypeMapper
     {
-        TransactionType Map(string trimmedText);
+        TransactionType MapValue(string trimmedText);
     }
 }
