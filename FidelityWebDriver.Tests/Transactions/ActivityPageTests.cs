@@ -48,7 +48,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _downloadServiceMock.Setup(service => service.GetDownloadedContent())
                 .Returns(() =>
                 {
-                    Assert.IsFalse(_progressBarDiv.Object.Displayed);
+                    Assert.IsFalse(_progressBarDiv.Object.Displayed, "Progress bar div is obstructing element!");
                     _downloadLinkMock.Verify(link => link.Click());
                     return _fileContents;
                 });
@@ -71,6 +71,17 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                     _toDateInputMock.Verify(input => input.SendKeys(_endDate.ToString("MM/dd/yyyy")));
                     Assert.IsTrue(_customHistoryRangeOptionMock.Object.Selected);
                     _sleepUtilMock.Verify(util => util.Sleep(It.IsAny<int>()), Times.Never());
+                    _progressBarDiv.Setup(div => div.Displayed).Returns(() =>
+                    {
+                        try
+                        {
+                            return true;
+                        }
+                        finally
+                        {
+                            _progressBarDiv.Setup(div => div.Displayed).Returns(false);
+                        }
+                    });
                 });
 
             _downloadLinkMock = new Mock<IWebElement>();

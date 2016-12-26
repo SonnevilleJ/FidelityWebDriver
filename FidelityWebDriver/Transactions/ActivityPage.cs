@@ -28,8 +28,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
 
             _csvDownloadService.Cleanup();
 
-            new WebDriverWait(_webDriver, TimeSpan.FromMinutes(1))
-                .Until(webDriver => !webDriver.FindElement(By.ClassName("progress-bar")).Displayed);
+            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
 
             var historyExpanderLink = _webDriver.FindElement(By.Id("historyExpander"));
             historyExpanderLink.Click();
@@ -45,6 +44,8 @@ namespace Sonneville.FidelityWebDriver.Transactions
             var setTimePeriodButton = dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-display-button"));
             setTimePeriodButton.Click();
 
+            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
+
             _sleepUtil.Sleep(500);
             var downloadLink = _webDriver.FindElement(By.ClassName("activity--history-download-link"));
             downloadLink.Click();
@@ -52,6 +53,12 @@ namespace Sonneville.FidelityWebDriver.Transactions
             var content = _csvDownloadService.GetDownloadedContent();
             _csvDownloadService.Cleanup();
             return content;
+        }
+
+        private void WaitUntilNotDisplayed(IWebDriver webDriver, By element)
+        {
+            new WebDriverWait(webDriver, TimeSpan.FromMinutes(1))
+                .Until(driver => !driver.FindElement(element).Displayed);
         }
 
         private void ThrowIfDateRangeIsInvalid(DateTime startDate, DateTime endDate)

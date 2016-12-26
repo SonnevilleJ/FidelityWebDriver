@@ -24,11 +24,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
 
         private Mock<IWebElement> _activityLi;
         private Mock<IActivityPage> _activityPageMock;
+        private Mock<IWebElement> _progressBarDiv;
 
         [SetUp]
         public void Setup()
         {
-            base.SetupPageFactory();
+            SetupPageFactory();
 
             _balanceNumber = 1234.56;
 
@@ -44,11 +45,28 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
 
             _gainLossPercentSpan = new Mock<IWebElement>();
             _gainLossPercentSpan.Setup(span => span.Text)
-                .Returns($"(+{_gainLossPercent.ToString("P")})");
+                .Returns($"(+{_gainLossPercent:P})");
 
             _positionsLi = new Mock<IWebElement>();
 
+            _progressBarDiv = new Mock<IWebElement>();
+            _progressBarDiv.Setup(div => div.Displayed).Returns(() =>
+            {
+                try
+                {
+                    return true;
+                }
+                finally
+                {
+                    _progressBarDiv.Setup(div => div.Displayed).Returns(false);
+                }
+            });
+
             _activityLi = new Mock<IWebElement>();
+            _activityLi.Setup(li => li.Click()).Callback(() =>
+            {
+                Assert.IsFalse(_progressBarDiv.Object.Displayed, "Progress bar div is obstructing element!");
+            });
 
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("js-total-balance-value")))
@@ -61,6 +79,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
                 .Returns(_gainLossAmountSpan.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("js-today-change-value-percent")))
                 .Returns(_gainLossPercentSpan.Object);
+            _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("progress-bar")))
+                .Returns(_progressBarDiv.Object);
 
             _positionsPageMock = new Mock<IPositionsPage>();
 

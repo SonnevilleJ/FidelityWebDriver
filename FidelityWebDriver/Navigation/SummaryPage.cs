@@ -1,5 +1,7 @@
+using System;
 using System.Globalization;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.FidelityWebDriver.Transactions;
 
@@ -49,9 +51,17 @@ namespace Sonneville.FidelityWebDriver.Navigation
 
         public IActivityPage GoToActivityPage()
         {
+            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
+
             _webDriver.FindElement(By.CssSelector("[data-tab-name='Activity']")).Click();
 
             return _pageFactory.GetPage<IActivityPage>();
+        }
+
+        private void WaitUntilNotDisplayed(IWebDriver webDriver, By element)
+        {
+            new WebDriverWait(webDriver, TimeSpan.FromMinutes(1))
+                .Until(driver => !driver.FindElement(element).Displayed);
         }
     }
 }
