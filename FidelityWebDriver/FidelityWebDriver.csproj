@@ -109,7 +109,9 @@
     <Compile Include="Transactions\CSV\TransactionMapper.cs" />
     <Compile Include="Transactions\CSV\TransactionsMapper.cs" />
     <Compile Include="Transactions\CSV\TransactionTypeMapper.cs" />
+      <Compile Include="Transactions\HistoryTransactionParser.cs"/>
     <Compile Include="Transactions\IActivityPage.cs" />
+      <Compile Include="Transactions\IHistoryTransactionParser.cs"/>
     <Compile Include="Transactions\ITransactionManager.cs" />
     <Compile Include="Transactions\TransactionManager.cs" />
   </ItemGroup>

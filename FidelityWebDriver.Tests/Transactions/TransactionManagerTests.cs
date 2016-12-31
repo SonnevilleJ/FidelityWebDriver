@@ -21,18 +21,24 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private DateTime _startDate;
         private DateTime _endDate;
 
-        protected override TransactionManager InstantiateManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration)
+        protected override TransactionManager InstantiateManager(
+            ISiteNavigator siteNavigator,
+            FidelityConfiguration fidelityConfiguration
+        )
         {
             const string downloadPath = "file path";
             _startDate = DateTime.MinValue;
             _endDate = DateTime.Today;
 
-            _transactions = new List<IFidelityTransaction>();
+            _transactions = new List<IFidelityTransaction>
+            {
+                new FidelityTransaction()
+            };
 
             _activityPageMock = new Mock<IActivityPage>();
             _activityPageMock.Setup(
-                activityPage => activityPage.DownloadHistory(_startDate, _endDate))
-                .Returns(downloadPath);
+                    activityPage => activityPage.GetTransactions(_startDate, _endDate))
+                .Returns(_transactions);
 
             SiteNavigatorMock.Setup(navigator => navigator.GoTo<IActivityPage>())
                 .Returns(_activityPageMock.Object);
@@ -42,13 +48,13 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _csvParserMock = new Mock<ITransactionsMapper>();
             _csvParserMock.Setup(parser => parser.ParseCsv(downloadPath)).Returns(_transactions);
 
-            return new TransactionManager(siteNavigator, _loginManagerMock.Object, _csvParserMock.Object);
+            return new TransactionManager(siteNavigator, _loginManagerMock.Object);
         }
 
         [SetUp]
         public void Setup()
         {
-            base.SetupTestsBase();
+            SetupTestsBase();
         }
 
         [Test]
@@ -66,7 +72,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
             _loginManagerMock.Verify(manager => manager.EnsureLoggedIn());
             SiteNavigatorMock.Verify(navigator => navigator.GoTo<IActivityPage>());
-            Assert.AreEqual(_transactions, actualTransactions);
+            CollectionAssert.AreEquivalent(_transactions, actualTransactions);
         }
     }
 }

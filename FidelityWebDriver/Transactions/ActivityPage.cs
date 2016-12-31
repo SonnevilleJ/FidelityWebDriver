@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Transactions.CSV;
-using Sonneville.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
@@ -11,57 +11,65 @@ namespace Sonneville.FidelityWebDriver.Transactions
     {
         private readonly IWebDriver _webDriver;
         private readonly IPageFactory _pageFactory;
-        private readonly ICsvDownloadService _csvDownloadService;
-        private readonly ISleepUtil _sleepUtil;
+        private readonly IHistoryTransactionParser _historyTransactionParser;
 
-        public ActivityPage(IWebDriver webDriver, IPageFactory pageFactory, ICsvDownloadService csvDownloadService, ISleepUtil sleepUtil)
+        public ActivityPage(IWebDriver webDriver, IPageFactory pageFactory, IHistoryTransactionParser historyTransactionParser)
         {
             _webDriver = webDriver;
             _pageFactory = pageFactory;
-            _csvDownloadService = csvDownloadService;
-            _sleepUtil = sleepUtil;
+            _historyTransactionParser = historyTransactionParser;
         }
 
-        public string DownloadHistory(DateTime startDate, DateTime endDate)
+        public IEnumerable<IFidelityTransaction> GetTransactions(DateTime startDate, DateTime endDate)
         {
             ThrowIfDateRangeIsInvalid(startDate, endDate);
 
-            _csvDownloadService.Cleanup();
+            var historyRoot = _webDriver.FindElement(By.ClassName("activity--expander-history"));
+
+            OpenHistoryPanel(historyRoot);
+            SelectCustomDateRangeOption(historyRoot);
+            SetTimePeriod(historyRoot, startDate, endDate);
 
             WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
 
-            var historyExpanderLink = _webDriver.FindElement(By.Id("historyExpander"));
+            return _historyTransactionParser.ParseFidelityTransactions(historyRoot);
+        }
+
+        private void OpenHistoryPanel(IWebElement historyRoot)
+        {
+            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
+
+            var historyExpanderLink = historyRoot.FindElement(By.Id("historyExpander"));
             historyExpanderLink.Click();
+        }
 
-            var rangeDropdown = _webDriver.FindElement(By.Id("activity--history-range-dropdown"));
+        private void SelectCustomDateRangeOption(IWebElement historyRoot)
+        {
+            var rangeDropdown = historyRoot.FindElement(By.Id("activity--history-range-dropdown"));
             rangeDropdown.FindElement(By.CssSelector("option[value='custom']")).Click();
+        }
 
-            var dateRangeDiv = _webDriver.FindElement(By.ClassName("activity--history-custom-date-container"));
+        private void SetTimePeriod(IWebElement historyRoot, DateTime startDate, DateTime endDate)
+        {
+            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
+
+            var dateRangeDiv = historyRoot.FindElement(By.ClassName("activity--history-custom-date-container"));
             var fromDateInput = dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-from-field"));
             fromDateInput.SendKeys(startDate.ToString("MM/dd/yyyy"));
             var toDateInput = dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-to-field"));
             toDateInput.SendKeys(endDate.ToString("MM/dd/yyyy"));
-            var setTimePeriodButton = dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-display-button"));
+            var setTimePeriodButton =
+                dateRangeDiv.FindElement(By.ClassName("activity--history-custom-date-display-button"));
             setTimePeriodButton.Click();
-
-            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
-
-            _sleepUtil.Sleep(500);
-            var downloadLink = _webDriver.FindElement(By.ClassName("activity--history-download-link"));
-            downloadLink.Click();
-
-            var content = _csvDownloadService.GetDownloadedContent();
-            _csvDownloadService.Cleanup();
-            return content;
         }
 
-        private void WaitUntilNotDisplayed(IWebDriver webDriver, By element)
+        private static void WaitUntilNotDisplayed(IWebDriver webDriver, By element)
         {
             new WebDriverWait(webDriver, TimeSpan.FromMinutes(1))
                 .Until(driver => !driver.FindElement(element).Displayed);
         }
 
-        private void ThrowIfDateRangeIsInvalid(DateTime startDate, DateTime endDate)
+        private static void ThrowIfDateRangeIsInvalid(DateTime startDate, DateTime endDate)
         {
             if (startDate > endDate)
                 throw new ArgumentException("Start Date must preceed End Date!");

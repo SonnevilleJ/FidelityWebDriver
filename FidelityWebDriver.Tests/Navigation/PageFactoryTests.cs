@@ -3,7 +3,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Positions;
-using Sonneville.FidelityWebDriver.Transactions.CSV;
+using Sonneville.FidelityWebDriver.Transactions;
 using Sonneville.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Navigation
@@ -13,17 +13,15 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
     {
         private PageFactory _factory;
         private Mock<IWebDriver> _driverMock;
-        private Mock<ICsvDownloadService> _csvDownloadServiceMock;
         private Mock<IAccountSummariesExtractor> _accountSummariesExtractorMock;
         private Mock<IAccountDetailsExtractor> _accountDetailsExtractorMock;
         private Mock<ISleepUtil> _sleepUtilMock;
+        private Mock<IHistoryTransactionParser> _historyTransactionParserMock;
 
         [SetUp]
         public void SetupPageFactory()
         {
             _driverMock = new Mock<IWebDriver>(MockBehavior.Strict);
-
-            _csvDownloadServiceMock = new Mock<ICsvDownloadService>();
 
             _accountSummariesExtractorMock = new Mock<IAccountSummariesExtractor>();
 
@@ -31,8 +29,13 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
 
             _sleepUtilMock = new Mock<ISleepUtil>();
 
-            _factory = new PageFactory(_driverMock.Object, _csvDownloadServiceMock.Object,
-                _accountSummariesExtractorMock.Object, _accountDetailsExtractorMock.Object, _sleepUtilMock.Object);
+            _historyTransactionParserMock = new Mock<IHistoryTransactionParser>();
+            _factory = new PageFactory(
+                _driverMock.Object,
+                _accountSummariesExtractorMock.Object,
+                _accountDetailsExtractorMock.Object,
+                _sleepUtilMock.Object,
+                _historyTransactionParserMock.Object);
         }
 
         [Test]

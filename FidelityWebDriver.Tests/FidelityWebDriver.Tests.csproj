@@ -96,6 +96,8 @@
     <Compile Include="Transactions\CSV\TransactionMapperTests.cs" />
     <Compile Include="Transactions\CSV\TransactionsMapperTests.cs" />
     <Compile Include="Transactions\CSV\TransactionTypeMapperTests.cs" />
+    <Compile Include="Transactions\HistoryHtmlGenerator.cs"/>
+    <Compile Include="Transactions\HistoryTransactionParserTest.cs"/>
     <Compile Include="Transactions\TransactionManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>

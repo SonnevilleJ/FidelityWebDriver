@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
@@ -11,23 +11,18 @@ namespace Sonneville.FidelityWebDriver.Transactions
     {
         private ISiteNavigator _siteNavigator;
         private ILoginManager _loginManager;
-        private readonly ITransactionsMapper _transactionsMapper;
 
-        public TransactionManager(ISiteNavigator siteNavigator, ILoginManager loginManager,
-            ITransactionsMapper transactionsMapper)
+        public TransactionManager(ISiteNavigator siteNavigator, ILoginManager loginManager)
         {
             _siteNavigator = siteNavigator;
             _loginManager = loginManager;
-            _transactionsMapper = transactionsMapper;
         }
 
         public IList<IFidelityTransaction> DownloadTransactionHistory(DateTime startDate, DateTime endDate)
         {
             _loginManager.EnsureLoggedIn();
             var activityPage = _siteNavigator.GoTo<IActivityPage>();
-            var downloadPath = activityPage.DownloadHistory(startDate, endDate);
-
-            return _transactionsMapper.ParseCsv(downloadPath);
+            return activityPage.GetTransactions(startDate, endDate).ToList();
         }
 
         public void Dispose()

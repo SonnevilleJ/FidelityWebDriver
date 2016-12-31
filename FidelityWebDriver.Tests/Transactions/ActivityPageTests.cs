@@ -1,57 +1,51 @@
 ﻿using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Tests.Navigation;
 using Sonneville.FidelityWebDriver.Transactions;
-using Sonneville.FidelityWebDriver.Transactions.CSV;
-using Sonneville.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
     [TestFixture]
     public class ActivityPageTests : PageFactoryTests<IActivityPage>
     {
-        private ActivityPage _activityPage;
+        private DateTime _expectedStartDate;
+        private DateTime _expectedEndDate;
+        private List<IFidelityTransaction> _expectedTransactions;
 
-        private Mock<IWebDriver> _webDriverMock;
-
-        private Mock<IPageFactory> _pageFactoryMock;
-
-        private Mock<IWebElement> _downloadLinkMock;
-        private Mock<ICsvDownloadService> _downloadServiceMock;
-        private string _fileContents;
+        private Mock<IWebElement> _historyRootDivMock;
         private Mock<IWebElement> _historyExpanderLinkMock;
         private Mock<IWebElement> _historyRangeDropdownMock;
         private Mock<IWebElement> _customHistoryRangeOptionMock;
         private Mock<IWebElement> _setTimePeriodButtonMock;
-        private Mock<IWebElement> _dateRangeDiv;
-        private Mock<IWebElement> _progressBarDiv;
-        private DateTime _startDate;
-        private DateTime _endDate;
+        private Mock<IWebElement> _dateRangeDivMock;
         private Mock<IWebElement> _fromDateInputMock;
         private Mock<IWebElement> _toDateInputMock;
-        private Mock<ISleepUtil> _sleepUtilMock;
+        private Mock<IWebElement> _progressBarDivMock;
+
+        private Mock<IWebDriver> _webDriverMock;
+        private Mock<IPageFactory> _pageFactoryMock;
+        private Mock<IHistoryTransactionParser> _historyTransactionParserMock;
+
+        private ActivityPage _activityPage;
 
         [SetUp]
         public void Setup()
         {
-            base.SetupPageFactory();
+            SetupPageFactory();
 
-            _startDate = DateTime.Today.AddDays(-30);
-            _endDate = DateTime.Today;
+            _expectedStartDate = DateTime.Today.AddDays(-30);
+            _expectedEndDate = DateTime.Today;
 
-            _fileContents = "file contents";
+            _webDriverMock = new Mock<IWebDriver>();
 
-            _downloadServiceMock = new Mock<ICsvDownloadService>();
-            _downloadServiceMock.Setup(service => service.GetDownloadedContent())
-                .Returns(() =>
-                {
-                    Assert.IsFalse(_progressBarDiv.Object.Displayed, "Progress bar div is obstructing element!");
-                    _downloadLinkMock.Verify(link => link.Click());
-                    return _fileContents;
-                });
+            _historyRootDivMock = new Mock<IWebElement>();
+            _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("activity--expander-history")))
+                .Returns(_historyRootDivMock.Object);
 
             _customHistoryRangeOptionMock = new Mock<IWebElement>();
             _customHistoryRangeOptionMock.Setup(option => option.Click())
@@ -60,103 +54,136 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _historyRangeDropdownMock = new Mock<IWebElement>();
             _historyRangeDropdownMock.Setup(dropdown => dropdown.FindElement(By.CssSelector("option[value='custom']")))
                 .Returns(_customHistoryRangeOptionMock.Object);
-
-            _sleepUtilMock = new Mock<ISleepUtil>();
+            _historyRootDivMock.Setup(webDriver => webDriver.FindElement(By.Id("activity--history-range-dropdown")))
+                .Returns(_historyRangeDropdownMock.Object);
 
             _setTimePeriodButtonMock = new Mock<IWebElement>();
-            _setTimePeriodButtonMock.Setup(button => button.Click())
-                .Callback(() =>
-                {
-                    _fromDateInputMock.Verify(input => input.SendKeys(_startDate.ToString("MM/dd/yyyy")));
-                    _toDateInputMock.Verify(input => input.SendKeys(_endDate.ToString("MM/dd/yyyy")));
-                    Assert.IsTrue(_customHistoryRangeOptionMock.Object.Selected);
-                    _sleepUtilMock.Verify(util => util.Sleep(It.IsAny<int>()), Times.Never());
-                    _progressBarDiv.Setup(div => div.Displayed).Returns(() =>
-                    {
-                        try
-                        {
-                            return true;
-                        }
-                        finally
-                        {
-                            _progressBarDiv.Setup(div => div.Displayed).Returns(false);
-                        }
-                    });
-                });
-
-            _downloadLinkMock = new Mock<IWebElement>();
-            _downloadLinkMock.Setup(link => link.Click())
-                .Callback(() =>
-                {
-                    _setTimePeriodButtonMock.Verify(button => button.Click());
-                    _downloadServiceMock.Verify(service => service.Cleanup(), Times.Once());
-                    _sleepUtilMock.Verify(util => util.Sleep(It.Is<int>(i => i > 500)), Times.Never());
-                });
 
             _historyExpanderLinkMock = new Mock<IWebElement>();
+            _historyRootDivMock.Setup(webDriver => webDriver.FindElement(By.Id("historyExpander")))
+                .Returns(_historyExpanderLinkMock.Object);
 
             _fromDateInputMock = new Mock<IWebElement>();
 
             _toDateInputMock = new Mock<IWebElement>();
 
-            _dateRangeDiv = new Mock<IWebElement>();
-            _dateRangeDiv.Setup(div => div.FindElement(By.ClassName("activity--history-custom-date-from-field")))
+            _dateRangeDivMock = new Mock<IWebElement>();
+            _dateRangeDivMock.Setup(div => div.FindElement(By.ClassName("activity--history-custom-date-from-field")))
                 .Returns(_fromDateInputMock.Object);
-            _dateRangeDiv.Setup(div => div.FindElement(By.ClassName("activity--history-custom-date-to-field")))
+            _dateRangeDivMock.Setup(div => div.FindElement(By.ClassName("activity--history-custom-date-to-field")))
                 .Returns(_toDateInputMock.Object);
-            _dateRangeDiv.Setup(div => div.FindElement(By.ClassName("activity--history-custom-date-display-button")))
+            _dateRangeDivMock.Setup(
+                    div => div.FindElement(By.ClassName("activity--history-custom-date-display-button")))
                 .Returns(_setTimePeriodButtonMock.Object);
+            _historyRootDivMock.Setup(
+                    webDriver => webDriver.FindElement(By.ClassName("activity--history-custom-date-container")))
+                .Returns(_dateRangeDivMock.Object);
 
-            _progressBarDiv = new Mock<IWebElement>();
-            _progressBarDiv.Setup(div => div.Displayed).Returns(() =>
-            {
-                try
-                {
-                    return true;
-                }
-                finally
-                {
-                    _progressBarDiv.Setup(div => div.Displayed).Returns(false);
-                }
-            });
+            _progressBarDivMock = new Mock<IWebElement>();
 
-            _webDriverMock = new Mock<IWebDriver>();
-            _webDriverMock.Setup(webDriver => webDriver.FindElement(By.Id("historyExpander")))
-                .Returns(_historyExpanderLinkMock.Object);
-            _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("activity--history-download-link")))
-                .Returns(_downloadLinkMock.Object);
-            _webDriverMock.Setup(webDriver => webDriver.FindElement(By.Id("activity--history-range-dropdown")))
-                .Returns(_historyRangeDropdownMock.Object);
-            _webDriverMock.Setup(
-                webDriver => webDriver.FindElement(By.ClassName("activity--history-custom-date-container")))
-                .Returns(_dateRangeDiv.Object);
             _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("progress-bar")))
-                .Returns(_progressBarDiv.Object);
+                .Returns(_progressBarDivMock.Object);
 
             _pageFactoryMock = new Mock<IPageFactory>();
 
-            _activityPage = new ActivityPage(_webDriverMock.Object, _pageFactoryMock.Object, _downloadServiceMock.Object, _sleepUtilMock.Object);
+            _expectedTransactions = new List<IFidelityTransaction>
+            {
+                new FidelityTransaction()
+            };
+
+            _historyTransactionParserMock = new Mock<IHistoryTransactionParser>();
+            _historyTransactionParserMock.Setup(parser => parser.ParseFidelityTransactions(_historyRootDivMock.Object))
+                .Returns(_expectedTransactions);
+
+            _activityPage = new ActivityPage(_webDriverMock.Object, _pageFactoryMock.Object,
+                _historyTransactionParserMock.Object);
         }
 
         [Test]
-        public void DownloadHistoryShouldClickHistoryExpander()
+        public void GetHistoryShouldWaitAfterExpandingHistory()
         {
-            var actualContents = _activityPage.DownloadHistory(_startDate, _endDate);
+            SetupVisibleProgressBar();
+            _historyExpanderLinkMock.Setup(link => link.Click())
+                .Callback(AssertInvisibleProgressBar);
 
-            Assert.AreEqual(_fileContents, actualContents);
-            _downloadServiceMock.Verify(service => service.Cleanup(), Times.Exactly(2));
+            _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate);
+
+            _historyExpanderLinkMock.Verify(link => link.Click());
+        }
+
+        [Test]
+        public void GetHistoryShouldSetTimePeriod()
+        {
+            _historyExpanderLinkMock.Setup(link => link.Click())
+                .Callback(SetupVisibleProgressBar);
+            _setTimePeriodButtonMock.Setup(button => button.Click())
+                .Callback(() =>
+                {
+                    _fromDateInputMock.Verify(input => input.SendKeys(_expectedStartDate.ToString("MM/dd/yyyy")));
+                    _toDateInputMock.Verify(input => input.SendKeys(_expectedEndDate.ToString("MM/dd/yyyy")));
+                    Assert.IsTrue(_customHistoryRangeOptionMock.Object.Selected);
+                    AssertInvisibleProgressBar();
+                });
+
+            _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate);
+
+            _setTimePeriodButtonMock.Verify(button => button.Click());
+        }
+
+        [Test]
+        public void GetHistoryShouldWaitAfterSettingTimePeriod()
+        {
+            _setTimePeriodButtonMock.Setup(button => button.Click())
+                .Callback(SetupVisibleProgressBar);
+            _historyTransactionParserMock.Setup(parser => parser.ParseFidelityTransactions(_historyRootDivMock.Object))
+                .Callback(AssertInvisibleProgressBar);
+
+            _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate);
+
+            _historyTransactionParserMock.Verify(
+                parser => parser.ParseFidelityTransactions(_historyRootDivMock.Object));
+        }
+
+        [Test]
+        public void GetHistoryShouldReturnTransactions()
+        {
+            var actualTransactions = _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate);
+
+            AssertInvisibleProgressBar();
+            CollectionAssert.AreEquivalent(_expectedTransactions, actualTransactions);
         }
 
         [Test]
         [TestCase("11/12/2013", "11/11/2013")]
         [TestCase("11/12/2012", "11/11/2013")]
         [TestCase("11/11/9000", "11/12/9000")]
-        public void DownloadHistoryShouldValidateDates(string startDateString, string endDateString)
+        public void ShouldValidateDates(string startDateString, string endDateString)
         {
-            _startDate = DateTime.Parse(startDateString);
-            _endDate = DateTime.Parse(endDateString);
+            _expectedStartDate = DateTime.Parse(startDateString);
+            _expectedEndDate = DateTime.Parse(endDateString);
 
-            Assert.Throws<ArgumentException>(() => _activityPage.DownloadHistory(_startDate, _endDate));
+            Assert.Throws<ArgumentException>(() => _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate));
+        }
+
+        private void SetupVisibleProgressBar()
+        {
+            _progressBarDivMock.Setup(div => div.Displayed)
+                .Returns(() =>
+                {
+                    try
+                    {
+                        return true;
+                    }
+                    finally
+                    {
+                        _progressBarDivMock.Setup(div => div.Displayed).Returns(false);
+                    }
+                });
+        }
+
+        private void AssertInvisibleProgressBar()
+        {
+            Assert.IsFalse(_progressBarDivMock.Object.Displayed);
         }
     }
 }
