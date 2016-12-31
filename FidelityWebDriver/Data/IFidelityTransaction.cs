@@ -2,7 +2,7 @@ using System;
 
 namespace Sonneville.FidelityWebDriver.Data
 {
-    public interface IFidelityTransaction
+    public interface IFidelityTransaction : IEquatable<IFidelityTransaction>
     {
         DateTime? RunDate { get; }
 

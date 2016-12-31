@@ -69,6 +69,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Data\FidelityTransactionTest.cs"/>
     <Compile Include="Login\LoginManagerTests.cs" />
     <Compile Include="Login\LoginPageTests.cs" />
     <Compile Include="ManagerTestsBase.cs" />
