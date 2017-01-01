@@ -7,7 +7,6 @@ using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Transactions;
-using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
@@ -16,7 +15,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
     {
         private Mock<ILoginManager> _loginManagerMock;
         private Mock<IActivityPage> _activityPageMock;
-        private Mock<ITransactionsMapper> _csvParserMock;
         private List<IFidelityTransaction> _transactions;
         private DateTime _startDate;
         private DateTime _endDate;
@@ -26,7 +24,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             FidelityConfiguration fidelityConfiguration
         )
         {
-            const string downloadPath = "file path";
             _startDate = DateTime.MinValue;
             _endDate = DateTime.Today;
 
@@ -44,9 +41,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 .Returns(_activityPageMock.Object);
 
             _loginManagerMock = new Mock<ILoginManager>();
-
-            _csvParserMock = new Mock<ITransactionsMapper>();
-            _csvParserMock.Setup(parser => parser.ParseCsv(downloadPath)).Returns(_transactions);
 
             return new TransactionManager(siteNavigator, _loginManagerMock.Object);
         }

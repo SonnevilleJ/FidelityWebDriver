@@ -1,6 +1,6 @@
 using Sonneville.FidelityWebDriver.Data;
 
-namespace Sonneville.FidelityWebDriver.Transactions.CSV
+namespace Sonneville.FidelityWebDriver.Transactions
 {
     public interface ITransactionTypeMapper
     {

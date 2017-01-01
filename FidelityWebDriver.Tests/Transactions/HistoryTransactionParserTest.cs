@@ -6,7 +6,6 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Transactions;
-using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {

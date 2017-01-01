@@ -69,7 +69,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Data\FidelityTransactionTest.cs"/>
+      <Compile Include="Data\FidelityTransactionTest.cs"/>
     <Compile Include="Login\LoginManagerTests.cs" />
     <Compile Include="Login\LoginPageTests.cs" />
     <Compile Include="ManagerTestsBase.cs" />
@@ -95,10 +95,10 @@
     <Compile Include="Transactions\CSV\FidelityCsvColumnMapperTests.cs" />
     <Compile Include="Transactions\CSV\TransactionMapperTests.cs" />
     <Compile Include="Transactions\CSV\TransactionsMapperTests.cs" />
-    <Compile Include="Transactions\CSV\TransactionTypeMapperTests.cs" />
-    <Compile Include="Transactions\HistoryHtmlGenerator.cs"/>
-    <Compile Include="Transactions\HistoryTransactionParserTest.cs"/>
+      <Compile Include="Transactions\HistoryHtmlGenerator.cs"/>
+      <Compile Include="Transactions\HistoryTransactionParserTest.cs"/>
     <Compile Include="Transactions\TransactionManagerTests.cs" />
+      <Compile Include="Transactions\TransactionTypeMapperTests.cs"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

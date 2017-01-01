@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Transactions.CSV;
+using Sonneville.FidelityWebDriver.Transactions;
 
-namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
+namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
     [TestFixture]
     public class TransactionTypeMapperTests

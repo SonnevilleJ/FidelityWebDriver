@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {

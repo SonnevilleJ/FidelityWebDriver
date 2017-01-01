@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Transactions;
 using Sonneville.FidelityWebDriver.Transactions.CSV;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sonneville.FidelityWebDriver.Data;
 
-namespace Sonneville.FidelityWebDriver.Transactions.CSV
+namespace Sonneville.FidelityWebDriver.Transactions
 {
     public class TransactionTypeMapper : ITransactionTypeMapper
     {
