@@ -121,6 +121,62 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
         }
 
+        [Test]
+        public void GetHistoryShouldParseShortTermCapitalGainTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateShortTermCapitalGainTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        [Test]
+        public void GetHistoryShouldParseLongTermCapitalGainTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateLongTermCapitalGainTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        [Test]
+        public void GetHistoryShouldParseBuyTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateBuyTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        [Test]
+        public void GetHistoryShouldParseSellTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateSellTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
         private void SetupHistoryTable(List<IFidelityTransaction> expectedTransactions)
         {
             _historyTableBodyMock.Setup(div => div.FindElements(By.TagName("tr")))
@@ -135,7 +191,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             return new FidelityTransaction
             {
                 Type = transactionType,
-                SettlementDate = new DateTime(2016, 12, 26),
+                RunDate = new DateTime(2016, 12, 26),
                 AccountName = "account name",
                 AccountNumber = "account number",
                 SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
@@ -153,13 +209,18 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             return CreateDepositTransaction(TransactionType.DepositHSA);
         }
 
+        private IFidelityTransaction CreateWithdrawalTransaction()
+        {
+            return CreateDepositTransaction(TransactionType.Withdrawal);
+        }
+
         private IFidelityTransaction CreateDividendReceivedTransaction()
         {
             const TransactionType transactionType = TransactionType.DividendReceipt;
             return new FidelityTransaction
             {
                 Type = transactionType,
-                SettlementDate = new DateTime(2016, 12, 26),
+                RunDate = new DateTime(2016, 12, 26),
                 AccountName = "account name",
                 AccountNumber = "account number",
                 Symbol = "ASDF",
@@ -174,7 +235,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             return new FidelityTransaction
             {
                 Type = transactionType,
-                SettlementDate = new DateTime(2016, 12, 26),
+                RunDate = new DateTime(2016, 12, 26),
                 AccountName = "account name",
                 AccountNumber = "account number",
                 Symbol = "ASDF",
@@ -185,9 +246,60 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             };
         }
 
-        private IFidelityTransaction CreateWithdrawalTransaction()
+        private IFidelityTransaction CreateShortTermCapitalGainTransaction(TransactionType transactionType = TransactionType.ShortTermCapGain)
         {
-            return CreateDepositTransaction(TransactionType.Withdrawal);
+            return new FidelityTransaction
+            {
+                Type = transactionType,
+                RunDate = new DateTime(2016, 12, 26),
+                AccountName = "account name",
+                AccountNumber = "account number",
+                Symbol = "ASDF",
+                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                Amount = 1234.50m,
+            };
+        }
+
+        private IFidelityTransaction CreateLongTermCapitalGainTransaction()
+        {
+            return CreateShortTermCapitalGainTransaction(TransactionType.LongTermCapGain);
+        }
+
+        private IFidelityTransaction CreateBuyTransaction()
+        {
+            const TransactionType transactionType = TransactionType.Buy;
+            return new FidelityTransaction
+            {
+                Type = transactionType,
+                RunDate = new DateTime(2016, 12, 26),
+                AccountName = "account name",
+                AccountNumber = "account number",
+                Symbol = "ASDF",
+                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                Quantity = 0.012m,
+                Price = 1.23m,
+                Amount = 1234.50m,
+                SettlementDate = new DateTime(2016, 12, 31),
+            };
+        }
+
+        private IFidelityTransaction CreateSellTransaction()
+        {
+            const TransactionType transactionType = TransactionType.Sell;
+            return new FidelityTransaction
+            {
+                Type = transactionType,
+                RunDate = new DateTime(2016, 12, 26),
+                AccountName = "account name",
+                AccountNumber = "account number",
+                Symbol = "ASDF",
+                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                Quantity = -0.012m,
+                Price = 1.23m,
+                Amount = 1234.50m,
+                Commission = 7.95m,
+                SettlementDate = new DateTime(2016, 12, 31),
+            };
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
         {
             var result = new FidelityTransaction();
             var normalTDs = normalAndContentRows[0].FindElements(By.TagName("td"));
-            result.SettlementDate = ParseSettlementDate(normalTDs[0]);
+            result.RunDate = ParseDate(normalTDs[0].Text);
             result.AccountName = ParseAccountName(normalTDs[1]);
             result.AccountNumber = ParseAccountNumber(normalTDs[1]);
             result.SecurityDescription = ParseSecurityDescription(normalTDs[2]);
@@ -42,47 +42,45 @@ namespace Sonneville.FidelityWebDriver.Transactions
 
             var contentDictionary = tHeaders.Zip(tDatas, (th, td) => new KeyValuePair<string, string>(th.Text, td.Text))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            result.Amount = ParseAmount(contentDictionary["Amount"]);
+            result.Amount = ParseCurrency(contentDictionary["Amount"]);
             switch (result.Type)
             {
-                case TransactionType.Unknown:
-                    break;
                 case TransactionType.Deposit:
-                    break;
                 case TransactionType.DepositBrokeragelink:
-                    break;
                 case TransactionType.DepositHSA:
-                    break;
                 case TransactionType.Withdrawal:
                     break;
                 case TransactionType.Buy:
+                    result.Symbol = contentDictionary["Symbol"];
+                    result.Quantity = ParseQuantity(contentDictionary["Shares"]);
+                    result.Price = ParseDecimal(contentDictionary["Price"]);
+                    result.SettlementDate = ParseDate(contentDictionary["Settlement Date"]);
                     break;
                 case TransactionType.Sell:
+                    result.Symbol = contentDictionary["Symbol"];
+                    result.Quantity = ParseQuantity(contentDictionary["Shares"]);
+                    result.Price = ParseDecimal(contentDictionary["Price"]);
+                    result.Commission = ParseCurrency(contentDictionary["Commission"]);
+                    result.SettlementDate = ParseDate(contentDictionary["Settlement Date"]);
                     break;
                 case TransactionType.DividendReceipt:
-                    result.Symbol = contentDictionary["Symbol"];
-                    break;
                 case TransactionType.ShortTermCapGain:
-                    break;
                 case TransactionType.LongTermCapGain:
+                    result.Symbol = contentDictionary["Symbol"];
                     break;
                 case TransactionType.DividendReinvestment:
                     result.Symbol = contentDictionary["Symbol"];
                     result.Quantity = ParseQuantity(contentDictionary["Shares"]);
-                    result.Price = ParsePrice(contentDictionary["Price"]);
-                    break;
-                case TransactionType.SellShort:
-                    break;
-                case TransactionType.BuyToCover:
+                    result.Price = ParseDecimal(contentDictionary["Price"]);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new NotImplementedException();
             }
 
             return result;
         }
 
-        private decimal ParseAmount(string amountText)
+        private decimal ParseCurrency(string amountText)
         {
             return decimal.Parse(amountText, NumberStyles.Currency);
         }
@@ -92,7 +90,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
             return decimal.Parse(amountText.Replace("+ ",""));
         }
 
-        private decimal ParsePrice(string amountText)
+        private decimal ParseDecimal(string amountText)
         {
             return decimal.Parse(amountText);
         }
@@ -119,9 +117,9 @@ namespace Sonneville.FidelityWebDriver.Transactions
             return accountNameSpan.Text;
         }
 
-        private DateTime ParseSettlementDate(IWebElement settlementDateTd)
+        private DateTime ParseDate(string text)
         {
-            return DateTime.ParseExact(settlementDateTd.Text, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(text, "MM/dd/yyyy", CultureInfo.InvariantCulture);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             trNormalRowExpandableMock.Setup(tr => tr.FindElements(By.TagName("td")))
                 .Returns(new List<IWebElement>
                 {
-                    CreateDateTd(transaction.SettlementDate),
+                    CreateDateTd(transaction.RunDate),
                     CreateAccountTd(transaction.AccountName, transaction.AccountNumber),
                     CreateDescriptionTd(transaction.SecurityDescription),
                 }.AsReadOnly);
@@ -53,28 +53,35 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         {
             switch (transaction.Type)
             {
-                case TransactionType.Unknown:
-                    throw new NotImplementedException();
                 case TransactionType.Deposit:
                 case TransactionType.DepositBrokeragelink:
                 case TransactionType.DepositHSA:
-                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
-                    break;
                 case TransactionType.Withdrawal:
                     yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
                     break;
                 case TransactionType.Buy:
+                    yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
+                    yield return CreateActivityKeyValuePair("Description", transaction.SecurityDescription);
+                    yield return CreateActivityKeyValuePair("Shares", transaction.Quantity?.ToString("+ 0.###"));
+                    yield return CreateActivityKeyValuePair("Price", transaction.Price?.ToString("F"));
+                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
+                    yield return CreateActivityKeyValuePair("Settlement Date", transaction.SettlementDate?.ToString("MM/dd/yyyy"));
                     break;
                 case TransactionType.Sell:
+                    yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
+                    yield return CreateActivityKeyValuePair("Description", transaction.SecurityDescription);
+                    yield return CreateActivityKeyValuePair("Shares", transaction.Quantity?.ToString("+ 0.###"));
+                    yield return CreateActivityKeyValuePair("Price", transaction.Price?.ToString("F"));
+                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
+                    yield return CreateActivityKeyValuePair("Commission", transaction.Commission?.ToString("C"));
+                    yield return CreateActivityKeyValuePair("Settlement Date", transaction.SettlementDate?.ToString("MM/dd/yyyy"));
                     break;
                 case TransactionType.DividendReceipt:
+                case TransactionType.ShortTermCapGain:
+                case TransactionType.LongTermCapGain:
                     yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
                     yield return CreateActivityKeyValuePair("Description", transaction.SecurityDescription);
                     yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
-                    break;
-                case TransactionType.ShortTermCapGain:
-                    break;
-                case TransactionType.LongTermCapGain:
                     break;
                 case TransactionType.DividendReinvestment:
                     yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
@@ -82,10 +89,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                     yield return CreateActivityKeyValuePair("Shares", transaction.Quantity?.ToString("+ 0.###"));
                     yield return CreateActivityKeyValuePair("Price", transaction.Price?.ToString("F"));
                     yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
-                    break;
-                case TransactionType.SellShort:
-                    break;
-                case TransactionType.BuyToCover:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -111,10 +114,10 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             return trMock;
         }
 
-        private IWebElement CreateDateTd(DateTime? settlementDate)
+        private IWebElement CreateDateTd(DateTime? runDate)
         {
             var dateTd = new Mock<IWebElement>();
-            dateTd.Setup(td => td.Text).Returns(settlementDate?.ToString("MM/dd/yyyy"));
+            dateTd.Setup(td => td.Text).Returns(runDate?.ToString("MM/dd/yyyy"));
             return dateTd.Object;
         }
 
