@@ -10,9 +10,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
     public class HistoryHtmlGenerator
     {
-        public IEnumerable<IWebElement> MapToTableRows(IFidelityTransaction transaction)
+        public IEnumerable<IWebElement> MapToTableRows(IFidelityTransaction transaction, ICollection<string> excludedKeys = null)
         {
-            var contentRow = CreateContentRow(transaction);
+            var contentRow = CreateContentRow(transaction, excludedKeys ?? new string[0]);
             var normalRow = CreateNormalRow(transaction, contentRow);
             yield return normalRow.Object;
             yield return contentRow.Object;
@@ -39,11 +39,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                         contentRow.Setup(row => row.GetAttribute("class")).Returns("content-row");
                     }
                 });
+            var normalRowLocalCopy = trNormalRowExpandableMock;
             trNormalRowExpandableMock.Setup(tr => tr.FindElements(By.TagName("td")))
-                .Callback(() =>
-                {
-                    Assert.IsTrue(trNormalRowExpandableMock.Object.GetAttribute("class").Contains("row-selected"));
-                })
+                .Callback(() => normalRowLocalCopy.Verify(row => row.Click()))
                 .Returns(new List<IWebElement>
                 {
                     CreateDateTd(transaction.RunDate),
@@ -53,19 +51,25 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             return trNormalRowExpandableMock;
         }
 
-        private Mock<IWebElement> CreateContentRow(IFidelityTransaction transaction)
+        private Mock<IWebElement> CreateContentRow(IFidelityTransaction transaction, ICollection<string> excludeKeys)
         {
             var trContentRowMock = CreateContentRowMock();
             trContentRowMock.Setup(tr => tr.FindElement(By.TagName("tbody")))
-                .Returns(CreateActivityTrs(transaction));
+                .Returns(CreateActivityTrs(transaction, excludeKeys));
             return trContentRowMock;
         }
 
-        private IWebElement CreateActivityTrs(IFidelityTransaction transaction)
+        private IWebElement CreateActivityTrs(IFidelityTransaction transaction, ICollection<string> excludedKeys)
         {
             var trs = CreateTrDictionary(transaction)
+                .Where(kvp => !excludedKeys.Contains(kvp.Key.Text))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
+            return MockActivityTableBody(trs);
+        }
+
+        private static IWebElement MockActivityTableBody(Dictionary<IWebElement, IWebElement> trs)
+        {
             var tbodyMock = new Mock<IWebElement>();
             tbodyMock.Setup(tr => tr.FindElements(By.TagName("th")))
                 .Returns(trs.Keys.ToList().AsReadOnly);

@@ -20,26 +20,27 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
             {TransactionType.Withdrawal, "Electronic Funds Transfer Paid"},
         };
 
-        private readonly Dictionary<TransactionType, string> _reverseMappings = new Dictionary<TransactionType, string>
+        private readonly Dictionary<string, TransactionType> _reverseMappings = new Dictionary<string, TransactionType>
         {
-            {TransactionType.Buy, "YOU BOUGHT"},
-            {TransactionType.Sell, "YOU SOLD"},
-            {TransactionType.DividendReinvestment, "REINVESTMENT"},
-            {TransactionType.DividendReceipt, "DIVIDEND RECEIVED"},
-            {TransactionType.ShortTermCapGain, "SHORT-TERM CAP GAIN"},
-            {TransactionType.LongTermCapGain, "LONG-TERM CAP GAIN"},
-            {TransactionType.Deposit, "Electronic Funds Transfer Received"},
-            {TransactionType.DepositBrokeragelink, "TO BROKERAGE OPTION"},
-            {TransactionType.DepositHSA, "PARTIC CONTR"},
-            {TransactionType.Withdrawal, "Electronic Funds Transfer Paid"},
+            {"YOU BOUGHT", TransactionType.Buy},
+            {"YOU SOLD", TransactionType.Sell},
+            {"IN LIEU OF FRX SHARE", TransactionType.Sell}, // receipt of cash in lieu of fractional shares. Must compute cost basis. Earnings/(losses) are taxable.
+            {"REINVESTMENT", TransactionType.DividendReinvestment},
+            {"DIVIDEND RECEIVED", TransactionType.DividendReceipt},
+            {"SHORT-TERM CAP GAIN", TransactionType.ShortTermCapGain},
+            {"LONG-TERM CAP GAIN", TransactionType.LongTermCapGain},
+            {"Electronic Funds Transfer Received", TransactionType.Deposit},
+            {"TO BROKERAGE OPTION", TransactionType.DepositBrokeragelink},
+            {"PARTIC CONTR", TransactionType.DepositHSA},
+            {"Electronic Funds Transfer Paid", TransactionType.Withdrawal},
         };
 
-        public TransactionType MapValue(string trimmedText)
+        public TransactionType ClassifyDescription(string description)
         {
-            return _reverseMappings.SingleOrDefault(mapping => trimmedText.Contains(mapping.Value)).Key;
+            return _reverseMappings.SingleOrDefault(mapping => description.Contains(mapping.Key)).Value;
         }
 
-        public string MapKey(TransactionType transactionType)
+        public string GetSampleDescription(TransactionType transactionType)
         {
             return _forwardMappings[transactionType];
         }

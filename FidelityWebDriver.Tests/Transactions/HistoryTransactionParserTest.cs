@@ -40,7 +40,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseDepositTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateDepositTransaction()
             };
@@ -54,7 +54,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseDepositBrokerageLinkTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateDepositBrokeragelinkTransaction()
             };
@@ -68,7 +68,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseDepositHsaTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateDepositHsaTransaction()
             };
@@ -82,7 +82,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseDividendReceiptTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateDividendReceivedTransaction()
             };
@@ -96,7 +96,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseDividendReinvestmentTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateDividendReinvestmentTransaction()
             };
@@ -110,7 +110,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseWithdrawalTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateWithdrawalTransaction()
             };
@@ -124,7 +124,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseShortTermCapitalGainTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateShortTermCapitalGainTransaction()
             };
@@ -138,7 +138,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseLongTermCapitalGainTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateLongTermCapitalGainTransaction()
             };
@@ -152,7 +152,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseBuyTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateBuyTransaction()
             };
@@ -166,7 +166,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void GetHistoryShouldParseSellTransactions()
         {
-            var expectedTransactions = new List<IFidelityTransaction>
+            var expectedTransactions = new List<FidelityTransaction>
             {
                 CreateSellTransaction()
             };
@@ -177,16 +177,32 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
         }
 
-        private void SetupHistoryTable(List<IFidelityTransaction> expectedTransactions)
+        [Test]
+        public void GetHistoryShouldParseInLieuOfSellTransactions()
+        {
+            var expectedTransactions = new List<FidelityTransaction>
+            {
+                CreateSellTransaction()
+            };
+            SetupHistoryTable(expectedTransactions, new[] {"Commission", "Settlement Date"});
+            expectedTransactions.Single().Commission = null;
+            expectedTransactions.Single().SettlementDate = null;
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        private void SetupHistoryTable(IEnumerable<FidelityTransaction> expectedTransactions, ICollection<string> excludedKeys = null)
         {
             _historyTableBodyMock.Setup(div => div.FindElements(By.TagName("tr")))
                 .Returns(expectedTransactions
-                    .SelectMany(_historyHtmlGenerator.MapToTableRows)
+                    .SelectMany(transaction => _historyHtmlGenerator.MapToTableRows(transaction, excludedKeys))
                     .ToList()
                     .AsReadOnly());
         }
 
-        private IFidelityTransaction CreateDepositTransaction(TransactionType transactionType = TransactionType.Deposit)
+        private FidelityTransaction CreateDepositTransaction(TransactionType transactionType = TransactionType.Deposit)
         {
             return new FidelityTransaction
             {
@@ -194,27 +210,27 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 RunDate = new DateTime(2016, 12, 26),
                 AccountName = "account name",
                 AccountNumber = "account number",
-                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                SecurityDescription = _transactionTypeMapper.GetSampleDescription(transactionType),
                 Amount = 1234.50m,
             };
         }
 
-        private IFidelityTransaction CreateDepositBrokeragelinkTransaction()
+        private FidelityTransaction CreateDepositBrokeragelinkTransaction()
         {
             return CreateDepositTransaction(TransactionType.DepositBrokeragelink);
         }
 
-        private IFidelityTransaction CreateDepositHsaTransaction()
+        private FidelityTransaction CreateDepositHsaTransaction()
         {
             return CreateDepositTransaction(TransactionType.DepositHSA);
         }
 
-        private IFidelityTransaction CreateWithdrawalTransaction()
+        private FidelityTransaction CreateWithdrawalTransaction()
         {
             return CreateDepositTransaction(TransactionType.Withdrawal);
         }
 
-        private IFidelityTransaction CreateDividendReceivedTransaction()
+        private FidelityTransaction CreateDividendReceivedTransaction()
         {
             const TransactionType transactionType = TransactionType.DividendReceipt;
             return new FidelityTransaction
@@ -224,12 +240,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 AccountName = "account name",
                 AccountNumber = "account number",
                 Symbol = "ASDF",
-                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                SecurityDescription = _transactionTypeMapper.GetSampleDescription(transactionType),
                 Amount = 1234.50m,
             };
         }
 
-        private IFidelityTransaction CreateDividendReinvestmentTransaction()
+        private FidelityTransaction CreateDividendReinvestmentTransaction()
         {
             const TransactionType transactionType = TransactionType.DividendReinvestment;
             return new FidelityTransaction
@@ -239,14 +255,14 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 AccountName = "account name",
                 AccountNumber = "account number",
                 Symbol = "ASDF",
-                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                SecurityDescription = _transactionTypeMapper.GetSampleDescription(transactionType),
                 Quantity = 0.012m,
                 Price = 1.23m,
                 Amount = 1234.50m,
             };
         }
 
-        private IFidelityTransaction CreateShortTermCapitalGainTransaction(TransactionType transactionType = TransactionType.ShortTermCapGain)
+        private FidelityTransaction CreateShortTermCapitalGainTransaction(TransactionType transactionType = TransactionType.ShortTermCapGain)
         {
             return new FidelityTransaction
             {
@@ -255,17 +271,17 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 AccountName = "account name",
                 AccountNumber = "account number",
                 Symbol = "ASDF",
-                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                SecurityDescription = _transactionTypeMapper.GetSampleDescription(transactionType),
                 Amount = 1234.50m,
             };
         }
 
-        private IFidelityTransaction CreateLongTermCapitalGainTransaction()
+        private FidelityTransaction CreateLongTermCapitalGainTransaction()
         {
             return CreateShortTermCapitalGainTransaction(TransactionType.LongTermCapGain);
         }
 
-        private IFidelityTransaction CreateBuyTransaction()
+        private FidelityTransaction CreateBuyTransaction()
         {
             const TransactionType transactionType = TransactionType.Buy;
             return new FidelityTransaction
@@ -275,7 +291,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 AccountName = "account name",
                 AccountNumber = "account number",
                 Symbol = "ASDF",
-                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                SecurityDescription = _transactionTypeMapper.GetSampleDescription(transactionType),
                 Quantity = 0.012m,
                 Price = 1.23m,
                 Amount = 1234.50m,
@@ -283,7 +299,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             };
         }
 
-        private IFidelityTransaction CreateSellTransaction()
+        private FidelityTransaction CreateSellTransaction()
         {
             const TransactionType transactionType = TransactionType.Sell;
             return new FidelityTransaction
@@ -293,7 +309,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 AccountName = "account name",
                 AccountNumber = "account number",
                 Symbol = "ASDF",
-                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                SecurityDescription = _transactionTypeMapper.GetSampleDescription(transactionType),
                 Quantity = -0.012m,
                 Price = 1.23m,
                 Amount = 1234.50m,

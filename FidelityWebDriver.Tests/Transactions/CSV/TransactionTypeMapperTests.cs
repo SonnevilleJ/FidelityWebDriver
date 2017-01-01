@@ -12,6 +12,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         [TestCase("DIVIDEND RECEIVED", TransactionType.DividendReceipt)]
         [TestCase("REINVESTMENT", TransactionType.DividendReinvestment)]
         [TestCase("YOU SOLD             EXCHANGE", TransactionType.Sell)]
+        [TestCase("IN LIEU OF FRX SHARE", TransactionType.Sell)]
         [TestCase("YOU BOUGHT           PROSPECTUS UNDER    SEPARATE COVER", TransactionType.Buy)]
         [TestCase("SHORT-TERM CAP GAIN", TransactionType.ShortTermCapGain)]
         [TestCase("LONG-TERM CAP GAIN", TransactionType.LongTermCapGain)]
@@ -21,7 +22,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         [TestCase("abcdefghijklmnopqrstuvwxyz", TransactionType.Unknown)]
         public void ShouldMapValues(string value, TransactionType expectedType)
         {
-            var actualType = new TransactionTypeMapper().MapValue(value);
+            var actualType = new TransactionTypeMapper().ClassifyDescription(value);
 
             Assert.AreEqual(expectedType, actualType);
         }
@@ -38,7 +39,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         [TestCase(TransactionType.DepositHSA, "PARTIC CONTR CURRENT PARTICIPANT CUR YR")]
         public void ShouldMapKeys(TransactionType key, string expectedValue)
         {
-            var actualValue = new TransactionTypeMapper().MapKey(key);
+            var actualValue = new TransactionTypeMapper().GetSampleDescription(key);
 
             Assert.AreEqual(expectedValue, actualValue);
         }
@@ -47,7 +48,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions.Csv
         public void ShouldNotMapUnknownKey()
         {
             Assert.Throws<KeyNotFoundException>(
-                () => new TransactionTypeMapper().MapKey(TransactionType.Unknown));
+                () => new TransactionTypeMapper().GetSampleDescription(TransactionType.Unknown));
         }
     }
 }

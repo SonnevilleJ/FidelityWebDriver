@@ -62,8 +62,8 @@ namespace Sonneville.FidelityWebDriver.Transactions
                     result.Symbol = contentDictionary["Symbol"];
                     result.Quantity = ParseQuantity(contentDictionary["Shares"]);
                     result.Price = ParseDecimal(contentDictionary["Price"]);
-                    result.Commission = ParseCurrency(contentDictionary["Commission"]);
-                    result.SettlementDate = ParseDate(contentDictionary["Settlement Date"]);
+                    if (contentDictionary.Keys.Contains("Commission")) result.Commission = ParseCurrency(contentDictionary["Commission"]);
+                    if (contentDictionary.Keys.Contains("Settlement Date")) result.SettlementDate = ParseDate(contentDictionary["Settlement Date"]);
                     break;
                 case TransactionType.DividendReceipt:
                 case TransactionType.ShortTermCapGain:
@@ -99,7 +99,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
 
         private TransactionType ParseType(string description)
         {
-            return _transactionTypeMapper.MapValue(description);
+            return _transactionTypeMapper.ClassifyDescription(description);
         }
 
         private string ParseSecurityDescription(IWebElement descriptionTd)
