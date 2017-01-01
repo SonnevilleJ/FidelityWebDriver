@@ -54,9 +54,10 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
 
         public static FidelityConfiguration ReadConfiguration()
         {
-            if (File.Exists("./demo.ini"))
+            var configFullPath = FidelityConfigurationProvider.ConfigLocation;
+            if (File.Exists(configFullPath))
             {
-                var iniConfigSource = new IniConfigSource("./demo.ini");
+                var iniConfigSource = new IniConfigSource(configFullPath);
                 var config = iniConfigSource.Configs["Fidelity"];
                 return new FidelityConfiguration
                 {
@@ -80,16 +81,19 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
 
         public static void DeletePersistedConfig()
         {
-            if (File.Exists("./demo.ini"))
+            var configFullPath = FidelityConfigurationProvider.ConfigLocation;
+            if (File.Exists(configFullPath))
             {
-                File.Delete("./demo.ini");
+                File.Delete(configFullPath);
             }
+            Assert.False(File.Exists(configFullPath));
         }
 
         public static void PersistConfiguration(FidelityConfiguration configuration)
         {
-            File.Create("./demo.ini").Dispose();
-            var iniConfigSource = new IniConfigSource("./demo.ini");
+            var configFullPath = FidelityConfigurationProvider.ConfigLocation;
+            File.Create(configFullPath).Dispose();
+            var iniConfigSource = new IniConfigSource(configFullPath);
             iniConfigSource.AddConfig("Fidelity");
             var config = iniConfigSource.Configs["Fidelity"];
             config.Set("Username", configuration.Username);

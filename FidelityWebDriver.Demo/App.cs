@@ -6,6 +6,7 @@ using NDesk.Options;
 using Nini.Config;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Demo.Ninject;
 using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.FidelityWebDriver.Transactions;
 
@@ -64,8 +65,8 @@ namespace Sonneville.FidelityWebDriver.Demo
             }
             if (_shouldPersistOptions)
             {
-                File.Create("./demo.ini").Dispose();
-                var iniConfigSource = new IniConfigSource("./demo.ini");
+                File.Create(FidelityConfigurationProvider.ConfigLocation).Dispose();
+                var iniConfigSource = new IniConfigSource(FidelityConfigurationProvider.ConfigLocation);
                 iniConfigSource.AddConfig("Fidelity");
                 var config = iniConfigSource.Configs["Fidelity"];
                 config.Set("Username", _fidelityConfiguration.Username);
