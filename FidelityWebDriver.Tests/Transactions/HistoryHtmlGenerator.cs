@@ -56,22 +56,22 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private Mock<IWebElement> CreateContentRow(IFidelityTransaction transaction)
         {
             var trContentRowMock = CreateContentRowMock();
-            trContentRowMock.Setup(tr => tr.FindElements(By.TagName("tr")))
-                .Returns(CreateActivityTrs(transaction).ToList().AsReadOnly());
+            trContentRowMock.Setup(tr => tr.FindElement(By.TagName("tbody")))
+                .Returns(CreateActivityTrs(transaction));
             return trContentRowMock;
         }
 
-        private IEnumerable<IWebElement> CreateActivityTrs(IFidelityTransaction transaction)
+        private IWebElement CreateActivityTrs(IFidelityTransaction transaction)
         {
             var trs = CreateTrDictionary(transaction)
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-            var trMock = new Mock<IWebElement>();
-            trMock.Setup(tr => tr.FindElements(By.TagName("th")))
+            var tbodyMock = new Mock<IWebElement>();
+            tbodyMock.Setup(tr => tr.FindElements(By.TagName("th")))
                 .Returns(trs.Keys.ToList().AsReadOnly);
-            trMock.Setup(tr => tr.FindElements(By.TagName("td")))
+            tbodyMock.Setup(tr => tr.FindElements(By.TagName("td")))
                 .Returns(trs.Values.ToList().AsReadOnly);
-            yield return trMock.Object;
+            return tbodyMock.Object;
         }
 
         private IEnumerable<KeyValuePair<IWebElement, IWebElement>> CreateTrDictionary(IFidelityTransaction transaction)

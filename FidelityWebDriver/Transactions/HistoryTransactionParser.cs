@@ -38,9 +38,9 @@ namespace Sonneville.FidelityWebDriver.Transactions
             result.SecurityDescription = ParseSecurityDescription(normalTDs[2]);
             result.Type = ParseType(result.SecurityDescription);
 
-            var activityTr = normalAndContentRows[1].FindElements(By.TagName("tr"))[0];
-            var tHeaders = activityTr.FindElements(By.TagName("th"));
-            var tDatas = activityTr.FindElements(By.TagName("td"));
+            var contentBody = normalAndContentRows[1].FindElement(By.TagName("tbody"));
+            var tHeaders = contentBody.FindElements(By.TagName("th"));
+            var tDatas = contentBody.FindElements(By.TagName("td"));
 
             var contentDictionary = tHeaders.Zip(tDatas, (th, td) => new KeyValuePair<string, string>(th.Text, td.Text))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
