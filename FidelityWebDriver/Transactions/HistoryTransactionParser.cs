@@ -44,7 +44,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
 
             var contentDictionary = tHeaders.Zip(tDatas, (th, td) => new KeyValuePair<string, string>(th.Text, td.Text))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            result.Amount = ParseCurrency(contentDictionary["Amount"]);
+            result.Amount = ParseCurrency(contentDictionary[AttributeStrings.Amount]);
             switch (result.Type)
             {
                 case TransactionType.Deposit:
@@ -53,27 +53,27 @@ namespace Sonneville.FidelityWebDriver.Transactions
                 case TransactionType.Withdrawal:
                     break;
                 case TransactionType.Buy:
-                    result.Symbol = contentDictionary["Symbol"];
-                    result.Quantity = ParseQuantity(contentDictionary["Shares"]);
-                    result.Price = ParseDecimal(contentDictionary["Price"]);
-                    result.SettlementDate = ParseDate(contentDictionary["Settlement Date"]);
+                    result.Symbol = contentDictionary[AttributeStrings.Symbol];
+                    result.Quantity = ParseQuantity(contentDictionary[AttributeStrings.Quantity]);
+                    result.Price = ParseDecimal(contentDictionary[AttributeStrings.Price]);
+                    result.SettlementDate = ParseDate(contentDictionary[AttributeStrings.SettlementDate]);
                     break;
                 case TransactionType.Sell:
-                    result.Symbol = contentDictionary["Symbol"];
-                    result.Quantity = ParseQuantity(contentDictionary["Shares"]);
-                    result.Price = ParseDecimal(contentDictionary["Price"]);
-                    if (contentDictionary.Keys.Contains("Commission")) result.Commission = ParseCurrency(contentDictionary["Commission"]);
-                    if (contentDictionary.Keys.Contains("Settlement Date")) result.SettlementDate = ParseDate(contentDictionary["Settlement Date"]);
+                    result.Symbol = contentDictionary[AttributeStrings.Symbol];
+                    result.Quantity = ParseQuantity(contentDictionary[AttributeStrings.Quantity]);
+                    result.Price = ParseDecimal(contentDictionary[AttributeStrings.Price]);
+                    if (contentDictionary.Keys.Contains(AttributeStrings.Commission)) result.Commission = ParseCurrency(contentDictionary[AttributeStrings.Commission]);
+                    if (contentDictionary.Keys.Contains(AttributeStrings.SettlementDate)) result.SettlementDate = ParseDate(contentDictionary[AttributeStrings.SettlementDate]);
                     break;
                 case TransactionType.DividendReceipt:
                 case TransactionType.ShortTermCapGain:
                 case TransactionType.LongTermCapGain:
-                    result.Symbol = contentDictionary["Symbol"];
+                    result.Symbol = contentDictionary[AttributeStrings.Symbol];
                     break;
                 case TransactionType.DividendReinvestment:
-                    result.Symbol = contentDictionary["Symbol"];
-                    result.Quantity = ParseQuantity(contentDictionary["Shares"]);
-                    result.Price = ParseDecimal(contentDictionary["Price"]);
+                    result.Symbol = contentDictionary[AttributeStrings.Symbol];
+                    result.Quantity = ParseQuantity(contentDictionary[AttributeStrings.Quantity]);
+                    result.Price = ParseDecimal(contentDictionary[AttributeStrings.Price]);
                     break;
                 default:
                     throw new NotImplementedException();

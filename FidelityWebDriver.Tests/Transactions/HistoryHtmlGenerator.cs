@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
@@ -86,38 +86,38 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 case TransactionType.DepositBrokeragelink:
                 case TransactionType.DepositHSA:
                 case TransactionType.Withdrawal:
-                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Amount, transaction.Amount?.ToString("C"));
                     break;
                 case TransactionType.Buy:
-                    yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
-                    yield return CreateActivityKeyValuePair("Description", transaction.SecurityDescription);
-                    yield return CreateActivityKeyValuePair("Shares", transaction.Quantity?.ToString("+ 0.###"));
-                    yield return CreateActivityKeyValuePair("Price", transaction.Price?.ToString("F"));
-                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
-                    yield return CreateActivityKeyValuePair("Settlement Date", transaction.SettlementDate?.ToString("MM/dd/yyyy"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Symbol, transaction.Symbol);
+                    yield return CreateActivityKeyValuePair(AttributeStrings.SecurityDescription, transaction.SecurityDescription);
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Quantity, transaction.Quantity?.ToString("+ 0.###"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Price, transaction.Price?.ToString("F"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Amount, transaction.Amount?.ToString("C"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.SettlementDate, transaction.SettlementDate?.ToString("MM/dd/yyyy"));
                     break;
                 case TransactionType.Sell:
-                    yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
-                    yield return CreateActivityKeyValuePair("Description", transaction.SecurityDescription);
-                    yield return CreateActivityKeyValuePair("Shares", transaction.Quantity?.ToString("+ 0.###"));
-                    yield return CreateActivityKeyValuePair("Price", transaction.Price?.ToString("F"));
-                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
-                    yield return CreateActivityKeyValuePair("Commission", transaction.Commission?.ToString("C"));
-                    yield return CreateActivityKeyValuePair("Settlement Date", transaction.SettlementDate?.ToString("MM/dd/yyyy"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Symbol, transaction.Symbol);
+                    yield return CreateActivityKeyValuePair(AttributeStrings.SecurityDescription, transaction.SecurityDescription);
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Quantity, transaction.Quantity?.ToString("+ 0.###"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Price, transaction.Price?.ToString("F"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Amount, transaction.Amount?.ToString("C"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Commission, transaction.Commission?.ToString("C"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.SettlementDate, transaction.SettlementDate?.ToString("MM/dd/yyyy"));
                     break;
                 case TransactionType.DividendReceipt:
                 case TransactionType.ShortTermCapGain:
                 case TransactionType.LongTermCapGain:
-                    yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
-                    yield return CreateActivityKeyValuePair("Description", transaction.SecurityDescription);
-                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Symbol, transaction.Symbol);
+                    yield return CreateActivityKeyValuePair(AttributeStrings.SecurityDescription, transaction.SecurityDescription);
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Amount, transaction.Amount?.ToString("C"));
                     break;
                 case TransactionType.DividendReinvestment:
-                    yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
-                    yield return CreateActivityKeyValuePair("Description", transaction.SecurityDescription);
-                    yield return CreateActivityKeyValuePair("Shares", transaction.Quantity?.ToString("+ 0.###"));
-                    yield return CreateActivityKeyValuePair("Price", transaction.Price?.ToString("F"));
-                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Symbol, transaction.Symbol);
+                    yield return CreateActivityKeyValuePair(AttributeStrings.SecurityDescription, transaction.SecurityDescription);
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Quantity, transaction.Quantity?.ToString("+ 0.###"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Price, transaction.Price?.ToString("F"));
+                    yield return CreateActivityKeyValuePair(AttributeStrings.Amount, transaction.Amount?.ToString("C"));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
