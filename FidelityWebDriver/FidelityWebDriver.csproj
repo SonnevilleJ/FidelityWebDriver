@@ -98,23 +98,21 @@
     <Compile Include="Positions\AccountSummariesExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transactions\ActivityPage.cs" />
-    <Compile Include="Transactions\CSV\CsvDownloadService.cs" />
     <Compile Include="Transactions\CSV\FidelityCsvColumn.cs" />
     <Compile Include="Transactions\CSV\FidelityCsvColumnMapper.cs" />
-    <Compile Include="Transactions\CSV\ICsvDownloadService.cs" />
     <Compile Include="Transactions\CSV\IFidelityCsvColumnMapper.cs" />
     <Compile Include="Transactions\CSV\ITransactionMapper.cs" />
     <Compile Include="Transactions\CSV\ITransactionsMapper.cs" />
     <Compile Include="Transactions\CSV\TransactionMapper.cs" />
     <Compile Include="Transactions\CSV\TransactionsMapper.cs" />
-      <Compile Include="Transactions\HistoryTransactionParser.cs"/>
+    <Compile Include="Transactions\HistoryTransactionParser.cs"/>
     <Compile Include="Transactions\IActivityPage.cs" />
-      <Compile Include="Transactions\IHistoryTransactionParser.cs"/>
+    <Compile Include="Transactions\IHistoryTransactionParser.cs"/>
     <Compile Include="Transactions\ITransactionManager.cs" />
-      <Compile Include="Transactions\AttributeStrings.cs"/>
-      <Compile Include="Transactions\ITransactionTypeMapper.cs"/>
+    <Compile Include="Transactions\AttributeStrings.cs"/>
+    <Compile Include="Transactions\ITransactionTypeMapper.cs"/>
     <Compile Include="Transactions\TransactionManager.cs" />
-      <Compile Include="Transactions\TransactionTypeMapper.cs"/>
+    <Compile Include="Transactions\TransactionTypeMapper.cs"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="FidelityWebDriver.nuspec" />

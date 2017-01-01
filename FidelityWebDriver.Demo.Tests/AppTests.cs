@@ -144,7 +144,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
             _positionsManagerMock.Setup(manager => manager.GetAccountDetails()).Returns(_accountDetails);
 
             _transactionManagerMock = new Mock<ITransactionManager>();
-            _transactionManagerMock.Setup(manager => manager.DownloadTransactionHistory(_startDate, _endDate))
+            _transactionManagerMock.Setup(manager => manager.GetTransactionHistory(_startDate, _endDate))
                 .Returns(_transactions);
 
             _fidelityConfiguration = new FidelityConfiguration();
@@ -213,7 +213,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         }
 
         [Test]
-        public void ShouldDownloadTransactionHistoryFromTransactionsManager()
+        public void ShouldGetTransactionHistoryFromTransactionsManager()
         {
             SetCredentials();
             using (var memoryStream = new MemoryStream())
@@ -232,7 +232,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
                 });
             }
 
-            _transactionManagerMock.Verify(manager => manager.DownloadTransactionHistory(_startDate, _endDate));
+            _transactionManagerMock.Verify(manager => manager.GetTransactionHistory(_startDate, _endDate));
         }
 
         [Test]

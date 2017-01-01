@@ -15,7 +15,6 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
             if (File.Exists("./demo.ini"))
             {
                 var config = new IniConfigSource("./demo.ini").Configs["Fidelity"];
-                Instance.DownloadPath = config.Get("DownloadPath");
                 Instance.Username = config.Get("Username");
                 Instance.Password = config.Get("Password");
             }

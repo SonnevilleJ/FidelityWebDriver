@@ -18,7 +18,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
             _loginManager = loginManager;
         }
 
-        public IList<IFidelityTransaction> DownloadTransactionHistory(DateTime startDate, DateTime endDate)
+        public IList<IFidelityTransaction> GetTransactionHistory(DateTime startDate, DateTime endDate)
         {
             _loginManager.EnsureLoggedIn();
             var activityPage = _siteNavigator.GoTo<IActivityPage>();

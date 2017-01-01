@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Nini.Config;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
@@ -36,8 +35,6 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
             var createdConfig = _provider.Create(null) as FidelityConfiguration;
 
             Assert.IsNotNull(createdConfig);
-            Assert.AreEqual(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    "Downloads", "Accounts_History.csv"), createdConfig.DownloadPath);
             Assert.IsEmpty(createdConfig.Username);
             Assert.IsEmpty(createdConfig.Password);
         }
@@ -45,13 +42,12 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
         [Test]
         public void ShouldReturnPersistedConfig()
         {
-            var fidelityConfiguration = SetupConfiguration("download path", "user name", "pass word");
+            var fidelityConfiguration = SetupConfiguration("user name", "pass word");
             PersistConfiguration(fidelityConfiguration);
 
             var createdConfig = _provider.Create(null) as FidelityConfiguration;
 
             Assert.IsNotNull(createdConfig);
-            Assert.AreEqual(fidelityConfiguration.DownloadPath, createdConfig.DownloadPath);
             Assert.AreEqual(fidelityConfiguration.Username, createdConfig.Username);
             Assert.AreEqual(fidelityConfiguration.Password, createdConfig.Password);
         }
@@ -64,7 +60,6 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
                 var config = iniConfigSource.Configs["Fidelity"];
                 return new FidelityConfiguration
                 {
-                    DownloadPath = config.Get("DownloadPath"),
                     Username = config.Get("Username"),
                     Password = config.Get("Password"),
                 };
@@ -72,11 +67,10 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
             return new FidelityConfiguration();
         }
 
-        public static FidelityConfiguration SetupConfiguration(string downloadPath, string username, string password)
+        public static FidelityConfiguration SetupConfiguration(string username, string password)
         {
             var configuration = new FidelityConfiguration
             {
-                DownloadPath = downloadPath,
                 Username = username,
                 Password = password,
             };
@@ -98,7 +92,6 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
             var iniConfigSource = new IniConfigSource("./demo.ini");
             iniConfigSource.AddConfig("Fidelity");
             var config = iniConfigSource.Configs["Fidelity"];
-            config.Set("DownloadPath", configuration.DownloadPath);
             config.Set("Username", configuration.Username);
             config.Set("Password", configuration.Password);
             iniConfigSource.Save();

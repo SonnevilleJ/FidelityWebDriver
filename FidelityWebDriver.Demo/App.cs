@@ -68,7 +68,6 @@ namespace Sonneville.FidelityWebDriver.Demo
                 var iniConfigSource = new IniConfigSource("./demo.ini");
                 iniConfigSource.AddConfig("Fidelity");
                 var config = iniConfigSource.Configs["Fidelity"];
-                config.Set("DownloadPath", _fidelityConfiguration.DownloadPath);
                 config.Set("Username", _fidelityConfiguration.Username);
                 config.Set("Password", _fidelityConfiguration.Password);
                 iniConfigSource.Save();
@@ -88,7 +87,7 @@ namespace Sonneville.FidelityWebDriver.Demo
             PrintAccountDetails(_positionsManager.GetAccountDetails().ToList());
             PrintSeparator();
             Console.WriteLine("Reading recent transactions...");
-            PrintRecentTransactions(_transactionManager.DownloadTransactionHistory(DateTime.Today.AddDays(-30), DateTime.Today).ToList());
+            PrintRecentTransactions(_transactionManager.GetTransactionHistory(DateTime.Today.AddDays(-30), DateTime.Today).ToList());
             PrintSeparator();
         }
 

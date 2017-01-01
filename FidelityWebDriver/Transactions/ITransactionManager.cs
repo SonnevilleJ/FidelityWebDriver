@@ -6,6 +6,6 @@ namespace Sonneville.FidelityWebDriver.Transactions
 {
     public interface ITransactionManager : IManager
     {
-        IList<IFidelityTransaction> DownloadTransactionHistory(DateTime startDate, DateTime endDate);
+        IList<IFidelityTransaction> GetTransactionHistory(DateTime startDate, DateTime endDate);
     }
 }

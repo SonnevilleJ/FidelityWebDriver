@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TradingHistoryCsvDownloader")]
+[assembly: AssemblyTitle("FidelityWebDriver.Demo")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("John Sonneville")]
-[assembly: AssemblyProduct("TradingHistoryCsvDownloader")]
+[assembly: AssemblyProduct("FidelityWebDriver.Demo")]
 [assembly: AssemblyCopyright("Copyright © 2015 John Sonneville")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

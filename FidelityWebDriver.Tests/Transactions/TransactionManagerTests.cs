@@ -62,7 +62,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [Test]
         public void ShouldReturnParsedTransactions()
         {
-            var actualTransactions = Manager.DownloadTransactionHistory(_startDate, _endDate);
+            var actualTransactions = Manager.GetTransactionHistory(_startDate, _endDate);
 
             _loginManagerMock.Verify(manager => manager.EnsureLoggedIn());
             SiteNavigatorMock.Verify(navigator => navigator.GoTo<IActivityPage>());
