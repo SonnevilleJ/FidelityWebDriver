@@ -43,6 +43,38 @@ namespace Sonneville.FidelityWebDriver.Transactions
             var contentDictionary = tHeaders.Zip(tDatas, (th, td) => new KeyValuePair<string, string>(th.Text, td.Text))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             result.Amount = ParseAmount(contentDictionary["Amount"]);
+            switch (result.Type)
+            {
+                case TransactionType.Unknown:
+                    break;
+                case TransactionType.Deposit:
+                    break;
+                case TransactionType.DepositBrokeragelink:
+                    break;
+                case TransactionType.DepositHSA:
+                    break;
+                case TransactionType.Withdrawal:
+                    break;
+                case TransactionType.Buy:
+                    break;
+                case TransactionType.Sell:
+                    break;
+                case TransactionType.DividendReceipt:
+                    result.Symbol = contentDictionary["Symbol"];
+                    break;
+                case TransactionType.ShortTermCapGain:
+                    break;
+                case TransactionType.LongTermCapGain:
+                    break;
+                case TransactionType.DividendReinvestment:
+                    break;
+                case TransactionType.SellShort:
+                    break;
+                case TransactionType.BuyToCover:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             return result;
         }

@@ -20,25 +20,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private Mock<IWebElement> _historyTableBodyMock;
 
         private HistoryTransactionParser _historyTransactionParser;
-        private List<IFidelityTransaction> _expectedTransactions;
 
         [SetUp]
         public void Setup()
         {
-            _expectedTransactions = new List<IFidelityTransaction>
-            {
-                CreateDepositTransaction(),
-                CreateDepositBrokeragelinkTransaction(),
-                CreateDepositHsaTransaction(),
-            };
-
             _historyTableBodyMock = new Mock<IWebElement>();
-
-            _historyTableBodyMock.Setup(div => div.FindElements(By.TagName("tr")))
-                .Returns(_expectedTransactions
-                    .SelectMany(_historyHtmlGenerator.MapToTableRows)
-                    .ToList()
-                    .AsReadOnly());
 
             _historyRootDivMock = new Mock<IWebElement>();
             _historyRootDivMock.Setup(div => div.FindElements(By.TagName("tbody")))
@@ -52,11 +38,68 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         }
 
         [Test]
-        public void GetHistoryShouldReturnTransactions()
+        public void GetHistoryShouldParseDepositTransactions()
         {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateDepositTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
             var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
 
-            CollectionAssert.AreEquivalent(_expectedTransactions, actualTransactions);
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        [Test]
+        public void GetHistoryShouldParseDepositBrokerageLinkTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateDepositBrokeragelinkTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        [Test]
+        public void GetHistoryShouldParseDepositHsaTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateDepositHsaTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        [Test]
+        public void GetHistoryShouldParseDividendReceiptTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateDividendReceivedTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        private void SetupHistoryTable(List<IFidelityTransaction> expectedTransactions)
+        {
+            _historyTableBodyMock.Setup(div => div.FindElements(By.TagName("tr")))
+                .Returns(expectedTransactions
+                    .SelectMany(_historyHtmlGenerator.MapToTableRows)
+                    .ToList()
+                    .AsReadOnly());
         }
 
         private IFidelityTransaction CreateDepositTransaction(TransactionType transactionType = TransactionType.Deposit)
@@ -80,6 +123,20 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private IFidelityTransaction CreateDepositHsaTransaction()
         {
             return CreateDepositTransaction(TransactionType.DepositHSA);
+        }
+
+        private IFidelityTransaction CreateDividendReceivedTransaction()
+        {
+            return new FidelityTransaction
+            {
+                Type = TransactionType.DividendReceipt,
+                Symbol = "ASDF",
+                SecurityDescription = _transactionTypeMapper.MapKey(TransactionType.DividendReceipt),
+                AccountName = "account name",
+                AccountNumber = "account number",
+                Amount = 1234.50m,
+                SettlementDate = new DateTime(2016, 12, 26),
+            };
         }
     }
 }
