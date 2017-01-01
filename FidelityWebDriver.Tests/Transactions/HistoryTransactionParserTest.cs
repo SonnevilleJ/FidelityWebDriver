@@ -27,14 +27,16 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         {
             _expectedTransactions = new List<IFidelityTransaction>
             {
+                CreateDepositTransaction(),
                 CreateDepositBrokeragelinkTransaction(),
+                CreateDepositHsaTransaction(),
             };
 
             _historyTableBodyMock = new Mock<IWebElement>();
 
             _historyTableBodyMock.Setup(div => div.FindElements(By.TagName("tr")))
                 .Returns(_expectedTransactions
-                    .SelectMany(_historyHtmlGenerator.MapToContentRow)
+                    .SelectMany(_historyHtmlGenerator.MapToTableRows)
                     .ToList()
                     .AsReadOnly());
 
@@ -57,17 +59,27 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             CollectionAssert.AreEquivalent(_expectedTransactions, actualTransactions);
         }
 
-        private IFidelityTransaction CreateDepositBrokeragelinkTransaction()
+        private IFidelityTransaction CreateDepositTransaction(TransactionType transactionType = TransactionType.Deposit)
         {
             return new FidelityTransaction
             {
-                Type = TransactionType.DepositBrokeragelink,
-                SecurityDescription = _transactionTypeMapper.MapKey(TransactionType.DepositBrokeragelink),
+                Type = transactionType,
+                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
                 AccountName = "account name",
                 AccountNumber = "account number",
                 Amount = 1234.50m,
                 SettlementDate = new DateTime(2016, 12, 26),
             };
+        }
+
+        private IFidelityTransaction CreateDepositBrokeragelinkTransaction()
+        {
+            return CreateDepositTransaction(TransactionType.DepositBrokeragelink);
+        }
+
+        private IFidelityTransaction CreateDepositHsaTransaction()
+        {
+            return CreateDepositTransaction(TransactionType.DepositHSA);
         }
     }
 }

@@ -11,33 +11,17 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
     {
         private readonly TransactionTypeMapper _transactionTypeMapper = new TransactionTypeMapper();
 
-        public IEnumerable<IWebElement> MapToContentRow(IFidelityTransaction transaction)
+        public IEnumerable<IWebElement> MapToTableRows(IFidelityTransaction transaction)
         {
             switch (transaction.Type)
             {
                 case TransactionType.Unknown:
                     throw new NotImplementedException();
                 case TransactionType.Deposit:
-                    break;
                 case TransactionType.DepositBrokeragelink:
-                    var trNormalRowExpandableMock = CreateNormalRowMock();
-                    trNormalRowExpandableMock.Setup(tr => tr.FindElements(By.TagName("td")))
-                        .Returns(new List<IWebElement>
-                        {
-                            CreateDateTd(transaction.SettlementDate),
-                            CreateAccountTd(transaction.AccountName, transaction.AccountNumber),
-                            CreateDescriptionTd(_transactionTypeMapper.MapKey(transaction.Type)),
-                        }.AsReadOnly);
-                    yield return trNormalRowExpandableMock.Object;
-                    var trContentRowMock = CreateContentRowMock();
-                    trContentRowMock.Setup(tr => tr.FindElements(By.TagName("tr")))
-                        .Returns(new List<IWebElement>
-                        {
-                            CreateActivityAmountTr(transaction.Amount),
-                        }.AsReadOnly);
-                    yield return trContentRowMock.Object;
-                    break;
                 case TransactionType.DepositHSA:
+                    yield return CreateDepositNormalRow(transaction);
+                    yield return CreateDepositContentRow(transaction);
                     break;
                 case TransactionType.Withdrawal:
                     break;
@@ -60,6 +44,30 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private IWebElement CreateDepositNormalRow(IFidelityTransaction transaction)
+        {
+            var trNormalRowExpandableMock = CreateNormalRowMock();
+            trNormalRowExpandableMock.Setup(tr => tr.FindElements(By.TagName("td")))
+                .Returns(new List<IWebElement>
+                {
+                    CreateDateTd(transaction.SettlementDate),
+                    CreateAccountTd(transaction.AccountName, transaction.AccountNumber),
+                    CreateDescriptionTd(_transactionTypeMapper.MapKey(transaction.Type)),
+                }.AsReadOnly);
+            return trNormalRowExpandableMock.Object;
+        }
+
+        private IWebElement CreateDepositContentRow(IFidelityTransaction transaction)
+        {
+            var trContentRowMock = CreateContentRowMock();
+            trContentRowMock.Setup(tr => tr.FindElements(By.TagName("tr")))
+                .Returns(new List<IWebElement>
+                {
+                    CreateActivityAmountTr(transaction.Amount),
+                }.AsReadOnly);
+            return trContentRowMock.Object;
         }
 
         private Mock<IWebElement> CreateNormalRowMock()

@@ -26,7 +26,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
                 .Select(transactionRows => ParseTransactionFromRows(transactionRows.ToArray()));
         }
 
-        private IFidelityTransaction ParseTransactionFromRows(IWebElement[] normalAndContentRows)
+        private IFidelityTransaction ParseTransactionFromRows(IReadOnlyList<IWebElement> normalAndContentRows)
         {
             var result = new FidelityTransaction();
             var normalTDs = normalAndContentRows[0].FindElements(By.TagName("td"));
