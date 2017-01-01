@@ -93,6 +93,34 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
         }
 
+        [Test]
+        public void GetHistoryShouldParseDividendReinvestmentTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateDividendReinvestmentTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
+        [Test]
+        public void GetHistoryShouldParseWithdrawalTransactions()
+        {
+            var expectedTransactions = new List<IFidelityTransaction>
+            {
+                CreateWithdrawalTransaction()
+            };
+            SetupHistoryTable(expectedTransactions);
+
+            var actualTransactions = _historyTransactionParser.ParseFidelityTransactions(_historyRootDivMock.Object);
+
+            CollectionAssert.AreEquivalent(expectedTransactions, actualTransactions);
+        }
+
         private void SetupHistoryTable(List<IFidelityTransaction> expectedTransactions)
         {
             _historyTableBodyMock.Setup(div => div.FindElements(By.TagName("tr")))
@@ -107,11 +135,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             return new FidelityTransaction
             {
                 Type = transactionType,
-                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                SettlementDate = new DateTime(2016, 12, 26),
                 AccountName = "account name",
                 AccountNumber = "account number",
+                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
                 Amount = 1234.50m,
-                SettlementDate = new DateTime(2016, 12, 26),
             };
         }
 
@@ -127,16 +155,39 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
         private IFidelityTransaction CreateDividendReceivedTransaction()
         {
+            const TransactionType transactionType = TransactionType.DividendReceipt;
             return new FidelityTransaction
             {
-                Type = TransactionType.DividendReceipt,
-                Symbol = "ASDF",
-                SecurityDescription = _transactionTypeMapper.MapKey(TransactionType.DividendReceipt),
+                Type = transactionType,
+                SettlementDate = new DateTime(2016, 12, 26),
                 AccountName = "account name",
                 AccountNumber = "account number",
+                Symbol = "ASDF",
+                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
                 Amount = 1234.50m,
-                SettlementDate = new DateTime(2016, 12, 26),
             };
+        }
+
+        private IFidelityTransaction CreateDividendReinvestmentTransaction()
+        {
+            const TransactionType transactionType = TransactionType.DividendReinvestment;
+            return new FidelityTransaction
+            {
+                Type = transactionType,
+                SettlementDate = new DateTime(2016, 12, 26),
+                AccountName = "account name",
+                AccountNumber = "account number",
+                Symbol = "ASDF",
+                SecurityDescription = _transactionTypeMapper.MapKey(transactionType),
+                Quantity = 0.012m,
+                Price = 1.23m,
+                Amount = 1234.50m,
+            };
+        }
+
+        private IFidelityTransaction CreateWithdrawalTransaction()
+        {
+            return CreateDepositTransaction(TransactionType.Withdrawal);
         }
     }
 }

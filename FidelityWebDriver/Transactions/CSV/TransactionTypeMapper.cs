@@ -17,6 +17,7 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
             {TransactionType.Deposit, "Electronic Funds Transfer Received"},
             {TransactionType.DepositBrokeragelink, "TRANSFERRED FROM     TO BROKERAGE OPTION"},
             {TransactionType.DepositHSA, "PARTIC CONTR CURRENT PARTICIPANT CUR YR"},
+            {TransactionType.Withdrawal, "Electronic Funds Transfer Paid"},
         };
 
         private readonly Dictionary<TransactionType, string> _reverseMappings = new Dictionary<TransactionType, string>
@@ -30,6 +31,7 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
             {TransactionType.Deposit, "Electronic Funds Transfer Received"},
             {TransactionType.DepositBrokeragelink, "TRANSFERRED FROM     TO BROKERAGE OPTION"},
             {TransactionType.DepositHSA, "PARTIC CONTR"},
+            {TransactionType.Withdrawal, "Electronic Funds Transfer Paid"},
         };
 
         public TransactionType MapValue(string trimmedText)

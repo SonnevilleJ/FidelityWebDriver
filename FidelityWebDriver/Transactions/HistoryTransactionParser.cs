@@ -67,6 +67,9 @@ namespace Sonneville.FidelityWebDriver.Transactions
                 case TransactionType.LongTermCapGain:
                     break;
                 case TransactionType.DividendReinvestment:
+                    result.Symbol = contentDictionary["Symbol"];
+                    result.Quantity = ParseQuantity(contentDictionary["Shares"]);
+                    result.Price = ParsePrice(contentDictionary["Price"]);
                     break;
                 case TransactionType.SellShort:
                     break;
@@ -82,6 +85,16 @@ namespace Sonneville.FidelityWebDriver.Transactions
         private decimal ParseAmount(string amountText)
         {
             return decimal.Parse(amountText, NumberStyles.Currency);
+        }
+
+        private decimal ParseQuantity(string amountText)
+        {
+            return decimal.Parse(amountText.Replace("+ ",""));
+        }
+
+        private decimal ParsePrice(string amountText)
+        {
+            return decimal.Parse(amountText);
         }
 
         private TransactionType ParseType(string description)

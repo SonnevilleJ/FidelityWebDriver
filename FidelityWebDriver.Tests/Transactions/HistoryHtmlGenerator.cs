@@ -61,6 +61,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                     yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
                     break;
                 case TransactionType.Withdrawal:
+                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
                     break;
                 case TransactionType.Buy:
                     break;
@@ -76,6 +77,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                 case TransactionType.LongTermCapGain:
                     break;
                 case TransactionType.DividendReinvestment:
+                    yield return CreateActivityKeyValuePair("Symbol", transaction.Symbol);
+                    yield return CreateActivityKeyValuePair("Description", transaction.SecurityDescription);
+                    yield return CreateActivityKeyValuePair("Shares", transaction.Quantity?.ToString("+ 0.###"));
+                    yield return CreateActivityKeyValuePair("Price", transaction.Price?.ToString("F"));
+                    yield return CreateActivityKeyValuePair("Amount", transaction.Amount?.ToString("C"));
                     break;
                 case TransactionType.SellShort:
                     break;
