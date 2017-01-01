@@ -183,7 +183,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
         private void AssertInvisibleProgressBar()
         {
-            Assert.IsFalse(_progressBarDivMock.Object.Displayed);
+            Assert.IsFalse(_progressBarDivMock.Object.Displayed, "Progress bar div is obstructing element!");
         }
     }
 }

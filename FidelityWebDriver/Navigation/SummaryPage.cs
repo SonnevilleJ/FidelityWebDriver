@@ -44,7 +44,10 @@ namespace Sonneville.FidelityWebDriver.Navigation
 
         public IPositionsPage GoToPositionsPage()
         {
+            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
+
             _webDriver.FindElement(By.CssSelector("[data-tab-name='Positions']")).Click();
+            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
 
             return _pageFactory.GetPage<IPositionsPage>();
         }
@@ -54,6 +57,7 @@ namespace Sonneville.FidelityWebDriver.Navigation
             WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
 
             _webDriver.FindElement(By.CssSelector("[data-tab-name='Activity']")).Click();
+            WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
 
             return _pageFactory.GetPage<IActivityPage>();
         }

@@ -14,17 +14,17 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         private Mock<IWebDriver> _webDriverMock;
         private Mock<IPageFactory> _pageFactoryMock;
         private double _balanceNumber;
-        private Mock<IWebElement> _fullBalanceSpan;
+        private Mock<IWebElement> _fullBalanceSpanMock;
         private Mock<IPositionsPage> _positionsPageMock;
-        private Mock<IWebElement> _positionsLi;
-        private Mock<IWebElement> _gainLossAmountSpan;
-        private Mock<IWebElement> _gainLossPercentSpan;
+        private Mock<IWebElement> _positionsLiMock;
+        private Mock<IWebElement> _gainLossAmountSpanMock;
+        private Mock<IWebElement> _gainLossPercentSpanMock;
         private double _gainLossAmount;
         private double _gainLossPercent;
 
-        private Mock<IWebElement> _activityLi;
+        private Mock<IWebElement> _activityLiMock;
         private Mock<IActivityPage> _activityPageMock;
-        private Mock<IWebElement> _progressBarDiv;
+        private Mock<IWebElement> _progressBarDivMock;
 
         [SetUp]
         public void Setup()
@@ -33,59 +33,44 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
 
             _balanceNumber = 1234.56;
 
-            _fullBalanceSpan = new Mock<IWebElement>();
-            _fullBalanceSpan.Setup(span => span.Text).Returns(_balanceNumber.ToString("C"));
+            _fullBalanceSpanMock = new Mock<IWebElement>();
+            _fullBalanceSpanMock.Setup(span => span.Text).Returns(_balanceNumber.ToString("C"));
 
             _gainLossAmount = 12.35;
 
-            _gainLossAmountSpan = new Mock<IWebElement>();
-            _gainLossAmountSpan.Setup(span => span.Text).Returns(_gainLossAmount.ToString("C"));
+            _gainLossAmountSpanMock = new Mock<IWebElement>();
+            _gainLossAmountSpanMock.Setup(span => span.Text).Returns(_gainLossAmount.ToString("C"));
 
             _gainLossPercent = 0.1;
 
-            _gainLossPercentSpan = new Mock<IWebElement>();
-            _gainLossPercentSpan.Setup(span => span.Text)
+            _gainLossPercentSpanMock = new Mock<IWebElement>();
+            _gainLossPercentSpanMock.Setup(span => span.Text)
                 .Returns($"(+{_gainLossPercent:P})");
 
-            _positionsLi = new Mock<IWebElement>();
+            _positionsLiMock = new Mock<IWebElement>();
 
-            _progressBarDiv = new Mock<IWebElement>();
-            _progressBarDiv.Setup(div => div.Displayed).Returns(() =>
-            {
-                try
-                {
-                    return true;
-                }
-                finally
-                {
-                    _progressBarDiv.Setup(div => div.Displayed).Returns(false);
-                }
-            });
+            _progressBarDivMock = new Mock<IWebElement>();
 
-            _activityLi = new Mock<IWebElement>();
-            _activityLi.Setup(li => li.Click()).Callback(() =>
-            {
-                Assert.IsFalse(_progressBarDiv.Object.Displayed, "Progress bar div is obstructing element!");
-            });
+            _activityLiMock = new Mock<IWebElement>();
 
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("js-total-balance-value")))
-                .Returns(_fullBalanceSpan.Object);
+                .Returns(_fullBalanceSpanMock.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.CssSelector("[data-tab-name='Positions']")))
-                .Returns(_positionsLi.Object);
+                .Returns(_positionsLiMock.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.CssSelector("[data-tab-name='Activity']")))
-                .Returns(_activityLi.Object);
+                .Returns(_activityLiMock.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("js-today-change-value-dollar")))
-                .Returns(_gainLossAmountSpan.Object);
+                .Returns(_gainLossAmountSpanMock.Object);
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("js-today-change-value-percent")))
-                .Returns(_gainLossPercentSpan.Object);
+                .Returns(_gainLossPercentSpanMock.Object);
             _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("progress-bar")))
-                .Returns(_progressBarDiv.Object);
+                .Returns(_progressBarDivMock.Object);
 
             _positionsPageMock = new Mock<IPositionsPage>();
 
             _activityPageMock = new Mock<IActivityPage>();
-            
+
             _pageFactoryMock = new Mock<IPageFactory>();
             _pageFactoryMock.Setup(factory => factory.GetPage<IPositionsPage>()).Returns(_positionsPageMock.Object);
             _pageFactoryMock.Setup(factory => factory.GetPage<IActivityPage>()).Returns(_activityPageMock.Object);
@@ -120,19 +105,55 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         [Test]
         public void ShouldNavigateToPositionsPage()
         {
+            SetupVisibleProgressBar();
+            _positionsLiMock.Setup(li => li.Click()).Callback(() =>
+            {
+                AssertInvisibleProgressBar();
+                SetupVisibleProgressBar();
+            });
             var positionsPage = _summaryPage.GoToPositionsPage();
 
-            _positionsLi.Verify(li => li.Click());
+            _positionsLiMock.Verify(li => li.Click());
+            AssertInvisibleProgressBar();
             Assert.AreSame(_positionsPageMock.Object, positionsPage);
         }
 
         [Test]
         public void ShouldNavigateToActivityPage()
         {
+            SetupVisibleProgressBar();
+            _activityLiMock.Setup(li => li.Click()).Callback(() =>
+            {
+                AssertInvisibleProgressBar();
+                SetupVisibleProgressBar();
+            });
+
             var activityPage = _summaryPage.GoToActivityPage();
 
-            _activityLi.Verify(li => li.Click());
+            _activityLiMock.Verify(li => li.Click());
+            AssertInvisibleProgressBar();
             Assert.AreSame(_activityPageMock.Object, activityPage);
+        }
+
+        private void SetupVisibleProgressBar()
+        {
+            _progressBarDivMock.Setup(div => div.Displayed)
+                .Returns(() =>
+                {
+                    try
+                    {
+                        return true;
+                    }
+                    finally
+                    {
+                        _progressBarDivMock.Setup(div => div.Displayed).Returns(false);
+                    }
+                });
+        }
+
+        private void AssertInvisibleProgressBar()
+        {
+            Assert.IsFalse(_progressBarDivMock.Object.Displayed, "Progress bar div is obstructing element!");
         }
     }
 }
