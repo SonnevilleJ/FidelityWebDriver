@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
 
@@ -11,29 +12,53 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
     {
         public IEnumerable<IWebElement> MapToTableRows(IFidelityTransaction transaction)
         {
-            yield return CreateNormalRow(transaction);
-            yield return CreateDepositContentRow(transaction);
+            var contentRow = CreateContentRow(transaction);
+            var normalRow = CreateNormalRow(transaction, contentRow);
+            yield return normalRow.Object;
+            yield return contentRow.Object;
+            var garbageRow = new Mock<IWebElement>();
+            garbageRow.Setup(row => row.GetAttribute("class")).Returns("This row should be ignored");
+            yield return garbageRow.Object;
         }
 
-        private IWebElement CreateNormalRow(IFidelityTransaction transaction)
+        private Mock<IWebElement> CreateNormalRow(IFidelityTransaction transaction, Mock<IWebElement> contentRow)
         {
             var trNormalRowExpandableMock = CreateNormalRowMock();
+            trNormalRowExpandableMock.Setup(tr => tr.GetAttribute("class")).Returns("normal-row expandable");
+            trNormalRowExpandableMock.Setup(tr => tr.Click())
+                .Callback(() =>
+                {
+                    if (trNormalRowExpandableMock.Object.GetAttribute("class").Contains("row-selected"))
+                    {
+                        trNormalRowExpandableMock.Setup(row => row.GetAttribute("class")).Returns("normal-row expandable");
+                        contentRow.Setup(row => row.GetAttribute("class")).Returns("content-row content-row-hidden");
+                    }
+                    else
+                    {
+                        trNormalRowExpandableMock.Setup(row => row.GetAttribute("class")).Returns("normal-row expandable row-selected");
+                        contentRow.Setup(row => row.GetAttribute("class")).Returns("content-row");
+                    }
+                });
             trNormalRowExpandableMock.Setup(tr => tr.FindElements(By.TagName("td")))
+                .Callback(() =>
+                {
+                    Assert.IsTrue(trNormalRowExpandableMock.Object.GetAttribute("class").Contains("row-selected"));
+                })
                 .Returns(new List<IWebElement>
                 {
                     CreateDateTd(transaction.RunDate),
                     CreateAccountTd(transaction.AccountName, transaction.AccountNumber),
                     CreateDescriptionTd(transaction.SecurityDescription),
                 }.AsReadOnly);
-            return trNormalRowExpandableMock.Object;
+            return trNormalRowExpandableMock;
         }
 
-        private IWebElement CreateDepositContentRow(IFidelityTransaction transaction)
+        private Mock<IWebElement> CreateContentRow(IFidelityTransaction transaction)
         {
             var trContentRowMock = CreateContentRowMock();
             trContentRowMock.Setup(tr => tr.FindElements(By.TagName("tr")))
                 .Returns(CreateActivityTrs(transaction).ToList().AsReadOnly());
-            return trContentRowMock.Object;
+            return trContentRowMock;
         }
 
         private IEnumerable<IWebElement> CreateActivityTrs(IFidelityTransaction transaction)

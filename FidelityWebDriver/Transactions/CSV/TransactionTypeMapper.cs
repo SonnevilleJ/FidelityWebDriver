@@ -29,7 +29,7 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
             {TransactionType.ShortTermCapGain, "SHORT-TERM CAP GAIN"},
             {TransactionType.LongTermCapGain, "LONG-TERM CAP GAIN"},
             {TransactionType.Deposit, "Electronic Funds Transfer Received"},
-            {TransactionType.DepositBrokeragelink, "TRANSFERRED FROM     TO BROKERAGE OPTION"},
+            {TransactionType.DepositBrokeragelink, "TO BROKERAGE OPTION"},
             {TransactionType.DepositHSA, "PARTIC CONTR"},
             {TransactionType.Withdrawal, "Electronic Funds Transfer Paid"},
         };

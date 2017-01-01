@@ -39,8 +39,11 @@ namespace Sonneville.FidelityWebDriver.Transactions
         {
             WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
 
-            var historyExpanderLink = historyRoot.FindElement(By.Id("historyExpander"));
-            historyExpanderLink.Click();
+            if (!historyRoot.GetAttribute("class").Contains("expanded"))
+            {
+                var historyExpanderLink = historyRoot.FindElement(By.Id("historyExpander"));
+                historyExpanderLink.Click();
+            }
         }
 
         private void SelectCustomDateRangeOption(IWebElement historyRoot)

@@ -44,6 +44,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _webDriverMock = new Mock<IWebDriver>();
 
             _historyRootDivMock = new Mock<IWebElement>();
+            _historyRootDivMock.Setup(div => div.GetAttribute("class")).Returns("activity--expander activity--expander-history expander last collapsed");
+
             _webDriverMock.Setup(driver => driver.FindElement(By.ClassName("activity--expander-history")))
                 .Returns(_historyRootDivMock.Object);
 
@@ -54,13 +56,13 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _historyRangeDropdownMock = new Mock<IWebElement>();
             _historyRangeDropdownMock.Setup(dropdown => dropdown.FindElement(By.CssSelector("option[value='custom']")))
                 .Returns(_customHistoryRangeOptionMock.Object);
-            _historyRootDivMock.Setup(webDriver => webDriver.FindElement(By.Id("activity--history-range-dropdown")))
+            _historyRootDivMock.Setup(div => div.FindElement(By.Id("activity--history-range-dropdown")))
                 .Returns(_historyRangeDropdownMock.Object);
 
             _setTimePeriodButtonMock = new Mock<IWebElement>();
 
             _historyExpanderLinkMock = new Mock<IWebElement>();
-            _historyRootDivMock.Setup(webDriver => webDriver.FindElement(By.Id("historyExpander")))
+            _historyRootDivMock.Setup(div => div.FindElement(By.Id("historyExpander")))
                 .Returns(_historyExpanderLinkMock.Object);
 
             _fromDateInputMock = new Mock<IWebElement>();
@@ -76,7 +78,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
                     div => div.FindElement(By.ClassName("activity--history-custom-date-display-button")))
                 .Returns(_setTimePeriodButtonMock.Object);
             _historyRootDivMock.Setup(
-                    webDriver => webDriver.FindElement(By.ClassName("activity--history-custom-date-container")))
+                    div => div.FindElement(By.ClassName("activity--history-custom-date-container")))
                 .Returns(_dateRangeDivMock.Object);
 
             _progressBarDivMock = new Mock<IWebElement>();
@@ -109,6 +111,16 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate);
 
             _historyExpanderLinkMock.Verify(link => link.Click());
+        }
+
+        [Test]
+        public void ShouldNotExpandHistoryIfAlreadyExpanded()
+        {
+            _historyRootDivMock.Setup(div => div.GetAttribute("class")).Returns("activity--expander activity--expander-history expander last expanded");
+
+            _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate);
+
+            _historyExpanderLinkMock.Verify(link => link.Click(), Times.Never);
         }
 
         [Test]

@@ -21,6 +21,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
         {
             return historyRoot.FindElements(By.TagName("tbody"))[0]
                 .FindElements(By.TagName("tr"))
+                .Where(row => row.GetAttribute("class").Contains("normal-row") || row.GetAttribute("class").Contains("content-row"))
                 .Select((row, index) => new KeyValuePair<int, IWebElement>(index, row))
                 .GroupBy(kvp => kvp.Key / 2, kvp => kvp.Value, (i, elements) => elements)
                 .Select(transactionRows => ParseTransactionFromRows(transactionRows.ToArray()));
@@ -29,6 +30,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
         private IFidelityTransaction ParseTransactionFromRows(IReadOnlyList<IWebElement> normalAndContentRows)
         {
             var result = new FidelityTransaction();
+            normalAndContentRows[0].Click();
             var normalTDs = normalAndContentRows[0].FindElements(By.TagName("td"));
             result.RunDate = ParseDate(normalTDs[0].Text);
             result.AccountName = ParseAccountName(normalTDs[1]);
@@ -80,19 +82,19 @@ namespace Sonneville.FidelityWebDriver.Transactions
             return result;
         }
 
-        private decimal ParseCurrency(string amountText)
+        private decimal ParseCurrency(string text)
         {
-            return decimal.Parse(amountText, NumberStyles.Currency);
+            return decimal.Parse(text, NumberStyles.Currency);
         }
 
-        private decimal ParseQuantity(string amountText)
+        private decimal ParseQuantity(string text)
         {
-            return decimal.Parse(amountText.Replace("+ ",""));
+            return decimal.Parse(text.Replace("+ ", ""));
         }
 
-        private decimal ParseDecimal(string amountText)
+        private decimal ParseDecimal(string text)
         {
-            return decimal.Parse(amountText);
+            return decimal.Parse(text);
         }
 
         private TransactionType ParseType(string description)
