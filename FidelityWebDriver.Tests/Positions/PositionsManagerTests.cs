@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
-using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Positions;
 
 namespace Sonneville.FidelityWebDriver.Tests.Positions
@@ -13,7 +11,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
     public class PositionsManagerTests : ManagerTestsBase<IPositionsManager>
     {
         private Mock<ILoginManager> _loginManagerMock;
-        private Mock<ISummaryPage> _summaryPageMock;
         private Mock<IPositionsPage> _positionsPage;
         private List<IAccountSummary> _accountSummaries;
         private List<IAccountDetails> _accountDetails;
@@ -29,11 +26,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             _positionsPage.Setup(positionsPage => positionsPage.GetAccountDetails())
                 .Returns(_accountDetails);
 
-            _summaryPageMock = new Mock<ISummaryPage>();
-            _summaryPageMock.Setup(summaryPage => summaryPage.GoToPositionsPage()).Returns(_positionsPage.Object);
+            SiteNavigatorMock.Setup(siteNavigator => siteNavigator.GoTo<IPositionsPage>()).Returns(_positionsPage.Object);
 
             _loginManagerMock = new Mock<ILoginManager>();
-            _loginManagerMock.Setup(manager => manager.EnsureLoggedIn()).Returns(_summaryPageMock.Object);
 
             return new PositionsManager(LogMock.Object, SiteNavigatorMock.Object, _loginManagerMock.Object);
         }

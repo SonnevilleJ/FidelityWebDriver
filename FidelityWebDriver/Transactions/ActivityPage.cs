@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
     public class ActivityPage : IActivityPage
     {
         private readonly IWebDriver _webDriver;
-        private readonly IPageFactory _pageFactory;
         private readonly IHistoryTransactionParser _historyTransactionParser;
 
-        public ActivityPage(IWebDriver webDriver, IPageFactory pageFactory, IHistoryTransactionParser historyTransactionParser)
+        public ActivityPage(IWebDriver webDriver, IHistoryTransactionParser historyTransactionParser)
         {
             _webDriver = webDriver;
-            _pageFactory = pageFactory;
             _historyTransactionParser = historyTransactionParser;
         }
 

@@ -4,6 +4,6 @@ namespace Sonneville.FidelityWebDriver.Login
 {
     public interface ILoginPage : IPage
     {
-        ISummaryPage LogIn(string username, string password);
+        void LogIn(string username, string password);
     }
 }

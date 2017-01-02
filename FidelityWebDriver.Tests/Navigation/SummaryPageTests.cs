@@ -2,8 +2,6 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Positions;
-using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Tests.Navigation
 {
@@ -12,10 +10,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
     {
         private SummaryPage _summaryPage;
         private Mock<IWebDriver> _webDriverMock;
-        private Mock<IPageFactory> _pageFactoryMock;
         private double _balanceNumber;
         private Mock<IWebElement> _fullBalanceSpanMock;
-        private Mock<IPositionsPage> _positionsPageMock;
         private Mock<IWebElement> _positionsLiMock;
         private Mock<IWebElement> _gainLossAmountSpanMock;
         private Mock<IWebElement> _gainLossPercentSpanMock;
@@ -23,7 +19,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         private double _gainLossPercent;
 
         private Mock<IWebElement> _activityLiMock;
-        private Mock<IActivityPage> _activityPageMock;
         private Mock<IWebElement> _progressBarDivMock;
 
         [SetUp]
@@ -67,15 +62,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
             _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("progress-bar")))
                 .Returns(_progressBarDivMock.Object);
 
-            _positionsPageMock = new Mock<IPositionsPage>();
-
-            _activityPageMock = new Mock<IActivityPage>();
-
-            _pageFactoryMock = new Mock<IPageFactory>();
-            _pageFactoryMock.Setup(factory => factory.GetPage<IPositionsPage>()).Returns(_positionsPageMock.Object);
-            _pageFactoryMock.Setup(factory => factory.GetPage<IActivityPage>()).Returns(_activityPageMock.Object);
-
-            _summaryPage = new SummaryPage(_webDriverMock.Object, _pageFactoryMock.Object);
+            _summaryPage = new SummaryPage(_webDriverMock.Object);
         }
 
         [Test]
@@ -111,11 +98,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
                 AssertInvisibleProgressBar();
                 SetupVisibleProgressBar();
             });
-            var positionsPage = _summaryPage.GoToPositionsPage();
+
+            _summaryPage.GoToPositionsPage();
 
             _positionsLiMock.Verify(li => li.Click());
             AssertInvisibleProgressBar();
-            Assert.AreSame(_positionsPageMock.Object, positionsPage);
         }
 
         [Test]
@@ -128,11 +115,10 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
                 SetupVisibleProgressBar();
             });
 
-            var activityPage = _summaryPage.GoToActivityPage();
+            _summaryPage.GoToActivityPage();
 
             _activityLiMock.Verify(li => li.Click());
             AssertInvisibleProgressBar();
-            Assert.AreSame(_activityPageMock.Object, activityPage);
         }
 
         private void SetupVisibleProgressBar()

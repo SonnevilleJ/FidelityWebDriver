@@ -22,13 +22,17 @@ namespace Sonneville.FidelityWebDriver.Positions
         public IEnumerable<IAccountSummary> GetAccountSummaries()
         {
             _log.Info("Getting account summaries...");
-            return _loginManager.EnsureLoggedIn().GoToPositionsPage().GetAccountSummaries();
+            _loginManager.EnsureLoggedIn();
+
+            return _siteNavigator.GoTo<IPositionsPage>().GetAccountSummaries();
         }
 
         public IEnumerable<IAccountDetails> GetAccountDetails()
         {
             _log.Info("Getting account details...");
-            return _loginManager.EnsureLoggedIn().GoToPositionsPage().GetAccountDetails();
+            _loginManager.EnsureLoggedIn();
+
+            return _siteNavigator.GoTo<IPositionsPage>().GetAccountDetails();
         }
 
         public void Dispose()

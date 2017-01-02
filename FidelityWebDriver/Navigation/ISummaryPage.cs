@@ -11,8 +11,8 @@ namespace Sonneville.FidelityWebDriver.Navigation
 
         double GetGainLossPercent();
 
-        IPositionsPage GoToPositionsPage();
+        void GoToPositionsPage();
 
-        IActivityPage GoToActivityPage();
+        void GoToActivityPage();
     }
 }

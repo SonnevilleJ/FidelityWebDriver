@@ -32,7 +32,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
             _sleepUtilMock = new Mock<ISleepUtil>();
 
-            _positionsPage = new PositionsPage(_webDriverMock.Object, _pageFactoryMock.Object,
+            _positionsPage = new PositionsPage(_webDriverMock.Object,
                 _accountSummariesExtractorMock.Object, _accountDetailsExtractorMock.Object, _sleepUtilMock.Object);
         }
 

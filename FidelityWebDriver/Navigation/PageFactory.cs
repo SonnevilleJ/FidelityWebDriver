@@ -22,23 +22,23 @@ namespace Sonneville.FidelityWebDriver.Navigation
             {
                 {
                     typeof(IHomePage),
-                    new HomePage(webDriver, this)
+                    new HomePage(webDriver)
                 },
                 {
                     typeof(ILoginPage),
-                    new LoginPage(webDriver, this)
+                    new LoginPage(webDriver)
                 },
                 {
                     typeof(ISummaryPage),
-                    new SummaryPage(webDriver, this)
+                    new SummaryPage(webDriver)
                 },
                 {
                     typeof(IPositionsPage),
-                    new PositionsPage(webDriver, this, accountSummariesExtractor, accountDetailsExtractor, sleepUtil)
+                    new PositionsPage(webDriver, accountSummariesExtractor, accountDetailsExtractor, sleepUtil)
                 },
                 {
                     typeof(IActivityPage),
-                    new ActivityPage(webDriver, this, historyTransactionParser)
+                    new ActivityPage(webDriver, historyTransactionParser)
                 },
             };
         }

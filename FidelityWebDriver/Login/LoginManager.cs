@@ -19,22 +19,19 @@ namespace Sonneville.FidelityWebDriver.Login
 
         public bool IsLoggedIn { get; private set; }
 
-        private ISummaryPage LogIn()
+        private void LogIn()
         {
             _log.Info("Logging in to Fidelity...");
 
-            var loginPage = _siteNavigator.GoTo<ILoginPage>();
-
-            var summaryPage = loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password);
+            _siteNavigator.GoTo<ILoginPage>().LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password);
             IsLoggedIn = true;
-            return summaryPage;
         }
 
         public ISummaryPage EnsureLoggedIn()
         {
             if (!IsLoggedIn)
             {
-                return LogIn();
+                LogIn();
             }
             return _siteNavigator.GoTo<ISummaryPage>();
         }

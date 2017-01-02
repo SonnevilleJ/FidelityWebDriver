@@ -42,16 +42,15 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
             _pageFactoryMock = new Mock<IPageFactory>();
             _pageFactoryMock.Setup(factory => factory.GetPage<ILoginPage>()).Returns(_loginPageMock.Object);
 
-            _homePage = new HomePage(_webDriverMock.Object, _pageFactoryMock.Object);
+            _homePage = new HomePage(_webDriverMock.Object);
         }
 
         [Test]
         public void ShouldNavigateToLoginPage()
         {
-            var loginPage = _homePage.GoToLoginPage();
+            _homePage.GoToLoginPage();
 
             _aMock.Verify(a => a.Click());
-            Assert.AreSame(_loginPageMock.Object, loginPage);
         }
     }
 }

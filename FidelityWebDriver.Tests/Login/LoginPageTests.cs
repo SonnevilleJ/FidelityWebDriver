@@ -5,7 +5,6 @@ using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Login;
-using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Tests.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Tests.Login
@@ -20,14 +19,12 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         private Mock<IWebElement> _passwordInputMock;
         private Mock<IWebElement> _submitButtonMock;
         private Mock<IWebDriver> _webDriverMock;
-        private Mock<IPageFactory> _pageFactoryMock;
-        private Mock<ISummaryPage> _summaryPageMock;
         private List<IWebElement> _errorDivs;
 
         [SetUp]
         public void Setup()
         {
-            base.SetupPageFactory();
+            SetupPageFactory();
 
             _username = "username";
             _password = "password";
@@ -47,13 +44,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
             _webDriverMock.Setup(webDriver => webDriver.FindElements(By.ClassName("error-page")))
                 .Returns(_errorDivs.AsReadOnly());
 
-            _summaryPageMock = new Mock<ISummaryPage>();
-
-            _pageFactoryMock = new Mock<IPageFactory>();
-            _pageFactoryMock.Setup(pageFactory => pageFactory.GetPage<ISummaryPage>())
-                .Returns(_summaryPageMock.Object);
-
-            _loginPage = new LoginPage(_webDriverMock.Object, _pageFactoryMock.Object);
+            _loginPage = new LoginPage(_webDriverMock.Object);
         }
 
         [Test]
@@ -79,11 +70,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
                 _passwordInputMock.Verify(input => input.SendKeys(_password), "Must enter password before clicking submit!");
             });
 
-            var summaryPage = _loginPage.LogIn(_username, _password);
+            _loginPage.LogIn(_username, _password);
 
             _submitButtonMock.Verify(button => button.Click());
-
-            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
 
         [Test]

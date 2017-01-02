@@ -2,22 +2,19 @@ using System;
 using System.Linq;
 using System.Security.Authentication;
 using OpenQA.Selenium;
-using Sonneville.FidelityWebDriver.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Login
 {
     public class LoginPage : ILoginPage
     {
         private readonly IWebDriver _webDriver;
-        private readonly IPageFactory _pageFactory;
 
-        public LoginPage(IWebDriver webDriver, IPageFactory pageFactory)
+        public LoginPage(IWebDriver webDriver)
         {
             _webDriver = webDriver;
-            _pageFactory = pageFactory;
         }
 
-        public ISummaryPage LogIn(string username, string password)
+        public void LogIn(string username, string password)
         {
             ValidateCredentials(username, password);
 
@@ -29,7 +26,6 @@ namespace Sonneville.FidelityWebDriver.Login
             {
                 throw new InvalidCredentialException("Failed to log into Fidelity with given credentials!");
             }
-            return _pageFactory.GetPage<ISummaryPage>();
         }
 
         private void ValidateCredentials(string username, string password)
@@ -38,9 +34,9 @@ namespace Sonneville.FidelityWebDriver.Login
             if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password));
         }
 
-        private void InsertTextIntoInput(By @by, string username)
+        private void InsertTextIntoInput(By by, string username)
         {
-            var element = _webDriver.FindElement(@by);
+            var element = _webDriver.FindElement(by);
             element.SendKeys(username);
         }
     }

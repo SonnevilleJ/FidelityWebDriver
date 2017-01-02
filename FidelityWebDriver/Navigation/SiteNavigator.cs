@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using log4net;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Login;
+using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Navigation
@@ -19,6 +20,7 @@ namespace Sonneville.FidelityWebDriver.Navigation
             {typeof (IHomePage), (siteNavigator, webDriver) => webDriver.Navigate().GoToUrl("https://www.fidelity.com")},
             {typeof (ILoginPage), (siteNavigator, webDriver) => siteNavigator.GoTo<IHomePage>().GoToLoginPage()},
             {typeof (ISummaryPage), (siteNavigator, webDriver) => webDriver.Navigate().GoToUrl("https://oltx.fidelity.com/ftgw/fbc/oftop/portfolio")},
+            {typeof (IPositionsPage), (siteNavigator, webDriver) => siteNavigator.GoTo<ISummaryPage>().GoToPositionsPage()},
             {typeof (IActivityPage), (siteNavigator, webDriver) => siteNavigator.GoTo<ISummaryPage>().GoToActivityPage()},
         };
 

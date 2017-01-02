@@ -2,20 +2,16 @@ using System;
 using System.Globalization;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using Sonneville.FidelityWebDriver.Positions;
-using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Navigation
 {
     public class SummaryPage : ISummaryPage
     {
         private readonly IWebDriver _webDriver;
-        private readonly IPageFactory _pageFactory;
 
-        public SummaryPage(IWebDriver webDriver, IPageFactory pageFactory)
+        public SummaryPage(IWebDriver webDriver)
         {
             _webDriver = webDriver;
-            _pageFactory = pageFactory;
         }
 
         public double GetBalanceOfAllAccounts()
@@ -42,24 +38,20 @@ namespace Sonneville.FidelityWebDriver.Navigation
             return double.Parse(result)/100.0;
         }
 
-        public IPositionsPage GoToPositionsPage()
+        public void GoToPositionsPage()
         {
             WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
 
             _webDriver.FindElement(By.CssSelector("[data-tab-name='Positions']")).Click();
             WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
-
-            return _pageFactory.GetPage<IPositionsPage>();
         }
 
-        public IActivityPage GoToActivityPage()
+        public void GoToActivityPage()
         {
             WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
 
             _webDriver.FindElement(By.CssSelector("[data-tab-name='Activity']")).Click();
             WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
-
-            return _pageFactory.GetPage<IActivityPage>();
         }
 
         private void WaitUntilNotDisplayed(IWebDriver webDriver, By element)

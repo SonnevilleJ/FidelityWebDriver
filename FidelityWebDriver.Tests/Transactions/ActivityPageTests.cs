@@ -97,7 +97,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _historyTransactionParserMock.Setup(parser => parser.ParseFidelityTransactions(_historyRootDivMock.Object))
                 .Returns(_expectedTransactions);
 
-            _activityPage = new ActivityPage(_webDriverMock.Object, _pageFactoryMock.Object,
+            _activityPage = new ActivityPage(_webDriverMock.Object,
                 _historyTransactionParserMock.Object);
         }
 
