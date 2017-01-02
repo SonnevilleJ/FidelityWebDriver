@@ -21,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Tests
         protected abstract T InstantiateManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration);
 
         [Test]
-        public void ShouldDisposeSiteNavigator()
+        public void EachManagerShouldDisposeSiteNavigator()
         {
             Manager.Dispose();
 
@@ -29,7 +29,7 @@ namespace Sonneville.FidelityWebDriver.Tests
         }
 
         [Test]
-        public void ShouldHandleMultipleDisposals()
+        public void EachManagerShouldHandleMultipleDisposals()
         {
             Manager.Dispose();
             Manager.Dispose();

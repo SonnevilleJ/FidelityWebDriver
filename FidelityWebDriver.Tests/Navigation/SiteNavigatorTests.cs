@@ -66,7 +66,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
             var homePage = _siteNavigator.GoTo<IHomePage>();
 
             _navigationMock.Verify(navigation => navigation.GoToUrl("https://www.fidelity.com"));
-            Assert.AreEqual(_homePageMock.Object, homePage);
+            Assert.AreSame(_homePageMock.Object, homePage);
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
             var loginPage = _siteNavigator.GoTo<ILoginPage>();
 
             _homePageMock.Verify(page => page.GoToLoginPage());
-            Assert.AreEqual(_loginPageMock.Object, loginPage);
+            Assert.AreSame(_loginPageMock.Object, loginPage);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
             var summaryPage = _siteNavigator.GoTo<ISummaryPage>();
 
             _navigationMock.Verify(navigation => navigation.GoToUrl("https://oltx.fidelity.com/ftgw/fbc/oftop/portfolio"));
-            Assert.AreEqual(_summaryPageMock.Object, summaryPage);
+            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
 
         [Test]
@@ -92,8 +92,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         {
             var activityPage = _siteNavigator.GoTo<IActivityPage>();
 
-            Assert.AreEqual(_activityPageMock.Object, activityPage);
             _summaryPageMock.Verify(summaryPage=>summaryPage.GoToActivityPage());
+            Assert.AreSame(_activityPageMock.Object, activityPage);
         }
 
         public void Dispose()

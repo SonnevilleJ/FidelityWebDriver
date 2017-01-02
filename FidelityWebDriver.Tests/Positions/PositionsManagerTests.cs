@@ -25,10 +25,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
             _positionsPage = new Mock<IPositionsPage>();
             _positionsPage.Setup(positionsPage => positionsPage.GetAccountSummaries())
-                .Callback(()=>_loginManagerMock.Verify(loginManager=>loginManager.EnsureLoggedIn()))
                 .Returns(_accountSummaries);
             _positionsPage.Setup(positionsPage => positionsPage.GetAccountDetails())
-                .Callback(() => _loginManagerMock.Verify(loginManager => loginManager.EnsureLoggedIn()))
                 .Returns(_accountDetails);
 
             _summaryPageMock = new Mock<ISummaryPage>();
@@ -43,7 +41,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         [SetUp]
         public void Setup()
         {
-            base.SetupTestsBase();
+            SetupTestsBase();
         }
 
         [Test]
@@ -68,6 +66,28 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             var accounts = Manager.GetAccountDetails();
 
             Assert.AreSame(_accountDetails, accounts);
+        }
+
+        [Test]
+        public void ShouldEnsureLoggedInBeforeGettingAccountSummaries()
+        {
+            _positionsPage.Setup(page => page.GetAccountSummaries())
+                .Callback(() => _loginManagerMock.Verify(loginManager => loginManager.EnsureLoggedIn()));
+
+            Manager.GetAccountSummaries();
+
+            _positionsPage.Verify(page => page.GetAccountSummaries());
+        }
+
+        [Test]
+        public void ShouldEnsureLoggedInBeforeGettingAccountDetails()
+        {
+            _positionsPage.Setup(page => page.GetAccountDetails())
+                .Callback(() => _loginManagerMock.Verify(loginManager => loginManager.EnsureLoggedIn()));
+
+            Manager.GetAccountDetails();
+
+            _positionsPage.Verify(page => page.GetAccountDetails());
         }
     }
 }

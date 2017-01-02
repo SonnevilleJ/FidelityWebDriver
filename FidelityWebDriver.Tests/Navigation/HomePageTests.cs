@@ -21,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         [SetUp]
         public void Setup()
         {
-            base.SetupPageFactory();
+            SetupPageFactory();
 
             _aMock = new Mock<IWebElement>();
 

@@ -25,7 +25,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         [SetUp]
         public void Setup()
         {
-            base.SetupTestsBase();
+            SetupTestsBase();
             _summaryPageMock = new Mock<ISummaryPage>();
             SiteNavigatorMock.Setup(navigator => navigator.GoTo<ISummaryPage>()).Returns(_summaryPageMock.Object);
 
@@ -67,7 +67,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         }
 
         [Test]
-        public void ShouldLogInIfNOtAlreadyLoggedIn()
+        public void ShouldLogInIfNotAlreadyLoggedIn()
         {
             var summaryPage = Manager.EnsureLoggedIn();
 
