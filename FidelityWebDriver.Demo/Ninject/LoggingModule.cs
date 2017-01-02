@@ -28,6 +28,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
 
             var hierarchy = (Hierarchy) LogManager.GetRepository();
             hierarchy.Root.AddAppender(rollingFileAppender);
+            hierarchy.Root.Level = Level.All;
             hierarchy.Configured = true;
         }
 
