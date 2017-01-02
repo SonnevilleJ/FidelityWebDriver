@@ -27,7 +27,7 @@ namespace Sonneville.FidelityWebDriver.Login
 
             if (_webDriver.FindElements(By.ClassName("error-page")).Any())
             {
-                throw new InvalidCredentialException("Failed to log into Fidelity.com with given credentials!");
+                throw new InvalidCredentialException("Failed to log into Fidelity with given credentials!");
             }
             return _pageFactory.GetPage<ISummaryPage>();
         }

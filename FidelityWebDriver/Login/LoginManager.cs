@@ -21,7 +21,7 @@ namespace Sonneville.FidelityWebDriver.Login
 
         private ISummaryPage LogIn()
         {
-            _log.Info("Logging in...");
+            _log.Info("Logging in to Fidelity...");
 
             var loginPage = _siteNavigator.GoTo<ILoginPage>();
 
