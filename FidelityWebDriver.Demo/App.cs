@@ -54,7 +54,7 @@ namespace Sonneville.FidelityWebDriver.Demo
                 },
             };
 
-            _log.Debug("App initialized");
+            _log.Info("App initialized");
         }
 
         public void Run(IEnumerable<string> args)
@@ -77,73 +77,78 @@ namespace Sonneville.FidelityWebDriver.Demo
             }
             if (string.IsNullOrEmpty(_fidelityConfiguration.Username))
             {
+                _log.Info("No username configured; requesting credentials from user.");
                 Console.Write("Please enter a username for Fidelity.com: ");
                 _fidelityConfiguration.Username = Console.ReadLine();
                 Console.Write("Please enter a password for Fidelity.com: ");
                 _fidelityConfiguration.Password = Console.ReadLine();
             }
 
-            Console.WriteLine("Reading account summaries.....");
+            LogToScreen("Reading account summaries.....");
             PrintAccountSummaries(_positionsManager.GetAccountSummaries().ToList());
             PrintSeparator();
-            Console.WriteLine("Reading account details.......");
+            LogToScreen("Reading account details.......");
             PrintAccountDetails(_positionsManager.GetAccountDetails().ToList());
             PrintSeparator();
-            Console.WriteLine("Reading recent transactions...");
+            LogToScreen("Reading recent transactions...");
             PrintRecentTransactions(_transactionManager.GetTransactionHistory(DateTime.Today.AddDays(-30), DateTime.Today).ToList());
             PrintSeparator();
         }
 
         private void PrintSeparator()
         {
-            Console.WriteLine();
-            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            Console.WriteLine();
+            LogToScreen();
+            LogToScreen("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            LogToScreen();
         }
 
         private void PrintAccountSummaries(IReadOnlyCollection<IAccountSummary> accountSummaries)
         {
-            Console.WriteLine("Found {0} accounts!", accountSummaries.Count);
+            LogToScreen($"Found {accountSummaries.Count} accounts!");
             foreach (var account in accountSummaries)
             {
-                Console.WriteLine("Account Name: {0}", account.Name);
-                Console.WriteLine("Account Number: {0}", account.AccountNumber);
-                Console.WriteLine("Account Type: {0}", account.AccountType);
-                Console.WriteLine("Account Value: {0:C}", account.MostRecentValue);
-                Console.WriteLine();
+                LogToScreen($"Account Name: {account.Name}");
+                LogToScreen($"Account Number: {account.AccountNumber}");
+                LogToScreen($"Account Type: {account.AccountType}");
+                LogToScreen($"Account Value: {account.MostRecentValue:C}");
+                LogToScreen();
             }
         }
 
         private void PrintAccountDetails(IReadOnlyCollection<IAccountDetails> accountDetails)
         {
-            Console.WriteLine($"Found {accountDetails.Count} accounts!");
+            LogToScreen($"Found {accountDetails.Count} accounts!");
             foreach (var accountDetail in accountDetails)
             {
-                Console.WriteLine("Account Name: {0}", accountDetail.Name);
-                Console.WriteLine("Account Number: {0}", accountDetail.AccountNumber);
-                Console.WriteLine("Account Type: {0}", accountDetail.AccountType);
-                Console.WriteLine("Found {0} positions in this account!", accountDetail.Positions.Count());
+                LogToScreen($"Account Name: {accountDetail.Name}");
+                LogToScreen($"Account Number: {accountDetail.AccountNumber}");
+                LogToScreen($"Account Type: {accountDetail.AccountType}");
+                LogToScreen($"Found {accountDetail.Positions.Count()} positions in this account!");
                 foreach (var position in accountDetail.Positions)
                 {
-                    Console.WriteLine("Ticker: {0}", position.Ticker);
-                    Console.WriteLine("Shares: {0:N}", position.Quantity);
-                    Console.WriteLine("Current value: {0:C}", position.CurrentValue);
-                    Console.WriteLine("Cost basis: {0:C}", position.CostBasisPerShare);
-                    Console.WriteLine();
+                    LogToScreen($"Ticker: {position.Ticker}");
+                    LogToScreen($"Shares: {position.Quantity:N}");
+                    LogToScreen($"Current value: {position.CurrentValue:C}");
+                    LogToScreen($"Cost basis: {position.CostBasisPerShare:C}");
+                    LogToScreen();
                 }
             }
         }
 
         private void PrintRecentTransactions(IReadOnlyCollection<IFidelityTransaction> transactions)
         {
-            Console.WriteLine("Found {0} recent transactions!", transactions.Count);
+            LogToScreen($"Found {transactions.Count} recent transactions!");
             foreach (var transaction in transactions)
             {
-                Console.WriteLine("On {0:d} {1:F} shares of {2} were {3} at {4:C} per share",
-                    transaction.RunDate, transaction.Quantity, transaction.Symbol,
-                    _transactionTranslator.Translate(transaction.Type), transaction.Price);
+                LogToScreen($"On {transaction.RunDate:d} {transaction.Quantity:F} shares of {transaction.Symbol} were {_transactionTranslator.Translate(transaction.Type)} at {transaction.Price:C} per share");
             }
-            Console.WriteLine();
+            LogToScreen();
+        }
+
+        private void LogToScreen(string message = null)
+        {
+            _log.Info(message ?? Environment.NewLine);
+            Console.WriteLine(message ?? Environment.NewLine);
         }
 
         public void Dispose()
