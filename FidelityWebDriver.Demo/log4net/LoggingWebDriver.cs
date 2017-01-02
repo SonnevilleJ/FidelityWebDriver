@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using log4net;
 using OpenQA.Selenium;
@@ -8,85 +7,77 @@ namespace Sonneville.FidelityWebDriver.Demo.log4net
 {
     public class LoggingWebDriver : IWebDriver
     {
-        private readonly IWebDriver _webDriverImplementation;
+        private readonly IWebDriver _webDriver;
+        private readonly ILog _log;
 
-        public LoggingWebDriver(IWebDriver webDriverImplementation)
+        public LoggingWebDriver(IWebDriver webDriver, ILog log)
         {
-            _webDriverImplementation = webDriverImplementation;
+            _webDriver = webDriver;
+            _log = log;
         }
 
         public IWebElement FindElement(By by)
         {
-            LogTrace($"Finding element by {by}.");
-            var element = _webDriverImplementation.FindElement(by);
+            _log.Trace($"Finding element {by}.");
+            var element = _webDriver.FindElement(by);
             return new LoggingWebElement(element);
         }
 
         public ReadOnlyCollection<IWebElement> FindElements(By by)
         {
-            LogTrace($"Finding elements by {by}.");
-            var elements = _webDriverImplementation.FindElements(by);
+            _log.Trace($"Finding elements {by}.");
+            var elements = _webDriver.FindElements(by);
             return elements.Select(e => new LoggingWebElement(e) as IWebElement).ToList().AsReadOnly();
         }
 
         public void Dispose()
         {
-            LogTrace($"Disposing web driver {_webDriverImplementation}");
-            _webDriverImplementation?.Dispose();
+            _webDriver?.Dispose();
         }
 
         public void Close()
         {
-            LogTrace($"Closing web driver {_webDriverImplementation}");
-            _webDriverImplementation.Close();
+            _log.Trace($"Closing web driver {_webDriver}");
+            _webDriver.Close();
         }
 
         public void Quit()
         {
-            LogTrace($"Disposing web driver {_webDriverImplementation}");
-            _webDriverImplementation.Quit();
+            _log.Trace($"Quitting web driver {_webDriver}");
+            _webDriver.Quit();
         }
 
         public IOptions Manage()
         {
-            return _webDriverImplementation.Manage();
+            return _webDriver.Manage();
         }
 
         public INavigation Navigate()
         {
-            return _webDriverImplementation.Navigate();
+            return _webDriver.Navigate();
         }
 
         public ITargetLocator SwitchTo()
         {
-            return _webDriverImplementation.SwitchTo();
+            return _webDriver.SwitchTo();
         }
 
         public string Url
         {
-            get { return _webDriverImplementation.Url; }
+            get { return _webDriver.Url; }
             set
             {
-                LogTrace($"Setting web driver URL: {value}");
-                _webDriverImplementation.Url = value;
+                _log.Trace($"Setting web driver URL: {value}");
+                _webDriver.Url = value;
             }
         }
 
-        public string Title => _webDriverImplementation.Title;
+        public string Title => _webDriver.Title;
 
-        public string PageSource => _webDriverImplementation.PageSource;
+        public string PageSource => _webDriver.PageSource;
 
-        public string CurrentWindowHandle => _webDriverImplementation.CurrentWindowHandle;
+        public string CurrentWindowHandle => _webDriver.CurrentWindowHandle;
 
-        public ReadOnlyCollection<string> WindowHandles => _webDriverImplementation.WindowHandles;
-
-        private static void LogTrace(string message)
-        {
-            var declaringType = new StackTrace(2, false)
-                .GetFrame(0)
-                .GetMethod()
-                .DeclaringType;
-            LogManager.GetLogger(declaringType).Trace(message, declaringType);
-        }
+        public ReadOnlyCollection<string> WindowHandles => _webDriver.WindowHandles;
     }
 }
