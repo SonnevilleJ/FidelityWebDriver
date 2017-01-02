@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using log4net;
 using NDesk.Options;
 using Nini.Config;
 using Sonneville.FidelityWebDriver.Configuration;
@@ -20,16 +21,15 @@ namespace Sonneville.FidelityWebDriver.Demo
 
         private readonly TransactionTranslator _transactionTranslator;
 
+        private readonly ILog _log;
         private readonly FidelityConfiguration _fidelityConfiguration;
         private readonly OptionSet _optionSet;
         private bool _shouldPersistOptions;
         private bool _shouldShowHelp;
 
-        public App(IPositionsManager positionsManager,
-            ITransactionManager transactionManager,
-            FidelityConfiguration fidelityConfiguration,
-            TransactionTranslator transactionTranslator)
+        public App(ILog log, IPositionsManager positionsManager, ITransactionManager transactionManager, FidelityConfiguration fidelityConfiguration, TransactionTranslator transactionTranslator)
         {
+            _log = log;
             _fidelityConfiguration = fidelityConfiguration;
             _positionsManager = positionsManager;
             _transactionManager = transactionManager;
@@ -53,6 +53,8 @@ namespace Sonneville.FidelityWebDriver.Demo
                     help => { _shouldShowHelp = true; }
                 },
             };
+
+            _log.Debug("App initialized");
         }
 
         public void Run(IEnumerable<string> args)
@@ -158,6 +160,8 @@ namespace Sonneville.FidelityWebDriver.Demo
 
                 _transactionManager?.Dispose();
                 _transactionManager = null;
+
+                _log.Debug("App exiting...");
             }
         }
     }

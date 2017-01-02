@@ -6,7 +6,11 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
     {
         public IKernel Build()
         {
-            return new StandardKernel(new AppModule(), new SeleniumModule());
+            return new StandardKernel(
+                new AppModule(),
+                new SeleniumModule(),
+                new LoggingModule()
+            );
         } 
     }
 }

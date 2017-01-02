@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using log4net;
 using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
@@ -19,6 +20,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
         private string _username;
         private string _password;
 
+        private Mock<ILog> _logMock;
         private Mock<IPositionsManager> _positionsManagerMock;
         private Mock<ITransactionManager> _transactionManagerMock;
         private List<IFidelityTransaction> _transactions;
@@ -149,7 +151,13 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests
 
             _fidelityConfiguration = new FidelityConfiguration();
 
-            _app = new App(_positionsManagerMock.Object, _transactionManagerMock.Object, _fidelityConfiguration,
+            _logMock = new Mock<ILog>();
+
+            _app = new App(
+                _logMock.Object,
+                _positionsManagerMock.Object,
+                _transactionManagerMock.Object,
+                _fidelityConfiguration,
                 new TransactionTranslator());
         }
 

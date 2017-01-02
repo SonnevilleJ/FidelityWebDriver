@@ -30,3 +30,13 @@ Available managers   | Description |
 Login Manager        | manages login state for the www.Fidelity.com website
 Positions Manager    | parses current positions
 Transactions Manager | parses previous transactions
+
+# Troubleshooting
+FidelityWebDriver should always be functional if built from the master branch. Logging is achieved via [Apache log4net](https://logging.apache.org/log4net/). Log files for the demo app can be retrieved from the following location:
+
+Platform  | Location
+----------|-------------------------------------------------------
+Windows   | %LocalAppData%\John Sonneville\FidelityWebDriver.Demo
+Mac/Linux | ~/.local/share/John\ Sonneville/FidelityWebDriver.Demo
+
+Please [create an issue](https://github.com/SonnevilleJ/FidelityWebDriver/issues/new) with any bugs!
