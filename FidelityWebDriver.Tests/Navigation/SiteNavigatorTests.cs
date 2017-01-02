@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -11,22 +12,27 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
     [TestFixture]
     public class SiteNavigatorTests : IDisposable
     {
-        private SiteNavigator _siteNavigator;
-        private Mock<IWebDriver> _webDriverMock;
+        private Mock<ILog> _logMock;
+
         private Mock<INavigation> _navigationMock;
+        private Mock<IWebDriver> _webDriverMock;
+
         private Mock<IHomePage> _homePageMock;
-        private Mock<IPageFactory> _pageFactoryMock;
         private Mock<ILoginPage> _loginPageMock;
         private Mock<ISummaryPage> _summaryPageMock;
-
         private Mock<IActivityPage> _activityPageMock;
+        private Mock<IPageFactory> _pageFactoryMock;
+
+        private SiteNavigator _siteNavigator;
 
         [SetUp]
         public void Setup()
         {
+            _logMock = new Mock<ILog>();
             SetupWebDriver();
             SetupPageFactory();
-            _siteNavigator = new SiteNavigator(_webDriverMock.Object, _pageFactoryMock.Object);
+
+            _siteNavigator = new SiteNavigator(_logMock.Object, _webDriverMock.Object, _pageFactoryMock.Object);
         }
 
         private void SetupWebDriver()

@@ -16,7 +16,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
             FidelityConfiguration.Username = "username";
             FidelityConfiguration.Password = "password";
 
-            return new LoginManager(SiteNavigatorMock.Object, FidelityConfiguration);
+            return new LoginManager(LogMock.Object, SiteNavigatorMock.Object, FidelityConfiguration);
         }
 
         [SetUp]

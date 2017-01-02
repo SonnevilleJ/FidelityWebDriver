@@ -37,7 +37,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
             _loginManagerMock = new Mock<ILoginManager>();
 
-            return new TransactionManager(SiteNavigatorMock.Object, _loginManagerMock.Object);
+            return new TransactionManager(LogMock.Object, SiteNavigatorMock.Object, _loginManagerMock.Object);
         }
 
         [SetUp]

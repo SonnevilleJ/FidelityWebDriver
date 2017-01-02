@@ -1,3 +1,4 @@
+using log4net;
 using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Configuration;
@@ -8,6 +9,7 @@ namespace Sonneville.FidelityWebDriver.Tests
     [TestFixture]
     public abstract class ManagerTestsBase<T> where T : IManager
     {
+        protected Mock<ILog> LogMock;
         protected T Manager;
         protected Mock<ISiteNavigator> SiteNavigatorMock;
         protected FidelityConfiguration FidelityConfiguration;
@@ -15,6 +17,7 @@ namespace Sonneville.FidelityWebDriver.Tests
         [SetUp]
         public void SetupTestsBase()
         {
+            LogMock = new Mock<ILog>();
             SiteNavigatorMock = new Mock<ISiteNavigator>();
             FidelityConfiguration = new FidelityConfiguration();
 

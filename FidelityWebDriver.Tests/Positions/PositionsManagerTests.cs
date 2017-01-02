@@ -35,7 +35,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             _loginManagerMock = new Mock<ILoginManager>();
             _loginManagerMock.Setup(manager => manager.EnsureLoggedIn()).Returns(_summaryPageMock.Object);
 
-            return new PositionsManager(SiteNavigatorMock.Object, _loginManagerMock.Object);
+            return new PositionsManager(LogMock.Object, SiteNavigatorMock.Object, _loginManagerMock.Object);
         }
 
         [SetUp]
