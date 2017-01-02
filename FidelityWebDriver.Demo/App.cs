@@ -147,8 +147,8 @@ namespace Sonneville.FidelityWebDriver.Demo
 
         private void LogToScreen(string message = null)
         {
-            _log.Info(message ?? Environment.NewLine);
-            Console.WriteLine(message ?? Environment.NewLine);
+            _log.Info(message ?? string.Empty);
+            Console.WriteLine(message ?? string.Empty);
         }
 
         public void Dispose()
