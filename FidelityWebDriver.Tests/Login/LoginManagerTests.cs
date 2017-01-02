@@ -1,6 +1,5 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
 
@@ -10,16 +9,14 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
     public class LoginManagerTests : ManagerTestsBase<LoginManager>
     {
         private Mock<ILoginPage> _loginPageMock;
-        private FidelityConfiguration _fidelityConfiguration;
         private Mock<ISummaryPage> _summaryPageMock;
 
-        protected override LoginManager InstantiateManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration)
+        protected override LoginManager InstantiateManager()
         {
-            _fidelityConfiguration = fidelityConfiguration;
-            _fidelityConfiguration.Username = "username";
-            _fidelityConfiguration.Password = "password";
+            FidelityConfiguration.Username = "username";
+            FidelityConfiguration.Password = "password";
 
-            return new LoginManager(siteNavigator, _fidelityConfiguration);
+            return new LoginManager(SiteNavigatorMock.Object, FidelityConfiguration);
         }
 
         [SetUp]
@@ -31,7 +28,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
 
             _loginPageMock = new Mock<ILoginPage>();
             _loginPageMock.Setup(
-                loginPage => loginPage.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password))
+                loginPage => loginPage.LogIn(FidelityConfiguration.Username, FidelityConfiguration.Password))
                 .Returns(_summaryPageMock.Object);
 
             SiteNavigatorMock.Setup(navigator => navigator.GoTo<ILoginPage>()).Returns(_loginPageMock.Object);
@@ -50,7 +47,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         {
             var summaryPage = Manager.EnsureLoggedIn();
 
-            _loginPageMock.Verify(page => page.LogIn(_fidelityConfiguration.Username, _fidelityConfiguration.Password));
+            _loginPageMock.Verify(page => page.LogIn(FidelityConfiguration.Username, FidelityConfiguration.Password));
             Assert.IsTrue(Manager.IsLoggedIn);
             Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }

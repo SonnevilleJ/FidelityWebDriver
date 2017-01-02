@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
-using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
@@ -19,10 +17,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private DateTime _startDate;
         private DateTime _endDate;
 
-        protected override TransactionManager InstantiateManager(
-            ISiteNavigator siteNavigator,
-            FidelityConfiguration fidelityConfiguration
-        )
+        protected override TransactionManager InstantiateManager()
         {
             _startDate = DateTime.MinValue;
             _endDate = DateTime.Today;
@@ -42,7 +37,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
             _loginManagerMock = new Mock<ILoginManager>();
 
-            return new TransactionManager(siteNavigator, _loginManagerMock.Object);
+            return new TransactionManager(SiteNavigatorMock.Object, _loginManagerMock.Object);
         }
 
         [SetUp]

@@ -18,7 +18,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private List<IAccountSummary> _accountSummaries;
         private List<IAccountDetails> _accountDetails;
 
-        protected override IPositionsManager InstantiateManager(ISiteNavigator siteNavigator, FidelityConfiguration fidelityConfiguration)
+        protected override IPositionsManager InstantiateManager()
         {
             _accountSummaries = new List<IAccountSummary>();
             _accountDetails = new List<IAccountDetails>();
@@ -35,7 +35,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             _loginManagerMock = new Mock<ILoginManager>();
             _loginManagerMock.Setup(manager => manager.EnsureLoggedIn()).Returns(_summaryPageMock.Object);
 
-            return new PositionsManager(siteNavigator, _loginManagerMock.Object);
+            return new PositionsManager(SiteNavigatorMock.Object, _loginManagerMock.Object);
         }
 
         [SetUp]
