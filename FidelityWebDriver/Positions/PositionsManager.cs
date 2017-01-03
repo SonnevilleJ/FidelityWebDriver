@@ -7,6 +7,13 @@ using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
+    public interface IPositionsManager : IManager
+    {
+        IEnumerable<IAccountSummary> GetAccountSummaries();
+
+        IEnumerable<IAccountDetails> GetAccountDetails();
+    }
+
     public class PositionsManager : IPositionsManager
     {
         private readonly ILog _log;

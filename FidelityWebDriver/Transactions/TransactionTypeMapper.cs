@@ -4,6 +4,11 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
+    public interface ITransactionTypeMapper
+    {
+        TransactionType ClassifyDescription(string description);
+    }
+
     public class TransactionTypeMapper : ITransactionTypeMapper
     {
         private readonly Dictionary<TransactionType, string> _forwardMappings = new Dictionary<TransactionType, string>

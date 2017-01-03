@@ -5,6 +5,11 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Transactions.CSV
 {
+    public interface ITransactionsMapper
+    {
+        IList<IFidelityTransaction> ParseCsv(string csvContent);
+    }
+
     public class TransactionsMapper : ITransactionsMapper
     {
         private readonly IFidelityCsvColumnMapper _fidelityCsvColumnMapper;

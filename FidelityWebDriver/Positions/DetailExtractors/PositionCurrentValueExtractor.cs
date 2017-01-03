@@ -4,6 +4,11 @@ using OpenQA.Selenium;
 
 namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
 {
+    public interface IPositionCurrentValueExtractor
+    {
+        decimal ExtractCurrentValue(IReadOnlyList<IWebElement> tdElements);
+    }
+
     public class PositionCurrentValueExtractor : IPositionCurrentValueExtractor
     {
         public decimal ExtractCurrentValue(IReadOnlyList<IWebElement> tdElements)

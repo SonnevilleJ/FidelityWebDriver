@@ -9,6 +9,11 @@ using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
+    public interface ITransactionManager : IManager
+    {
+        IList<IFidelityTransaction> GetTransactionHistory(DateTime startDate, DateTime endDate);
+    }
+
     public class TransactionManager : ITransactionManager
     {
         private readonly ILog _log;

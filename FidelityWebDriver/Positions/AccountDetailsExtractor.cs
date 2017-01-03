@@ -5,6 +5,11 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
+    public interface IAccountDetailsExtractor
+    {
+        IEnumerable<IAccountDetails> ExtractAccountDetails(IWebDriver webDriver);
+    }
+
     public class AccountDetailsExtractor : IAccountDetailsExtractor
     {
         private readonly IPositionDetailsExtractor _positionDetailsExtractor;

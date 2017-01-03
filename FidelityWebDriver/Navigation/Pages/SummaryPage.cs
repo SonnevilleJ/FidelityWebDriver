@@ -5,6 +5,19 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
+    public interface ISummaryPage : IPage
+    {
+        double GetBalanceOfAllAccounts();
+
+        double GetGainLossAmount();
+
+        double GetGainLossPercent();
+
+        void GoToPositionsPage();
+
+        void GoToActivityPage();
+    }
+
     public class SummaryPage : ISummaryPage
     {
         private readonly IWebDriver _webDriver;

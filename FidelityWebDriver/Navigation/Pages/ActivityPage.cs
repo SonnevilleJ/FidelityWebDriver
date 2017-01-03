@@ -7,6 +7,11 @@ using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
+    public interface IActivityPage : IPage
+    {
+        IEnumerable<IFidelityTransaction> GetTransactions(DateTime startDate, DateTime endDate);
+    }
+
     public class ActivityPage : IActivityPage
     {
         private readonly IWebDriver _webDriver;

@@ -4,6 +4,11 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
+    public interface IAccountSummariesExtractor
+    {
+        IEnumerable<IAccountSummary> ExtractAccountSummaries(IWebDriver webDriver);
+    }
+
     public class AccountSummariesExtractor : IAccountSummariesExtractor
     {
         private static readonly Dictionary<string, AccountType> GroupIdsToAccountTypes = new Dictionary<string, AccountType>

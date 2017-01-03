@@ -4,6 +4,11 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Transactions.CSV
 {
+    public interface ITransactionMapper
+    {
+        IFidelityTransaction CreateTransaction(string row, IDictionary<FidelityCsvColumn, int> headers);
+    }
+
     public class TransactionMapper : ITransactionMapper
     {
         private readonly ITransactionTypeMapper _transactionTypeMapper;

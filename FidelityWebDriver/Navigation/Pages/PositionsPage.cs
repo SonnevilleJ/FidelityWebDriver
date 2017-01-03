@@ -6,6 +6,13 @@ using Sonneville.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
+    public interface IPositionsPage : IPage
+    {
+        IEnumerable<IAccountSummary> GetAccountSummaries();
+
+        IEnumerable<IAccountDetails> GetAccountDetails();
+    }
+
     public class PositionsPage : IPositionsPage
     {
         private readonly IWebDriver _webDriver;

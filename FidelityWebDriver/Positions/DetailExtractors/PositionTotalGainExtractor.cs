@@ -4,6 +4,13 @@ using OpenQA.Selenium;
 
 namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
 {
+    public interface IPositionTotalGainExtractor
+    {
+        decimal ExtractTotalGainDollar(IReadOnlyList<IWebElement> tdElements);
+
+        decimal ExtractTotalGainPercent(IReadOnlyList<IWebElement> tdElements);
+    }
+
     public class PositionTotalGainExtractor : IPositionTotalGainExtractor
     {
         public decimal ExtractTotalGainDollar(IReadOnlyList<IWebElement> tdElements)

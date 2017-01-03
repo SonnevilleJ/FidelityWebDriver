@@ -7,6 +7,11 @@ using Sonneville.FidelityWebDriver.Data;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
+    public interface IHistoryTransactionParser
+    {
+        IEnumerable<IFidelityTransaction> ParseFidelityTransactions(IWebElement historyRoot);
+    }
+
     public class HistoryTransactionParser : IHistoryTransactionParser
     {
         private readonly ITransactionTypeMapper _transactionTypeMapper;

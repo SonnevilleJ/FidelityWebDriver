@@ -8,6 +8,11 @@ using Sonneville.FidelityWebDriver.Positions;
 
 namespace Sonneville.FidelityWebDriver.Navigation
 {
+    public interface ISiteNavigator : IDisposable
+    {
+        TPage GoTo<TPage>() where TPage : IPage;
+    }
+
     public class SiteNavigator : ISiteNavigator
     {
         private readonly ILog _log;

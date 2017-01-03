@@ -3,6 +3,13 @@ using System.Linq;
 
 namespace Sonneville.FidelityWebDriver.Transactions.CSV
 {
+    public interface IFidelityCsvColumnMapper
+    {
+        FidelityCsvColumn GetHeader(string text);
+
+        IDictionary<FidelityCsvColumn, int> GetColumnMappings(string headerRow);
+    }
+
     public class FidelityCsvColumnMapper : IFidelityCsvColumnMapper
     {
         public FidelityCsvColumn GetHeader(string text)

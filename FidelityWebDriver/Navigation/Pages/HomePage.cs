@@ -2,6 +2,11 @@ using OpenQA.Selenium;
 
 namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
+    public interface IHomePage : IPage
+    {
+        void GoToLoginPage();
+    }
+
     public class HomePage : IHomePage
     {
         private readonly IWebDriver _webDriver;

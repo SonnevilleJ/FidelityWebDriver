@@ -159,7 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="IApp.cs" />
     <Compile Include="log4net\LogExtentions.cs" />
     <Compile Include="log4net\LoggingWebDriver.cs" />
     <Compile Include="log4net\LoggingWebElement.cs" />

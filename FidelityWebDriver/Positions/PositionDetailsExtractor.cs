@@ -6,6 +6,11 @@ using Sonneville.FidelityWebDriver.Positions.DetailExtractors;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
+    public interface IPositionDetailsExtractor
+    {
+        IEnumerable<IPosition> ExtractPositionDetails(IEnumerable<IWebElement> positionTableRows);
+    }
+
     public class PositionDetailsExtractor : IPositionDetailsExtractor
     {
         private readonly IPositionCoreExtractor _positionCoreExtractor;

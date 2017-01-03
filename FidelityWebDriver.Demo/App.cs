@@ -13,6 +13,11 @@ using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Demo
 {
+    public interface IApp : IDisposable
+    {
+        void Run(IEnumerable<string> args);
+    }
+
     public class App : IApp
     {
         private IPositionsManager _positionsManager;
