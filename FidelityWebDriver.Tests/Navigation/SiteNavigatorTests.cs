@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using log4net;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Tests.Navigation
@@ -20,8 +22,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         private Mock<IHomePage> _homePageMock;
         private Mock<ILoginPage> _loginPageMock;
         private Mock<ISummaryPage> _summaryPageMock;
+        private Mock<IPositionsPage> _positionsPageMock;
         private Mock<IActivityPage> _activityPageMock;
-        private Mock<IPageFactory> _pageFactoryMock;
 
         private SiteNavigator _siteNavigator;
 
@@ -29,32 +31,27 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         public void Setup()
         {
             _logMock = new Mock<ILog>();
-            SetupWebDriver();
-            SetupPageFactory();
 
-            _siteNavigator = new SiteNavigator(_logMock.Object, _webDriverMock.Object, _pageFactoryMock.Object);
-        }
-
-        private void SetupWebDriver()
-        {
             _navigationMock = new Mock<INavigation>();
 
             _webDriverMock = new Mock<IWebDriver>();
             _webDriverMock.Setup(webDriver => webDriver.Navigate()).Returns(_navigationMock.Object);
-        }
 
-        private void SetupPageFactory()
-        {
             _homePageMock = new Mock<IHomePage>();
             _loginPageMock = new Mock<ILoginPage>();
             _summaryPageMock = new Mock<ISummaryPage>();
+            _positionsPageMock = new Mock<IPositionsPage>();
             _activityPageMock = new Mock<IActivityPage>();
+            var allPages = new IPage[]
+            {
+                _homePageMock.Object,
+                _loginPageMock.Object,
+                _summaryPageMock.Object,
+                _positionsPageMock.Object,
+                _activityPageMock.Object,
+            };
 
-            _pageFactoryMock = new Mock<IPageFactory>();
-            _pageFactoryMock.Setup(factory => factory.GetPage<IHomePage>()).Returns(_homePageMock.Object);
-            _pageFactoryMock.Setup(factory => factory.GetPage<ILoginPage>()).Returns(_loginPageMock.Object);
-            _pageFactoryMock.Setup(factory => factory.GetPage<ISummaryPage>()).Returns(_summaryPageMock.Object);
-            _pageFactoryMock.Setup(factory => factory.GetPage<IActivityPage>()).Returns(_activityPageMock.Object);
+            _siteNavigator = new SiteNavigator(_logMock.Object, _webDriverMock.Object, allPages);
         }
 
         [Test]
@@ -64,6 +61,21 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
             _siteNavigator.Dispose();
 
             _webDriverMock.Verify(driver => driver.Dispose(), Times.Once());
+        }
+
+        [Test]
+        public void ShouldThrowIfInspecificPageRequested()
+        {
+            Assert.Throws<KeyNotFoundException>(() => _siteNavigator.GoTo<IPage>());
+        }
+
+        [Test]
+        public void ShouldReturnSamePageForEachRequest()
+        {
+            var page1 = _siteNavigator.GoTo<ILoginPage>();
+            var page2 = _siteNavigator.GoTo<ILoginPage>();
+
+            Assert.AreSame(page1, page2);
         }
 
         [Test]
@@ -94,11 +106,21 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         }
 
         [Test]
+        public void ShouldGoToPositionsPage()
+        {
+            var positionsPage = _siteNavigator.GoTo<IPositionsPage>();
+
+            _summaryPageMock.Verify(summaryPage => summaryPage.GoToPositionsPage());
+            ;
+            Assert.AreSame(_positionsPageMock.Object, positionsPage);
+        }
+
+        [Test]
         public void ShouldGoToActivityPage()
         {
             var activityPage = _siteNavigator.GoTo<IActivityPage>();
 
-            _summaryPageMock.Verify(summaryPage=>summaryPage.GoToActivityPage());
+            _summaryPageMock.Verify(summaryPage => summaryPage.GoToActivityPage());
             Assert.AreSame(_activityPageMock.Object, activityPage);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Login;
@@ -12,7 +13,7 @@ namespace Sonneville.FidelityWebDriver.Navigation
     {
         private readonly ILog _log;
         private IWebDriver _webDriver;
-        private readonly IPageFactory _pageFactory;
+        private readonly IPage[] _allPages;
 
         private readonly Dictionary<Type, Action<ISiteNavigator, IWebDriver>> _pageNavigationActions = new Dictionary
             <Type, Action<ISiteNavigator, IWebDriver>>
@@ -24,11 +25,11 @@ namespace Sonneville.FidelityWebDriver.Navigation
             {typeof (IActivityPage), (siteNavigator, webDriver) => siteNavigator.GoTo<ISummaryPage>().GoToActivityPage()},
         };
 
-        public SiteNavigator(ILog log, IWebDriver webDriver, IPageFactory pageFactory)
+        public SiteNavigator(ILog log, IWebDriver webDriver, IPage[] allPages)
         {
             _log = log;
             _webDriver = webDriver;
-            _pageFactory = pageFactory;
+            _allPages = allPages;
         }
 
         public TPage GoTo<TPage>() where TPage : IPage
@@ -36,7 +37,7 @@ namespace Sonneville.FidelityWebDriver.Navigation
             _log.Info($"Navigating to {typeof(TPage).Name}");
 
             _pageNavigationActions[typeof (TPage)](this, _webDriver);
-            return _pageFactory.GetPage<TPage>();
+            return (TPage) _allPages.Single(page => page is TPage);
         }
 
         public void Dispose()

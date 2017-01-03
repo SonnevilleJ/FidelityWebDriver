@@ -5,12 +5,11 @@ using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Login;
-using Sonneville.FidelityWebDriver.Tests.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Tests.Login
 {
     [TestFixture]
-    public class LoginPageTests : PageFactoryTests<ILoginPage>
+    public class LoginPageTests
     {
         private LoginPage _loginPage;
         private string _username;
@@ -24,8 +23,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         [SetUp]
         public void Setup()
         {
-            SetupPageFactory();
-
             _username = "username";
             _password = "password";
 

@@ -10,7 +10,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
         {
             Kernel.Bind(syntax => syntax.FromAssembliesMatching("Sonneville.*")
                 .SelectAllClasses()
-                .BindDefaultInterface()
+                .BindAllInterfaces()
                 .Configure(configurationAction => configurationAction.InSingletonScope()));
 
             Bind<FidelityConfiguration>().ToProvider<FidelityConfigurationProvider>();

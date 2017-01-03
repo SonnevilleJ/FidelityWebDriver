@@ -1,9 +1,12 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Moq;
 using Ninject;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Demo.Ninject;
+using Sonneville.FidelityWebDriver.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
 {
@@ -53,6 +56,24 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
             _kernel.Get<IApp>().Dispose();
 
             _webDriverMock.Verify(webDriver => webDriver.Dispose(), Times.Once());
+        }
+
+        [Test]
+        public void ShouldGetAllPages()
+        {
+            var pages = _kernel.GetAll<IPage>().ToList();
+
+            Assert.IsTrue(pages.Any());
+            CollectionAssert.AllItemsAreNotNull(pages);
+        }
+
+        [Test]
+        public void ShouldGetSiteNavigator()
+        {
+            using (var siteNavigator = _kernel.Get<ISiteNavigator>())
+            {
+                Assert.IsNotNull(siteNavigator);
+            }
         }
     }
 }

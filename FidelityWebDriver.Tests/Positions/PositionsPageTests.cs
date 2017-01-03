@@ -3,7 +3,6 @@ using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.Utilities;
 
@@ -14,7 +13,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
     {
         private PositionsPage _positionsPage;
         private Mock<IWebDriver> _webDriverMock;
-        private Mock<IPageFactory> _pageFactoryMock;
         private Mock<IAccountSummariesExtractor> _accountSummariesExtractorMock;
         private Mock<IAccountDetailsExtractor> _accountDetailsExtractorMock;
         private Mock<ISleepUtil> _sleepUtilMock;
@@ -23,8 +21,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         public void Setup()
         {
             _webDriverMock = new Mock<IWebDriver>();
-
-            _pageFactoryMock = new Mock<IPageFactory>();
 
             _accountSummariesExtractorMock = new Mock<IAccountSummariesExtractor>();
 

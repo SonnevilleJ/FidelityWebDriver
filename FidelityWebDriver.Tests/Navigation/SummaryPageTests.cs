@@ -6,7 +6,7 @@ using Sonneville.FidelityWebDriver.Navigation;
 namespace Sonneville.FidelityWebDriver.Tests.Navigation
 {
     [TestFixture]
-    public class SummaryPageTests : PageFactoryTests<ISummaryPage>
+    public class SummaryPageTests
     {
         private SummaryPage _summaryPage;
         private Mock<IWebDriver> _webDriverMock;
@@ -24,8 +24,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Navigation
         [SetUp]
         public void Setup()
         {
-            SetupPageFactory();
-
             _balanceNumber = 1234.56;
 
             _fullBalanceSpanMock = new Mock<IWebElement>();

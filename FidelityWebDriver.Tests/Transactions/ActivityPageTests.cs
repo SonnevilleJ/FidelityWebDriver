@@ -4,14 +4,12 @@ using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Tests.Navigation;
 using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
     [TestFixture]
-    public class ActivityPageTests : PageFactoryTests<IActivityPage>
+    public class ActivityPageTests
     {
         private DateTime _expectedStartDate;
         private DateTime _expectedEndDate;
@@ -28,7 +26,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         private Mock<IWebElement> _progressBarDivMock;
 
         private Mock<IWebDriver> _webDriverMock;
-        private Mock<IPageFactory> _pageFactoryMock;
         private Mock<IHistoryTransactionParser> _historyTransactionParserMock;
 
         private ActivityPage _activityPage;
@@ -36,8 +33,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [SetUp]
         public void Setup()
         {
-            SetupPageFactory();
-
             _expectedStartDate = DateTime.Today.AddDays(-30);
             _expectedEndDate = DateTime.Today;
 
@@ -85,8 +80,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
 
             _webDriverMock.Setup(webDriver => webDriver.FindElement(By.ClassName("progress-bar")))
                 .Returns(_progressBarDivMock.Object);
-
-            _pageFactoryMock = new Mock<IPageFactory>();
 
             _expectedTransactions = new List<IFidelityTransaction>
             {

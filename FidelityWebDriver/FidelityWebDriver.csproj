@@ -166,10 +166,8 @@
     <Compile Include="Navigation\HomePage.cs" />
     <Compile Include="Navigation\IHomePage.cs" />
     <Compile Include="Navigation\IPage.cs" />
-    <Compile Include="Navigation\IPageFactory.cs" />
     <Compile Include="Navigation\ISiteNavigator.cs" />
     <Compile Include="Navigation\ISummaryPage.cs" />
-    <Compile Include="Navigation\PageFactory.cs" />
     <Compile Include="Navigation\SiteNavigator.cs" />
     <Compile Include="Navigation\SummaryPage.cs" />
     <Compile Include="Positions\AccountDetailsExtractor.cs" />
