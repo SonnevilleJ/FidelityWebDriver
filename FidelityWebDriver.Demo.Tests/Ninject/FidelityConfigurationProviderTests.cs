@@ -52,6 +52,21 @@ namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
             Assert.AreEqual(fidelityConfiguration.Password, createdConfig.Password);
         }
 
+        [Test]
+        public void ShouldReturnOriginalPersistedConfigAfterChanged()
+        {
+            const string originalPassword = "pass word";
+            var fidelityConfiguration = SetupConfiguration("user name", originalPassword);
+            PersistConfiguration(fidelityConfiguration);
+            fidelityConfiguration.Password = "changed it";
+
+            var createdConfig = _provider.Create(null) as FidelityConfiguration;
+
+            Assert.IsNotNull(createdConfig);
+            Assert.AreEqual(fidelityConfiguration.Username, createdConfig.Username);
+            Assert.AreEqual(originalPassword, createdConfig.Password);
+        }
+
         public static FidelityConfiguration ReadConfiguration()
         {
             var configFullPath = FidelityConfigurationProvider.ConfigLocation;
