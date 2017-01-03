@@ -1,9 +1,9 @@
 ﻿using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 
-namespace Sonneville.FidelityWebDriver.Tests.Navigation
+namespace Sonneville.FidelityWebDriver.Tests.Navigation.Pages
 {
     [TestFixture]
     public class HomePageTests

@@ -1,6 +1,7 @@
 ﻿using log4net;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Login
 {
@@ -27,13 +28,12 @@ namespace Sonneville.FidelityWebDriver.Login
             IsLoggedIn = true;
         }
 
-        public ISummaryPage EnsureLoggedIn()
+        public void EnsureLoggedIn()
         {
             if (!IsLoggedIn)
             {
                 LogIn();
             }
-            return _siteNavigator.GoTo<ISummaryPage>();
         }
 
         public void Dispose()

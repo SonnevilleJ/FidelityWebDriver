@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Authentication;
 using OpenQA.Selenium;
 
-namespace Sonneville.FidelityWebDriver.Login
+namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
     public class LoginPage : ILoginPage
     {

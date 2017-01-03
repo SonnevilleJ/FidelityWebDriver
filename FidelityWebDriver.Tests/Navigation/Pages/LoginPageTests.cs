@@ -4,9 +4,9 @@ using System.Security.Authentication;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using Sonneville.FidelityWebDriver.Login;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 
-namespace Sonneville.FidelityWebDriver.Tests.Login
+namespace Sonneville.FidelityWebDriver.Tests.Navigation.Pages
 {
     [TestFixture]
     public class LoginPageTests

@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Login;
-using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Tests.Login
 {
@@ -42,11 +42,10 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         [Test]
         public void ShouldNavigateToSummaryPageAfterSuccessfulLogIn()
         {
-            var summaryPage = Manager.EnsureLoggedIn();
+            Manager.EnsureLoggedIn();
 
             _loginPageMock.Verify(page => page.LogIn(FidelityConfiguration.Username, FidelityConfiguration.Password));
             Assert.IsTrue(Manager.IsLoggedIn);
-            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
 
         [Test]
@@ -54,20 +53,18 @@ namespace Sonneville.FidelityWebDriver.Tests.Login
         {
             Manager.EnsureLoggedIn();
 
-            var summaryPage = Manager.EnsureLoggedIn();
+            Manager.EnsureLoggedIn();
 
             SiteNavigatorMock.Verify(nav => nav.GoTo<ILoginPage>(), Times.Once());
-            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
 
         [Test]
         public void ShouldLogInIfNotAlreadyLoggedIn()
         {
-            var summaryPage = Manager.EnsureLoggedIn();
+            Manager.EnsureLoggedIn();
 
             SiteNavigatorMock.Verify(nav => nav.GoTo<ILoginPage>(), Times.Once());
             Assert.IsTrue(Manager.IsLoggedIn);
-            Assert.AreSame(_summaryPageMock.Object, summaryPage);
         }
     }
 }

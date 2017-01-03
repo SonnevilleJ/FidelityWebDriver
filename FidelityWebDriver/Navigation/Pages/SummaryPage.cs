@@ -3,7 +3,7 @@ using System.Globalization;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace Sonneville.FidelityWebDriver.Navigation
+namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
     public class SummaryPage : ISummaryPage
     {

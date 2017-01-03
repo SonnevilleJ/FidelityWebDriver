@@ -5,7 +5,7 @@ using Sonneville.FidelityWebDriver.Data;
 namespace Sonneville.FidelityWebDriver.Tests.Data
 {
     [TestFixture]
-    public class FidelityTransactionTest
+    public class FidelityTransactionTests
     {
         [Test]
         public void ShouldEqualIdenticalTransaction()

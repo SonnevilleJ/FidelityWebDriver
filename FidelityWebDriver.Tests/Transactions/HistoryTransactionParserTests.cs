@@ -10,7 +10,7 @@ using Sonneville.FidelityWebDriver.Transactions;
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
     [TestFixture]
-    public class HistoryTransactionParserTest
+    public class HistoryTransactionParserTests
     {
         private readonly HistoryHtmlGenerator _historyHtmlGenerator = new HistoryHtmlGenerator();
         private readonly TransactionTypeMapper _transactionTypeMapper = new TransactionTypeMapper();

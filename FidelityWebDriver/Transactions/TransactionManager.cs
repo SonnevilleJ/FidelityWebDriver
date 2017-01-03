@@ -5,6 +5,7 @@ using log4net;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {

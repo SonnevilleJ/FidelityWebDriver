@@ -3,10 +3,11 @@ using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 using Sonneville.FidelityWebDriver.Positions;
 using Sonneville.Utilities;
 
-namespace Sonneville.FidelityWebDriver.Tests.Positions
+namespace Sonneville.FidelityWebDriver.Tests.Navigation.Pages
 {
     [TestFixture]
     public class PositionsPageTests

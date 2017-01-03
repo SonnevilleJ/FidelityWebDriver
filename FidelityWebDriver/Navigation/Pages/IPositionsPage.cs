@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Navigation;
 
-namespace Sonneville.FidelityWebDriver.Positions
+namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
     public interface IPositionsPage : IPage
     {

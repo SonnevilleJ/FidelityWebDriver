@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using OpenQA.Selenium;
-using Sonneville.FidelityWebDriver.Login;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 using Sonneville.FidelityWebDriver.Positions;
-using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Navigation
 {

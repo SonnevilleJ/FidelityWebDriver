@@ -1,6 +1,6 @@
 using OpenQA.Selenium;
 
-namespace Sonneville.FidelityWebDriver.Navigation
+namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
     public class HomePage : IHomePage
     {

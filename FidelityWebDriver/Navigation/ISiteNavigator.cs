@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Navigation
 {

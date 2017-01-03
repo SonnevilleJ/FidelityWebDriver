@@ -1,7 +1,4 @@
-using Sonneville.FidelityWebDriver.Positions;
-using Sonneville.FidelityWebDriver.Transactions;
-
-namespace Sonneville.FidelityWebDriver.Navigation
+namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
     public interface ISummaryPage : IPage
     {

@@ -1,6 +1,4 @@
-using Sonneville.FidelityWebDriver.Navigation;
-
-namespace Sonneville.FidelityWebDriver.Login
+namespace Sonneville.FidelityWebDriver.Navigation.Pages
 {
     public interface ILoginPage : IPage
     {

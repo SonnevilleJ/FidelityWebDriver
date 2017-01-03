@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Moq;
 using Ninject;
 using NUnit.Framework;
@@ -7,6 +6,7 @@ using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Demo.Ninject;
 using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
 {
