@@ -1,7 +1,6 @@
 ﻿using log4net;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Login
 {

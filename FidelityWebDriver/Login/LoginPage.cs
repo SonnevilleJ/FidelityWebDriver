@@ -2,8 +2,9 @@ using System;
 using System.Linq;
 using System.Security.Authentication;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Navigation;
 
-namespace Sonneville.FidelityWebDriver.Navigation.Pages
+namespace Sonneville.FidelityWebDriver.Login
 {
     public interface ILoginPage : IPage
     {

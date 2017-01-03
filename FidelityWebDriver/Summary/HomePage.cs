@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Navigation;
 
-namespace Sonneville.FidelityWebDriver.Navigation.Pages
+namespace Sonneville.FidelityWebDriver.Summary
 {
     public interface IHomePage : IPage
     {

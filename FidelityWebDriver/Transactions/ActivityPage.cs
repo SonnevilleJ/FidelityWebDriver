@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Transactions;
+using Sonneville.FidelityWebDriver.Navigation;
 
-namespace Sonneville.FidelityWebDriver.Navigation.Pages
+namespace Sonneville.FidelityWebDriver.Transactions
 {
     public interface IActivityPage : IPage
     {

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Positions;
+using Sonneville.FidelityWebDriver.Navigation;
 using Sonneville.Utilities;
 
-namespace Sonneville.FidelityWebDriver.Navigation.Pages
+namespace Sonneville.FidelityWebDriver.Positions
 {
     public interface IPositionsPage : IPage
     {

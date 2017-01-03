@@ -2,8 +2,9 @@ using System;
 using System.Globalization;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Sonneville.FidelityWebDriver.Navigation;
 
-namespace Sonneville.FidelityWebDriver.Navigation.Pages
+namespace Sonneville.FidelityWebDriver.Summary
 {
     public interface ISummaryPage : IPage
     {

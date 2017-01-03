@@ -4,9 +4,11 @@ using log4net;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Login;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Navigation.Pages;
 using Sonneville.FidelityWebDriver.Positions;
+using Sonneville.FidelityWebDriver.Summary;
+using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Tests.Navigation
 {

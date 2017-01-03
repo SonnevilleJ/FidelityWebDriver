@@ -4,10 +4,9 @@ using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Navigation.Pages;
 using Sonneville.FidelityWebDriver.Transactions;
 
-namespace Sonneville.FidelityWebDriver.Tests.Navigation.Pages
+namespace Sonneville.FidelityWebDriver.Tests.Transactions
 {
     [TestFixture]
     public class ActivityPageTests

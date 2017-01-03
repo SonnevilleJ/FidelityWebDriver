@@ -6,7 +6,6 @@ using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Configuration;
 using Sonneville.FidelityWebDriver.Demo.Ninject;
 using Sonneville.FidelityWebDriver.Navigation;
-using Sonneville.FidelityWebDriver.Navigation.Pages;
 
 namespace Sonneville.FidelityWebDriver.Demo.Tests.Ninject
 {

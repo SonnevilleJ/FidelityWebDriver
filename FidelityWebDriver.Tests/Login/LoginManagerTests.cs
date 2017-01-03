@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Login;
-using Sonneville.FidelityWebDriver.Navigation.Pages;
+using Sonneville.FidelityWebDriver.Summary;
 
 namespace Sonneville.FidelityWebDriver.Tests.Login
 {

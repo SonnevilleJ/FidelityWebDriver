@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Login;
-using Sonneville.FidelityWebDriver.Navigation.Pages;
 using Sonneville.FidelityWebDriver.Transactions;
 
 namespace Sonneville.FidelityWebDriver.Tests.Transactions
