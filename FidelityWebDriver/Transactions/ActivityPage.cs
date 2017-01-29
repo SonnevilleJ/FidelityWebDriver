@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.FidelityWebDriver.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
@@ -31,6 +31,14 @@ namespace Sonneville.FidelityWebDriver.Transactions
 
             OpenHistoryPanel(historyRoot);
             SelectCustomDateRangeOption(historyRoot);
+
+            return SplitDateRange(startDate, endDate)
+                .SelectMany(tuple => ParseTransactionsInDateRange(historyRoot, tuple.Item1, tuple.Item2))
+                .ToList();
+        }
+
+        private IEnumerable<IFidelityTransaction> ParseTransactionsInDateRange(IWebElement historyRoot, DateTime startDate, DateTime endDate)
+        {
             SetTimePeriod(historyRoot, startDate, endDate);
 
             WaitUntilNotDisplayed(_webDriver, By.ClassName("progress-bar"));
@@ -79,10 +87,20 @@ namespace Sonneville.FidelityWebDriver.Transactions
         {
             if (startDate > endDate)
                 throw new ArgumentException("Start Date must preceed End Date!");
-            if (endDate - startDate > TimeSpan.FromDays(90))
-                throw new ArgumentException("Date range must be less than or equal to 90 days!");
             if (endDate.Date > DateTime.Today)
                 throw new ArgumentException("Cannot query for future dates!");
+        }
+
+        private static IEnumerable<Tuple<DateTime, DateTime>> SplitDateRange(DateTime startDate, DateTime endDate, int dayChunkSize = 89)
+        {
+            DateTime chunkEnd;
+            do
+            {
+                var startPlusChunkSize = startDate.AddDays(dayChunkSize);
+                chunkEnd = startPlusChunkSize <= endDate ? startPlusChunkSize : endDate;
+                yield return Tuple.Create(startDate, chunkEnd);
+                startDate = chunkEnd.AddDays(1);
+            } while (chunkEnd < endDate);
         }
     }
 }

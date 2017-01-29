@@ -141,7 +141,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
             _setTimePeriodButtonMock.Setup(button => button.Click())
                 .Callback(SetupVisibleProgressBar);
             _historyTransactionParserMock.Setup(parser => parser.ParseFidelityTransactions(_historyRootDivMock.Object))
-                .Callback(AssertInvisibleProgressBar);
+                .Callback(AssertInvisibleProgressBar)
+                .Returns(new List<IFidelityTransaction>());
 
             _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate);
 
@@ -159,15 +160,64 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         }
 
         [Test]
-        [TestCase("11/12/2013", "11/11/2013")]
         [TestCase("11/12/2012", "11/11/2013")]
-        [TestCase("11/11/9000", "11/12/9000")]
-        public void ShouldValidateDates(string startDateString, string endDateString)
+        public void ShouldMakeMultipleCallsInSequential90DayChunks(string startDateString, string endDateString)
+        {
+            _expectedStartDate = DateTime.Parse(startDateString);
+            _expectedEndDate = DateTime.Parse(endDateString);
+            var inputtedStartDates = new List<DateTime>();
+            var inputtedEndDates = new List<DateTime>();
+            _fromDateInputMock.Setup(input => input.SendKeys(It.IsAny<string>()))
+                .Callback<string>(dateString => inputtedStartDates.Add(DateTime.Parse(dateString)));
+            _toDateInputMock.Setup(input => input.SendKeys(It.IsAny<string>()))
+                .Callback<string>(dateString => inputtedEndDates.Add(DateTime.Parse(dateString)));
+
+            _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate);
+
+            Assert.AreEqual(inputtedStartDates.Count, inputtedEndDates.Count, "Should set start/end dates in pairs.");
+            Assert.Greater(inputtedStartDates.Count, 1, "Date ranges longer than 90 days should be split into multiple 90-day calls.");
+            for (var i = 0; i < inputtedStartDates.Count; i++)
+            {
+                var startDate = inputtedStartDates[i];
+                var endDate = inputtedEndDates[i];
+
+                Assert.LessOrEqual(startDate, endDate);
+                VerifyWithinRange(startDate, _expectedStartDate, _expectedEndDate);
+                VerifyWithinRange(endDate, _expectedStartDate, _expectedEndDate);
+                if (i > 0)
+                {
+                    var previousStartDate = inputtedStartDates[i - 1];
+                    var previousEndDate = inputtedEndDates[i - 1];
+                    Assert.AreEqual(TimeSpan.FromDays(1), startDate - previousEndDate);
+                    Assert.LessOrEqual(startDate - previousStartDate, TimeSpan.FromDays(90));
+                    Assert.LessOrEqual(endDate - previousEndDate, TimeSpan.FromDays(90));
+                }
+            }
+        }
+
+        [Test]
+        [TestCase("11/12/2013", "11/11/2013")]
+        public void ShouldThrowForBackwardsDateRanges(string startDateString, string endDateString)
         {
             _expectedStartDate = DateTime.Parse(startDateString);
             _expectedEndDate = DateTime.Parse(endDateString);
 
             Assert.Throws<ArgumentException>(() => _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate));
+        }
+
+        [Test]
+        public void ShouldThrowForDatesAfterToday()
+        {
+            _expectedStartDate = DateTime.Today.AddDays(-1);
+            _expectedEndDate = DateTime.Today.AddDays(1);
+
+            Assert.Throws<ArgumentException>(() => _activityPage.GetTransactions(_expectedStartDate, _expectedEndDate));
+        }
+
+        private static void VerifyWithinRange(DateTime dateTime, DateTime expectedStartDate, DateTime expectedEndDate)
+        {
+            Assert.GreaterOrEqual(dateTime, expectedStartDate);
+            Assert.LessOrEqual(dateTime, expectedEndDate);
         }
 
         private void SetupVisibleProgressBar()
