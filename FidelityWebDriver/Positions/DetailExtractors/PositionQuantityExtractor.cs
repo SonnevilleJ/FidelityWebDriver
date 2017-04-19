@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Globalization;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
 {
@@ -19,7 +19,7 @@ namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
             var quantityText = ExtractMargin(tdElements)
                 ? rawText.Replace("<br>", "").Replace("(Margin)", "").Replace("\"", "")
                 : rawText;
-            return decimal.Parse(quantityText.Trim(), NumberStyles.Any);
+            return NumberParser.ParseDecimal(quantityText.Trim());
         }
 
         public bool ExtractMargin(IReadOnlyList<IWebElement> tdElements)

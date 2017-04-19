@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Transactions
 {
@@ -88,17 +89,17 @@ namespace Sonneville.FidelityWebDriver.Transactions
 
         private decimal ParseCurrency(string text)
         {
-            return decimal.Parse(text, NumberStyles.Currency);
+            return NumberParser.ParseDecimal(text, NumberStyles.Currency);
         }
 
         private decimal ParseQuantity(string text)
         {
-            return decimal.Parse(text.Replace("+ ", ""));
+            return NumberParser.ParseDecimal(text.Replace("+ ", ""));
         }
 
         private decimal ParseDecimal(string text)
         {
-            return decimal.Parse(text);
+            return NumberParser.ParseDecimal(text);
         }
 
         private TransactionType ParseType(string description)

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Positions.DetailExtractors;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
 {
@@ -20,7 +20,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
 
             var actualCurrentValue = new PositionCurrentValueExtractor().ExtractCurrentValue(tdElements);
 
-            Assert.AreEqual(decimal.Parse(currentValueText, NumberStyles.Any), actualCurrentValue);
+            Assert.AreEqual(NumberParser.ParseDecimal(currentValueText), actualCurrentValue);
         }
 
         private List<IWebElement> SetupTdElements(string currentValueText)

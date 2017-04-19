@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
 {
@@ -19,7 +19,7 @@ namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
                 .Text;
             return text.Contains("--")
                 ? 0m
-                : decimal.Parse(text, NumberStyles.Any);
+                : NumberParser.ParseDecimal(text);
         }
     }
 }

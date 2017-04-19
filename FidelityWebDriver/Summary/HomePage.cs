@@ -1,5 +1,4 @@
 using OpenQA.Selenium;
-using Sonneville.FidelityWebDriver.Navigation;
 
 namespace Sonneville.FidelityWebDriver.Summary
 {

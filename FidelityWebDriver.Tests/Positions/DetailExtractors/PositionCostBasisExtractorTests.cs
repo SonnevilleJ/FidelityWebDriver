@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Positions.DetailExtractors;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
 {
@@ -21,8 +21,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
             var actualPerShare = extractor.ExtractCostBasisPerShare(tdElements);
             var actualTotal = extractor.ExtractCostBasisTotal(tdElements);
 
-            Assert.AreEqual(decimal.Parse(costBasisPerShareString, NumberStyles.Any), actualPerShare);
-            Assert.AreEqual(decimal.Parse(costBasisTotalString, NumberStyles.Any), actualTotal);
+            Assert.AreEqual(NumberParser.ParseDecimal(costBasisPerShareString), actualPerShare);
+            Assert.AreEqual(NumberParser.ParseDecimal(costBasisTotalString), actualTotal);
         }
 
         [Test]

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Globalization;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
 {
@@ -18,7 +18,7 @@ namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
             var spanText = tdElements[6].FindElements(By.ClassName("magicgrid--stacked-data-value"))[0].Text;
             return spanText == "n/a" || string.IsNullOrWhiteSpace(spanText) || spanText.Contains("--")
                 ? 0
-                : decimal.Parse(spanText.Replace("/Share", ""), NumberStyles.Any);
+                : NumberParser.ParseDecimal(spanText.Replace("/Share", ""));
         }
 
         public decimal ExtractCostBasisTotal(IReadOnlyList<IWebElement> tdElements)
@@ -29,7 +29,7 @@ namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
                 .Text;
             return spanText == "n/a" || string.IsNullOrWhiteSpace(spanText) || spanText.Contains("--")
                 ? 0
-                : decimal.Parse(spanText, NumberStyles.Any);
+                : NumberParser.ParseDecimal(spanText);
         }
     }
 }

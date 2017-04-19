@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -16,6 +17,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private List<IAccountDetails> _setupAccountDetails;
         private Dictionary<string, List<IPosition>> _positionsByAccount;
         private Mock<IPositionDetailsExtractor> _positionDetailsExtractorMock;
+        private Mock<ILog> _logMock;
 
         [SetUp]
         public void Setup()
@@ -35,7 +37,9 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             _webDriverMock.Setup(webDriver => webDriver.FindElements(By.ClassName("p-positions-tbody")))
                 .Returns(new List<IWebElement> {new Mock<IWebElement>().Object, tableBodyMock.Object}.AsReadOnly());
 
-            _extractor = new AccountDetailsExtractor(_positionDetailsExtractorMock.Object);
+            _logMock = new Mock<ILog>();
+
+            _extractor = new AccountDetailsExtractor(_positionDetailsExtractorMock.Object, _logMock.Object);
         }
 
         [Test]
@@ -139,11 +143,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
         private List<IWebElement> SetupAccountRows(IAccountDetails account)
         {
             return new List<IWebElement>
-            {
-                SetupIgnoredRow(),
-                SetupAccountTitleRow(account.Name, account.AccountNumber),
-                SetupIgnoredRow(),
-            }
+                {
+                    SetupIgnoredRow(),
+                    SetupAccountTitleRow(account.Name, account.AccountNumber),
+                    SetupIgnoredRow(),
+                }
                 .Concat(SetupAccountDetailsRows(account))
                 .ToList();
         }
@@ -167,10 +171,10 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
             var positions = new List<IPosition>();
             _positionsByAccount.Add(account.Name, positions);
             _positionDetailsExtractorMock.Setup(extractor => extractor.ExtractPositionDetails(
-                It.Is<IEnumerable<IWebElement>>(arg => positionRows
-                    .Where(row => row.GetAttribute("class") != "this row should be ignored")
-                    .Where(row => row.GetAttribute("class") != "magicgrid--total-row")
-                    .All(arg.Contains))))
+                    It.Is<IEnumerable<IWebElement>>(arg => positionRows
+                        .Where(row => row.GetAttribute("class") != "this row should be ignored")
+                        .Where(row => row.GetAttribute("class") != "magicgrid--total-row")
+                        .All(arg.Contains))))
                 .Returns(positions);
             return positionRows;
         }

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using System.Globalization;
+using log4net;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
@@ -13,11 +14,13 @@ namespace Sonneville.FidelityWebDriver.Positions
     public class AccountDetailsExtractor : IAccountDetailsExtractor
     {
         private readonly IPositionDetailsExtractor _positionDetailsExtractor;
+        private readonly ILog _log;
         private readonly Dictionary<AccountType, string> _accountTypeToGroupIds;
 
-        public AccountDetailsExtractor(IPositionDetailsExtractor positionDetailsExtractor)
+        public AccountDetailsExtractor(IPositionDetailsExtractor positionDetailsExtractor, ILog log)
         {
             _positionDetailsExtractor = positionDetailsExtractor;
+            _log = log;
 
             _accountTypeToGroupIds = new Dictionary<AccountType, string>
             {
@@ -70,13 +73,13 @@ namespace Sonneville.FidelityWebDriver.Positions
                                 .FindElement(By.ClassName("magicgrid--total-pending-activity-link"))
                                 .FindElement(By.ClassName("value"))
                                 .Text;
-                            accountDetails.PendingActivity = decimal.Parse(rawPendingActivityText, NumberStyles.Any);
+                            accountDetails.PendingActivity = NumberParser.ParseDecimal(rawPendingActivityText);
                         }
 
                         var totalGainSpans = tableRow.FindElements(By.ClassName("magicgrid--stacked-data-value"));
-                        accountDetails.TotalGainDollar = decimal.Parse(totalGainSpans[0].Text.Trim(), NumberStyles.Any);
+                        accountDetails.TotalGainDollar = NumberParser.ParseDecimal(totalGainSpans[0].Text.Trim());
                         var trimmedPercentString = totalGainSpans[1].Text.Trim('%');
-                        accountDetails.TotalGainPercent = decimal.Parse(trimmedPercentString, NumberStyles.Any)/100m;
+                        accountDetails.TotalGainPercent = NumberParser.ParseDecimal(trimmedPercentString)/100m;
                         collectingPositionRows = false;
                     }
                 }
@@ -88,6 +91,7 @@ namespace Sonneville.FidelityWebDriver.Positions
                     }
                     positionRows = new List<IWebElement>();
                     var accountNumber = ExctractAccountNumber(tableRow).Replace("†", "");
+                    _log.Debug($"Starting to extract details for account {accountNumber}...");
                     accountDetails = new AccountDetails
                     {
                         Name = ExtractAccountName(tableRow),
@@ -104,6 +108,7 @@ namespace Sonneville.FidelityWebDriver.Positions
         private AccountDetails PrepareAccountDetails(AccountDetails accountDetails,
             IEnumerable<IWebElement> positionRows)
         {
+            _log.Debug($"Completed parsing details for {accountDetails.AccountNumber}.");
             accountDetails.Positions = _positionDetailsExtractor.ExtractPositionDetails(positionRows);
             return accountDetails;
         }

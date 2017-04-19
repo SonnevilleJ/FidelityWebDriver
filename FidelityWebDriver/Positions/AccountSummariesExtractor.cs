@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
@@ -34,8 +35,8 @@ namespace Sonneville.FidelityWebDriver.Positions
                     var accountNumber = accountDiv.GetAttribute("data-acct-number");
                     var accountName = accountDiv.GetAttribute("data-acct-name");
                     var value = accountType == AccountType.CreditCard
-                        ? double.Parse(accountDiv.GetAttribute("data-acct-balance"))
-                        : double.Parse(accountDiv.GetAttribute("data-most-recent-value"));
+                        ? NumberParser.ParseDouble(accountDiv.GetAttribute("data-acct-balance"))
+                        : NumberParser.ParseDouble(accountDiv.GetAttribute("data-most-recent-value"));
                     yield return new AccountSummary
                     {
                         AccountNumber = accountNumber,

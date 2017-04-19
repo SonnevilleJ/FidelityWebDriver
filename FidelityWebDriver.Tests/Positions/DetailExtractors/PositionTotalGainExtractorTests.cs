@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Positions.DetailExtractors;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
 {
@@ -21,8 +21,8 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
             var actualDollarGain = new PositionTotalGainExtractor().ExtractTotalGainDollar(tdElements);
             var actualPercentGain = new PositionTotalGainExtractor().ExtractTotalGainPercent(tdElements);
 
-            Assert.AreEqual(decimal.Parse(totalGainDollarString, NumberStyles.Any), actualDollarGain);
-            Assert.AreEqual(decimal.Parse(totalGainPercentString.Replace("%", ""), NumberStyles.Any)/100, actualPercentGain);
+            Assert.AreEqual(NumberParser.ParseDecimal(totalGainDollarString), actualDollarGain);
+            Assert.AreEqual(NumberParser.ParseDecimal(totalGainPercentString.Replace("%", ""))/100, actualPercentGain);
         }
 
         [Test]

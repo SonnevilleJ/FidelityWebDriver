@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Globalization;
 using OpenQA.Selenium;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
 {
@@ -20,7 +20,7 @@ namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
                 .Text;
             return totalGainDollarText == "n/a" || totalGainDollarText.Contains("--")
                 ? 0
-                : decimal.Parse(totalGainDollarText, NumberStyles.Any);
+                : NumberParser.ParseDecimal(totalGainDollarText);
         }
 
         public decimal ExtractTotalGainPercent(IReadOnlyList<IWebElement> tdElements)
@@ -30,7 +30,7 @@ namespace Sonneville.FidelityWebDriver.Positions.DetailExtractors
                 .Text.TrimEnd('%');
             return totalGainPercentText == "n/a" || totalGainPercentText.Contains("--")
                 ? 0
-                : decimal.Parse(totalGainPercentText, NumberStyles.Any)/100m;
+                : NumberParser.ParseDecimal(totalGainPercentText)/100m;
         }
     }
 }

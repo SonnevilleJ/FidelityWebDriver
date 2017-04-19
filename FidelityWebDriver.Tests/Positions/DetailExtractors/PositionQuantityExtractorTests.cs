@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Positions.DetailExtractors;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
 {
@@ -25,7 +25,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions.DetailExtractors
             var actualQuantity = new PositionQuantityExtractor().ExtractQuantity(tdElements);
 
             Assert.AreEqual(isMargin, actualMargin);
-            Assert.AreEqual(decimal.Parse(quantityString, NumberStyles.Any), actualQuantity);
+            Assert.AreEqual(NumberParser.ParseDecimal(quantityString), actualQuantity);
         }
 
         private List<IWebElement> SetupTdElements(bool isMargin, string quantityString)

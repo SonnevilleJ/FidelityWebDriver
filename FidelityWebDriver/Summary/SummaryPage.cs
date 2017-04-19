@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using Sonneville.FidelityWebDriver.Navigation;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Summary
 {
@@ -32,14 +32,14 @@ namespace Sonneville.FidelityWebDriver.Summary
         {
             var balanceText = _webDriver.FindElement(By.ClassName("js-total-balance-value")).Text;
 
-            return double.Parse(balanceText, NumberStyles.Currency);
+            return NumberParser.ParseDouble(balanceText, NumberStyles.Currency);
         }
 
         public double GetGainLossAmount()
         {
             var text = _webDriver.FindElement(By.ClassName("js-today-change-value-dollar")).Text;
 
-            return double.Parse(text, NumberStyles.Currency);
+            return NumberParser.ParseDouble(text, NumberStyles.Currency);
         }
 
         public double GetGainLossPercent()
@@ -49,7 +49,7 @@ namespace Sonneville.FidelityWebDriver.Summary
             var tempt = text.Replace("(", "").Replace(")", "").Replace(" ", "");
             var result = tempt.Replace(CultureInfo.CurrentCulture.NumberFormat.PercentSymbol, "");
 
-            return double.Parse(result)/100.0;
+            return NumberParser.ParseDouble(result)/100.0;
         }
 
         public void GoToPositionsPage()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sonneville.FidelityWebDriver.Data;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Transactions.CSV
 {
@@ -45,7 +46,7 @@ namespace Sonneville.FidelityWebDriver.Transactions.CSV
         {
             return string.IsNullOrWhiteSpace(decimalString)
                 ? new decimal?()
-                : decimal.Parse(decimalString.Trim());
+                : NumberParser.ParseDecimal(decimalString.Trim());
         }
 
         private string ParseStringField(string rawString)

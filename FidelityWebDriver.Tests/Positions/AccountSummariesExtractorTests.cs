@@ -6,6 +6,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
 using Sonneville.FidelityWebDriver.Positions;
+using Sonneville.FidelityWebDriver.Utilities;
 
 namespace Sonneville.FidelityWebDriver.Tests.Positions
 {
@@ -58,7 +59,7 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
                 Assert.AreEqual(matchingExpected["accountName"], account.Name);
                 Assert.AreEqual(_accountTypeStrings[matchingExpected["accountType"]], account.AccountType);
-                Assert.AreEqual(double.Parse(matchingExpected["accountValue"]), account.MostRecentValue);
+                Assert.AreEqual(NumberParser.ParseDouble(matchingExpected["accountValue"]), account.MostRecentValue);
             }
         }
 
