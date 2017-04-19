@@ -14,9 +14,12 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
             {
                 var remoteAddress = new Uri("http://localhost:4444/wd/hub");
                 var actualWebDriver = new RemoteWebDriver(remoteAddress, DesiredCapabilities.Chrome());
+
+                Kernel.Unbind<IWebDriver>();
+
                 Kernel.Bind<IWebDriver>()
                     .ToConstant(actualWebDriver)
-                    .WhenInjectedExactlyInto<LoggingWebDriver>()
+                    .WhenInjectedInto<LoggingWebDriver>()
                     .InSingletonScope();
 
                 Kernel.Bind<IWebDriver>()
