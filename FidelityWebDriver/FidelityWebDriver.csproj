@@ -36,9 +36,8 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Sonneville.Utilities, Version=1.19.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sonneville.Utilities.1.19.0\lib\net452\Sonneville.Utilities.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sonneville.Utilities, Version=1.24.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Sonneville.Utilities.1.24.0\lib\net452\Sonneville.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -108,6 +107,9 @@
     </Reference>
     <Reference Include="System.Xml.XmlDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="UnixSignalWaiter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\UnixSignalWaiter.0.0.1\lib\UnixSignalWaiter.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver, Version=3.4.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Selenium.WebDriver.3.4.0\lib\net40\WebDriver.dll</HintPath>

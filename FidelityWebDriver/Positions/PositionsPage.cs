@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OpenQA.Selenium;
 using Sonneville.FidelityWebDriver.Data;
-using Sonneville.Utilities;
+using Sonneville.Utilities.Sleepers;
 
 namespace Sonneville.FidelityWebDriver.Positions
 {
