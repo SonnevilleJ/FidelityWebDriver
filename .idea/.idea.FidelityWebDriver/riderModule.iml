@@ -16,7 +16,6 @@
       <excludeFolder url="file://$MODULE_DIR$/../../FidelityWebDriver.Tests/obj" />
       <excludeFolder url="file://$MODULE_DIR$/../../FidelityWebDriver/bin" />
       <excludeFolder url="file://$MODULE_DIR$/../../FidelityWebDriver/obj" />
-      <excludeFolder url="file://$MODULE_DIR$/../../_ReSharper.Caches/ReSharperHost8.FidelityWebDriver.00" />
       <excludeFolder url="file://$MODULE_DIR$/../../packages" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
