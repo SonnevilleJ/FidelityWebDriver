@@ -128,8 +128,6 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
                     Name = "OtherAccount",
                     AccountNumber = "qwerty57†",
                     PendingActivity = 0,
-                    TotalGainDollar = 987.65m,
-                    TotalGainPercent = 0.4321m,
                     Positions = new List<IPosition> {new Mock<IPosition>().Object}
                 },
             };
@@ -181,27 +179,50 @@ namespace Sonneville.FidelityWebDriver.Tests.Positions
 
         private IWebElement SetupAccountTotalRow(IAccountDetails account)
         {
-            var totalGainDollarSpanMock = new Mock<IWebElement>();
-            totalGainDollarSpanMock.Setup(span => span.GetAttribute("class")).Returns("magicgrid--stacked-data-value");
-            totalGainDollarSpanMock.Setup(span => span.Text)
-                .Returns($@"
-                                            {account.TotalGainDollar:C}");
-
-            var totalGainPercentSpanMock = new Mock<IWebElement>();
-            totalGainPercentSpanMock.Setup(span => span.GetAttribute("class")).Returns("magicgrid--stacked-data-value");
-            totalGainPercentSpanMock.Setup(span => span.Text)
-                .Returns($@"
-                                            {account.TotalGainPercent:P}");
-            var totalGainSpans = new List<IWebElement> {totalGainDollarSpanMock.Object, totalGainPercentSpanMock.Object};
-
             var totalRowMock = new Mock<IWebElement>();
             totalRowMock.Setup(row => row.GetAttribute("class"))
                 .Returns("magicgrid--total-row");
-            totalRowMock.Setup(row => row.FindElements(By.ClassName("magicgrid--stacked-data-value")))
-                .Returns(totalGainSpans.AsReadOnly());
+
+            SetupTotalGain(account, totalRowMock);
+
             SetupPendingActivity(account, totalRowMock);
 
             return totalRowMock.Object;
+        }
+
+        private void SetupTotalGain(IAccountDetails account, Mock<IWebElement> totalRowMock)
+        {
+            var totalGainDollarSpanMock = new Mock<IWebElement>();
+            totalGainDollarSpanMock.Setup(span => span.GetAttribute("class")).Returns("magicgrid--stacked-data-value");
+            if (account.TotalGainDollar != 0)
+            {
+                totalGainDollarSpanMock.Setup(span => span.Text)
+                    .Returns($@"
+                                            {account.TotalGainDollar:C}");
+            }
+            else
+            {
+                totalGainDollarSpanMock.Setup(span => span.Text)
+                    .Returns("");
+            }
+
+            var totalGainPercentSpanMock = new Mock<IWebElement>();
+            totalGainPercentSpanMock.Setup(span => span.GetAttribute("class")).Returns("magicgrid--stacked-data-value");
+            if (account.TotalGainPercent != 0)
+            {
+                totalGainPercentSpanMock.Setup(span => span.Text)
+                    .Returns($@"
+                                            {account.TotalGainPercent:P}");
+            }
+            else
+            {
+                totalGainPercentSpanMock.Setup(span => span.Text)
+                    .Returns("");
+            }
+
+            var totalGainSpans = new List<IWebElement> {totalGainDollarSpanMock.Object, totalGainPercentSpanMock.Object};
+            totalRowMock.Setup(row => row.FindElements(By.ClassName("magicgrid--stacked-data-value")))
+                .Returns(totalGainSpans.AsReadOnly());
         }
 
         private void SetupPendingActivity(IAccountDetails account, Mock<IWebElement> totalRowMock)

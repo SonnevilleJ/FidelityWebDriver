@@ -77,9 +77,17 @@ namespace Sonneville.FidelityWebDriver.Positions
                         }
 
                         var totalGainSpans = tableRow.FindElements(By.ClassName("magicgrid--stacked-data-value"));
-                        accountDetails.TotalGainDollar = NumberParser.ParseDecimal(totalGainSpans[0].Text.Trim());
-                        var trimmedPercentString = totalGainSpans[1].Text.Trim('%');
-                        accountDetails.TotalGainPercent = NumberParser.ParseDecimal(trimmedPercentString)/100m;
+                        var trimmedGainText = totalGainSpans[0].Text.Trim();
+                        if (!string.IsNullOrWhiteSpace(trimmedGainText))
+                        {
+                            accountDetails.TotalGainDollar = NumberParser.ParseDecimal(trimmedGainText);
+                        }
+                        var trimmedPercentText = totalGainSpans[1].Text.Trim('%');
+                        if (!string.IsNullOrWhiteSpace(trimmedGainText))
+                        {
+                            accountDetails.TotalGainPercent = NumberParser.ParseDecimal(trimmedPercentText)/100m;
+                        }
+
                         collectingPositionRows = false;
                     }
                 }
