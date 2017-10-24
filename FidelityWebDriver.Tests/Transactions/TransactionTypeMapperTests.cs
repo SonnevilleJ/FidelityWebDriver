@@ -17,8 +17,11 @@ namespace Sonneville.FidelityWebDriver.Tests.Transactions
         [TestCase("SHORT-TERM CAP GAIN", TransactionType.ShortTermCapGain)]
         [TestCase("LONG-TERM CAP GAIN", TransactionType.LongTermCapGain)]
         [TestCase("Electronic Funds Transfer Received", TransactionType.Deposit)]
+        [TestCase("CASH CONTRIBUTION CURRENT YEAR", TransactionType.Deposit)]
+        [TestCase("DIRECT DEPOSIT ELAN CARDSVCRedemption (Cash)", TransactionType.Deposit)]
         [TestCase("TRANSFERRED FROM     TO BROKERAGE OPTION", TransactionType.DepositBrokeragelink)]
         [TestCase("PARTIC CONTR CURRENT PARTICIPANT CUR YR", TransactionType.DepositHSA)]
+        [TestCase("INTEREST EARNED", TransactionType.InterestEarned)]
         [TestCase("abcdefghijklmnopqrstuvwxyz", TransactionType.Unknown)]
         public void ShouldMapValues(string value, TransactionType expectedType)
         {

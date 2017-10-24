@@ -9,6 +9,7 @@ namespace Sonneville.FidelityWebDriver.Data
         Withdrawal,
         Buy,
         Sell,
+        InterestEarned,
         DividendReceipt,
         ShortTermCapGain,
         LongTermCapGain,

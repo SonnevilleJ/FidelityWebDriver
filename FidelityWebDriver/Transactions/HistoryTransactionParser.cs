@@ -73,6 +73,7 @@ namespace Sonneville.FidelityWebDriver.Transactions
                 case TransactionType.DividendReceipt:
                 case TransactionType.ShortTermCapGain:
                 case TransactionType.LongTermCapGain:
+                case TransactionType.InterestEarned:
                     result.Symbol = contentDictionary[AttributeStrings.Symbol];
                     break;
                 case TransactionType.DividendReinvestment:
