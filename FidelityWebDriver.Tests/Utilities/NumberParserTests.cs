@@ -7,7 +7,7 @@ using Sonneville.FidelityWebDriver.Utilities;
 namespace Sonneville.FidelityWebDriver.Tests.Utilities
 {
     [TestFixture]
-    public class NumberParserTest
+    public class NumberParserTests
     {
         private Mock<ILog> _logMock;
 

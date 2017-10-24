@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Dev\FidelityWebDriver" t="IncludeFlat">
@@ -166,7 +166,7 @@
           <e p="TransactionTypeMapperTests.cs" t="Include" />
         </e>
         <e p="Utilities" t="Include">
-          <e p="NumberParserTest.cs" t="Include" />
+          <e p="NumberParserTests.cs" t="Include" />
         </e>
       </e>
       <e p="LICENSE.txt" t="Include" />

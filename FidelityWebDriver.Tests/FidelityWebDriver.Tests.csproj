@@ -161,7 +161,7 @@
     <Compile Include="Transactions\HistoryTransactionParserTests.cs" />
     <Compile Include="Transactions\TransactionManagerTests.cs" />
     <Compile Include="Transactions\TransactionTypeMapperTests.cs" />
-    <Compile Include="Utilities\NumberParserTest.cs" />
+    <Compile Include="Utilities\NumberParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
