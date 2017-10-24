@@ -1,6 +1,7 @@
 ﻿using System;
 using Ninject.Modules;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 using Sonneville.FidelityWebDriver.Demo.log4net;
 
@@ -13,7 +14,7 @@ namespace Sonneville.FidelityWebDriver.Demo.Ninject
             try
             {
                 var remoteAddress = new Uri("http://localhost:4444/wd/hub");
-                var actualWebDriver = new RemoteWebDriver(remoteAddress, DesiredCapabilities.Chrome());
+                var actualWebDriver = new RemoteWebDriver(remoteAddress, new ChromeOptions());
 
                 Kernel.Unbind<IWebDriver>();
 
